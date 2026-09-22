@@ -1,0 +1,32 @@
+[project]
+name = "spherex-psb"
+version = "0.1.0"
+description = "Nearby post-starburst galaxies with SPHEREx spectrophotometry"
+requires-python = ">=3.12"
+dependencies = [
+    "astropy>=8.0.1",
+    "astroquery>=0.4.11",
+    "fsspec[s3]>=2026.9.0",
+    "matplotlib>=3.11.2",
+    "numpy>=2.5.3",
+    "photutils>=3.0.0",
+    "pyvo>=1.9.1",
+    "requests>=2.34.2",
+]
+
+[dependency-groups]
+dev = [
+    "ipykernel>=7.3.0",
+    "jupyter>=1.1.1",
+    "pre-commit>=4.6.2",
+    "ruff>=0.16.8",
+]
+
+[tool.ruff]
+line-length = 110
+target-version = "py312"
+# Verbatim copies of official IRSA tutorial sources are reference material, not our code
+extend-exclude = ["docs/reference_notes/irsa_tutorial_sources"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "N", "UP", "B"]

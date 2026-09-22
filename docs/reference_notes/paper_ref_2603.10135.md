@@ -1,0 +1,80 @@
+# Three Hundred Quasars from the Couch: A first look at high-redshift quasar discovery with SPHEREx (arXiv:2603.10135)
+
+## Bibliographic info (authors, date, version, journal; one-sentence science goal)
+
+Authors: Frederick B. Davies, Sarah E. I. Bosman, Arpita Ganguly, Eduardo Bañados, Silvia Belladitta, Daniel Stern, Javier A. Acevedo Barroso, Daming Yang, Joseph F. Hennawi, Feige Wang, Jinyi Yang, and Xiaohui Fan. Submitted 2026-03-10 (v1), to Astronomy & Astrophysics (A&A); 12+4 pages, 11+2 figures. arXiv:2603.10135.
+
+Science goal (one sentence): the authors show that SPHEREx spectrophotometry, combined with *Gaia* DR3/CatWISE2020 color pre-selection, can identify high-redshift (z ≈ 4.0–5.7) quasars directly from their broad Hα line without any ground-based photometric or spectroscopic pre-confirmation, recovering 219 known and discovering 87 new z>4 quasars (plus 203 new lower-z quasars) with a 100% spectroscopic confirmation rate in follow-up.
+
+## SPHEREx data used (release name, product type, dates, number of exposures/objects, how accessed: IRSA service names, cutouts, catalogs, maps)
+
+The paper uses the **"Quick Release" data products of the ongoing SPHEREx all-sky survey** (Sec. 3), i.e., the early-release spectrophotometric data product, not a final calibrated data release. SPHEREx launched 2025-03-11; the authors' analysis was carried out through December 2025, at which point "the first all-sky survey [pass]" had "recently completed." No explicit L1/L2 processing-level terminology or pipeline version number is given — the paper defers all such technical detail to the "SPHEREx Explanatory Supplement," which it cites but does not reproduce.
+
+Data access is exclusively through the **IRSA SPHEREx Spectrophotometry Tool**, a forced-photometry web service that operates on the Linear-Variable-Filter (LVF) images. This is not a cutout/image-cube download workflow: candidates are supplied to the tool as coordinates. The authors note the practical workflow constraint that "candidates selected above were separated into sets of 20 objects, and individually uploaded manually to IRSA" — i.e., the tool (as used) had no bulk/batch API and required manual batching.
+
+Sample sizes pushed through the tool: 3,076 "fiducial" candidates, 1,263 "faint G_RP" candidates, and 546 "G_BP flux" candidates (≈4,885 candidates total drawn from *Gaia* DR3 + CatWISE2020). Outputs: 87 newly discovered z>4 quasars, 219 recovered previously known z>4 quasars, and 203 newly discovered z<4 quasars (Appendix Tables 2–4).
+
+Instrumentally, SPHEREx covers 0.75–5.0 μm continuously across six detectors (D1–D6) via the LVF, with 17 wavelength steps per detector giving 17×6 = 102 spectral channels per all-sky survey pass; spectral resolution is R≈35–39 for D1–D4 (0.75–3.8 μm) and R≈120 for D5–D6. Scaling the full-survey depth forecast of Bock et al. (2025) to four all-sky passes, the 5σ depth of the completed first all-sky pass is "just shy of 19 AB mag" across most of the bandpass. Pixel scale is ≈6.2 arcsec.
+
+## Target selection and sample properties relevant to extraction (angular sizes, brightness, redshift; resolved vs unresolved)
+
+Targets are quasars selected purely photometrically/astrometrically from *Gaia* DR3 and CatWISE2020, not from any galaxy morphological catalog:
+- Fiducial selection: G_RP < 19.2 mag, G_BP − G_RP > 2.2, no significant *Gaia* parallax (>2σ excluded) or proper motion (total PM S/N < 3), and W1 − W2 > 0.3 (CatWISE2020).
+- Faint G_RP selection: relaxed to G_RP < 19.5 mag, G_BP − G_RP > 1.8.
+- G_BP flux-limited selection: G_RP < 19.7 mag, F(G_BP)/σ(G_BP) < 6, σ(G_BP) < 10 e⁻/s (i.e., objects essentially undetected in the blue *Gaia* band).
+
+The final z>4 sample has median M1450 = −27.5, i.e., these are luminous, unresolved quasars (point sources) at the SPHEREx pixel scale/PSF (~6.2″ pixels, diffraction-limited PSF of a 20 cm aperture). This is important context for a galaxy-extraction application: **the paper's entire extraction methodology is built around point-source forced photometry, not resolved or semi-resolved host-galaxy extraction.** The authors explicitly note that because of the large pixel scale and PSF size, "nearby object contamination is not so uncommon (≲10% of candidates)," meaning multiple physically unrelated sources often fall within a single SPHEREx PSF footprint — a crowding/blending regime, not a resolved-structure regime.
+
+## Spectrum / photometry extraction method (step-by-step: pixel selection, aperture or PSF fitting, PSF model source, wavelength assignment per pixel from the LVF, spectral binning, combination of exposures, error propagation; code used if named)
+
+1. **Tool and fitting engine**: The IRSA SPHEREx Spectrophotometry Tool "performs forced PSF photometry on the LVF images using the Tractor (Lang et al. 2016) and a detailed model for the SPHEREx PSF as a function of wavelength and detector position" (Sec. 3). This is genuinely PSF-fitting photometry (via Tractor), not aperture photometry.
+2. **PSF model source**: not described beyond "a detailed model for the SPHEREx PSF as a function of wavelength and detector position"; the authors point readers to the SPHEREx Explanatory Supplement for specifics (no further detail is given in the paper body or appendix).
+3. **Wavelength assignment**: because the LVF assigns wavelength as a function of position on each of the six detectors, the underlying pipeline maps detector position → wavelength; the paper does not describe the per-pixel wavelength-solution algorithm itself, treating this as internal to the Spectrophotometry Tool/pipeline.
+4. **Deblending**: for crowded fields, the tool's "deblending feature ... performs spectral deblending by using manually uploaded coordinates of objects in CatWISE2020 within 25 arcseconds of the candidate spectrum" (Sec. 3) — i.e., simultaneous multi-source PSF fitting using externally supplied source positions as priors, analogous to Tractor's standard forced-photometry-with-priors approach.
+5. **Extinction correction**: output spectrophotometry is corrected for Galactic extinction using the Schlafly & Finkbeiner (2011) E(B−V) map (queried via IRSA) and the Fitzpatrick (1999) extinction curve.
+6. **Redshift/line measurement**: redshifts are first assigned by eye from the strongest visible emission line (usually broad Hα), then refined by fitting a Gaussian plus a local power-law continuum to the Hα region, giving formal precision Δz ≈ 0.01; the authors adopt a fixed, more conservative Δz = 0.03 to account for unmodeled systematics (Sec. 3.1).
+7. **Continuum/flux calibration check**: absolute UV magnitude is estimated by fitting the Selsing et al. (2016) luminous-quasar template, with SMC-law dust attenuation, to the spectrophotometry in line-free windows between rest-frame 1600 Å and 4500 Å, then evaluating the best-fit model at 1450 Å (Sec. 3.1) — this doubles as an implicit self-consistency/calibration check on the flux-density scale.
+8. **Spectral binning**: for display/analysis, spectra are rebinned onto a fixed wavelength grid that reconciles the differing spectral sampling of detectors D1–D4 versus D5–D6 (Fig. 5 caption).
+9. **Combining exposures**: the paper gives no explicit description of how multiple epochs/exposures at the same sky position within the first all-sky pass are combined — this is left to the Spectrophotometry Tool internals and is not detailed.
+10. **Named software**: Tractor (Lang et al. 2016) for PSF-fitting photometry; IRSA SPHEREx Spectrophotometry Tool as the access/processing layer; no custom extraction code of the authors' own is described (they are consumers of the IRSA tool's output, with post-processing for extinction, deblending priors, redshift fitting, and template fitting done in their own analysis).
+
+## Background and systematics treatment (zodiacal light: used ZODI extension? own model? local sky annulus?; stray light; flags used; cosmic rays; persistence; flat-field / calibration residuals; how they validated)
+
+This paper gives essentially no explicit treatment of instrumental/background systematics beyond Galactic extinction and source-confusion deblending. Specifically:
+- **Zodiacal light**: not mentioned at all; presumably handled internally within the Spectrophotometry Tool / pipeline production of the LVF images, but the paper does not state whether a ZODI model/extension is subtracted, nor does it use a local sky annulus.
+- **Stray light**: not discussed.
+- **Data-quality flags**: none named or used explicitly in the paper.
+- **Cosmic rays, persistence, flat-fielding**: none discussed.
+- **Contamination/crowding** is the only systematic effect treated explicitly, handled via the CatWISE2020-prior deblending described above; the authors note this is imperfect — even after deblending, "the poor spatial sampling of SPHEREx at its short wavelength end is insufficient to fully separate the two objects, leading to a significant fraction of negative measured fluxes" for at least one blended pair (SPX J2238+4140), which they mask by hand for visualization (Fig. 11).
+- **Calibration validation**: indirect only, via (a) the Selsing et al. (2016) template fit matching the observed continuum shape reasonably well, and (b) spectroscopically confirmed redshifts from follow-up matching the SPHEREx-derived redshifts. There is no dedicated calibration-validation subsection or comparison to a flux-calibration standard.
+- The authors explicitly flag that "the error properties of SPHEREx Quick Release spectrophotometry are not yet fully characterized" and that "flux uncertainties from the Spectrophotometry Tool show indications of being underestimated in some cases" (Sec. 3.1) — this is the paper's single most important systematics caveat.
+
+## Stacking or combining multiple objects (if done: normalization, weighting, redshift handling, uncertainties)
+
+**Not done.** This paper performs no stacking or co-addition of spectra from multiple objects. Every quasar spectrum is treated and inspected individually (by eye, then via per-object line/continuum fits); there is no discussion of normalization schemes, weighting schemes, rest-frame stacking, or stack-level uncertainty propagation. If the reader's goal is a stacking recipe, this paper offers none.
+
+## Validation and quoted uncertainties (comparison with 2MASS/WISE/other spectra; quoted systematic floors)
+
+Validation is via ground-based spectroscopic follow-up, not via comparison to other all-sky infrared photometric/spectroscopic surveys (2MASS/WISE data are used only as photometric *pre-selection* inputs, W1−W2 color cut, not as an independent flux/spectral validation set):
+- 18 new z>4 candidates were followed up with P200/NGPS (16 objects) and Keck/KCWI (2 objects) in December 2025; "all 18 quasar candidates were confirmed, with redshifts consistent with our SPHEREx determinations upon visual inspection" — a 100% confirmation rate among the observed subset (Sec. 3.2).
+- At least 11 objects were independently confirmed via QUBRICS survey observations recovered from the ESO archive; 10 further unpublished objects had been separately observed by QUBRICS with NTT/EFOSC2, and archival spectra confirm the SPHEREx-based identifications (Sec. 3.1).
+- No quantitative systematic flux-error floor (e.g., "X% of flux" or "Y mag") is quoted anywhere in the paper; the only quantitative uncertainty given is the adopted fixed redshift error, Δz = 0.03, chosen conservatively above the formal Δz ≈ 0.01 fit precision because of unmodeled effects (sub-Nyquist sampling, underestimated tool-reported flux errors).
+
+## Lessons and reusable techniques for extracting spectra of nearby galaxies (your synthesis, concrete, specific to this paper's techniques)
+
+- **Access pathway**: the IRSA SPHEREx Spectrophotometry Tool + Tractor forced-PSF photometry is the standard, semi-manual (batches of ≤20 targets, coordinate upload) route to SPHEREx spectrophotometry during the Quick Release era. It is built for point sources; for resolved or semi-resolved nearby post-starburst galaxies, this tool alone is likely inadequate and custom aperture/PSF-weighted extraction directly from LVF image products (or L1/L2 cubes) would be needed — this paper does not provide that recipe.
+- **Deblending via external-catalog priors** (supplying CatWISE2020 coordinates within 25″ so Tractor fits multiple PSFs simultaneously) is directly reusable for nearby-galaxy work: given SPHEREx's ≈6.2″ pixels and large PSF, any target with a companion, nucleus+disk structure, or nearby star within ~25″ will need the same prior-position deblending strategy, and one should expect residual negative-flux artifacts at the short-wavelength end for close/blended pairs, requiring manual masking.
+- **Galactic extinction correction recipe** (Schlafly & Finkbeiner 2011 E(B−V) via IRSA + Fitzpatrick 1999 curve) is a simple, reusable first post-processing step regardless of target type.
+- **Redshift/line fitting at SPHEREx resolution**: a simple Gaussian-plus-local-power-law-continuum fit was sufficient to measure a strong, isolated emission line at R≈35–120; this is a useful low-complexity template for fitting individual strong lines (e.g., Hα, [N II]/Hα blend proxies, or stellar absorption features) in low-resolution PSB spectra, but the authors caution that sub-Nyquist sampling and underestimated tool errors mean formal fit uncertainties should be treated as lower limits — always adopt an inflated, conservative error rather than trusting the tool's reported per-pixel uncertainty at face value.
+- **Cross-detector rebinning**: since D1–D4 and D5–D6 have different spectral sampling/resolution, any full 0.75–5 μm spectrum assembled from SPHEREx must be explicitly rebinned onto a common wavelength grid before combination or fitting — a concrete, transferable step for combining exposures/detectors into one spectrum.
+- **Template fitting over line-free windows** as an implicit calibration/continuum-normalization check (here, Selsing et al. 2016 quasar template fit over 1600–4500 Å rest-frame) is a transferable technique for anchoring absolute flux scale of a low-S/N nearby-galaxy spectrum.
+- **What this paper does NOT provide, and where a gap remains for the user's project**: no resolved/semi-resolved extraction method, no explicit zodiacal-light/background model, no stray-light or cosmic-ray/persistence handling, no quality-flag usage, and no stacking recipe. For those specific needs, the SPHEREx Explanatory Supplement (repeatedly cited here but not reproduced) and dedicated SPHEREx instrument/calibration papers will be necessary complements to this one.
+
+## Caveats the authors state
+
+- "The error properties of SPHEREx Quick Release spectrophotometry are not yet fully characterized," and flux uncertainties from the Spectrophotometry Tool "show indications of being underestimated in some cases" (Sec. 3.1).
+- Formal redshift precision (Δz ≈ 0.01) does not account for the sub-Nyquist wavelength sampling of the LVF spectra; a conservative fixed Δz = 0.03 is adopted instead (Sec. 3.1).
+- Deblending of close pairs is imperfect: "the poor spatial sampling of SPHEREx at its short wavelength end is insufficient to fully separate the two objects," producing negative fluxes that must be masked (example: SPX J2238+4140, Fig. 11).
+- Nearby-source contamination affects "≲10% of candidates" because of SPHEREx's large ≈6.2″ pixel scale and the diffraction-limited PSF of its 20 cm aperture (Sec. 3).
+- The current quasar selection is "generally limited to discoveries at z ≲ 5.5 due to technical limitations of *Gaia* DR3 processing" (Sec. 4), an external-catalog limitation rather than a SPHEREx one.
+- The effective spectral resolution may eventually allow measuring intrinsic line widths, but the authors defer this to a future, Nyquist-sampled data product expected after "the third all-sky survey" pass (Sec. 5); the Quick Release / first-pass data used here are explicitly described as not yet adequate for that purpose.
