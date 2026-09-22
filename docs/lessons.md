@@ -46,3 +46,17 @@ Data lessons (verified live)
 - Cutout URLs accept both `center=RA,DEC` and `center=RA,DECd`; the PSF/EPSF extension is
   copied whole into cutouts, so zone selection must use parent-frame coordinates via
   CRPIX1A/CRPIX2A.
+
+## 2026-09-23 software review
+
+- Third-party SPHEREx tools written before July 2026 are all hard-coded to the QR2 data
+  model (PSF cube, MP_* flag names, seven extensions). Any tool must be checked against a
+  QR3 file before use; only hbahk/spherex-retrieval and hbahk/tractorjax-spherex dispatch
+  on the PSF kind.
+- The public Caltech-IPAC/spherex-pipelines snapshot (6.5.5) is the ground truth for the
+  IRSA tool's algorithm, but its tasks need the Rubin Butler middleware; only spx_data and
+  spx_utils are usable standalone. Read the task code as a specification.
+- Check licenses before copying: four of the reviewed repos have no license and one is
+  GPL-3.
+- A personal repo by an SSDC member (SPHERExSpecPhot) is not evidence of official status;
+  it is a simple aperture tool unrelated to the IRSA Spectrophotometry Tool.

@@ -556,6 +556,8 @@ arXiv:2602.09139) and, for mosaics, Cukierman et al. 2026 (ApJS 286, 22).
 
 ## 14. Source index
 
+Software review: `docs/spherex_tools_review.md` and `docs/reference_notes/tools/`.
+
 Official
 - `docs/reference_notes/irsa_spherex_official_pages.md` (mission page, QR overview, DOIs, cloud page, cutout tool page, spectral calibration page, comet 3I/ATLAS, SPLICES)
 - `docs/reference_notes/spherex_archive_documentation.md` (Archive User Guide site plus the Explanatory Supplement sections it links)

@@ -34,6 +34,22 @@ spectra, with emphasis on systematics and backgrounds.
   stacking; per-channel error budgets await Ashby et al. (2026); DR1 (late fall 2026)
   will change calibrations again.
 
+## Task 1b: review of existing SPHEREx software (2026-09-23)
+
+- [x] Review the eight user-suggested repos plus GitHub/arXiv search (16 notes in
+      `docs/reference_notes/tools/`, synthesis in `docs/spherex_tools_review.md`)
+- [ ] Read Bahk et al. 2026 (arXiv:2606.19875) extended-source validation
+- [ ] Test-build `tractor-spherex` in the uv environment (astrometry.net utils, SWIG)
+- [ ] Decide on vendoring `hbahk/spherex-retrieval` for retrieval and PSF preparation
+
+### Review
+
+- No existing tool does extended-source forward modeling with free shapes, explicit zodi
+  handling for photometry, rest-frame stacking, or (outside the hbahk repos) QR3 support.
+  The plan is a thin pipeline of ours on top of spherex-retrieval (MIT) and
+  tractor-spherex (official fork), copying specific MIT/BSD functions from SPIFF,
+  spxquery, spexpi and spherex-pipelines, and re-implementing GPL-3 ideas.
+
 ## Task 2 (next): sample and coverage
 
 - [ ] Define the post-starburst sample (parent catalog, redshift range, sizes) with the user
