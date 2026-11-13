@@ -104,3 +104,22 @@ Review (2026-11-14)
       local background, flag masks, VARIANCE propagation, ePSF aperture corrections
 - [ ] Compare with the tool output and with 2MASS/WISE synthetic photometry
 - [ ] Prototype rest-frame stacking with bootstrap errors
+
+## H-minus bump feasibility (2026-11-14)
+
+- [x] Evaluate the Hbump_opt index of the H-bump paper on the six demo SEDs: resolution test on the
+      cached FSPS grid, exposure counts per window, bootstrap errors, D2/D3 step bias, recovery simulation
+      with the real sampling (`docs/hminus_bump_feasibility.md`, figure 8).
+- [ ] Settle the D2/D3 step at the 0.3 % level (many field stars, or point-source control per ePSF zone)
+      before using any index that straddles 1.64 um observed.
+- [ ] Forward-model index estimator over 1.4-2.0 um using every exposure and its bandpass; validate on
+      injected FSPS spectra with the real sampling.
+- [ ] Decide whether the index sample should sit at z > 0.1 (whole index on D3) or accept the
+      D2/D3 calibration term.
+
+### Review
+
+The index is feasible at the 0.01 mag level per galaxy with today's coverage and 0.005 mag with stacks or
+the four-survey mission, once the D2/D3 step and the estimator bias are handled; the five normal galaxies
+show indices in the TP-AGB-on range and the post-starburst galaxy the weakest bump, neither of which can
+be interpreted before those two systematics are removed.

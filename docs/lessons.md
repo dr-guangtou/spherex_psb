@@ -125,3 +125,21 @@ Data lessons (verified live)
   1.06 factor between an analytic Sersic total and the tractor mixture total for n = 4), 2MASS XSC "total"
   magnitudes are 0-50 % low for the fainter galaxies, and AllWISE profile-fit and elliptical magnitudes are
   30-70 % low. Treat 2MASS XSC and AllWISE as lower limits for extended galaxies.
+
+## H-minus bump feasibility (2026-11-14)
+
+- "Spectral resolution" was the wrong worry for a 0.3 um wide continuum feature: degrading FSPS spectra
+  from R = 100 to the SPHEREx R = 41.4 (Gaussian or top-hat of equivalent width lambda / R) changes
+  Hbump_opt by < 0.002 mag over the whole SSP grid. The real limits are the number of exposures inside the
+  0.045 um sidebands (2-7 per galaxy today, 0.011-0.020 mag bootstrap error) and the D2/D3 detector
+  boundary, which sits inside the index windows for every galaxy at z < 0.096 and converts a 1 % detector
+  step into 0.003-0.007 mag of index. Check where detector boundaries fall in the rest frame before
+  defining any index for SPHEREx.
+- Band means over irregularly sampled exposures are biased (up to 0.008 mag here) when the exposures
+  cluster at one end of a window; a forward-model fit over all exposures is the right estimator for
+  SPHEREx indices.
+- A loop variable named like a function argument (`name`) silently relabelled a whole output table;
+  ruff does not catch shadowing. Use distinct names in loops that build records.
+- The SPHEREx response-profile shape (Hui et al. 2026) is not tabulated in the paper; R is defined with
+  the equivalent width of the normalised response, not the FWHM. When only R is known, test both a
+  Gaussian and a top-hat of the same equivalent width and report the difference.
