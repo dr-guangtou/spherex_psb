@@ -69,9 +69,26 @@ Checkpoint A (stop and show)
 - [x] Measurement layer: cutouts, ePSF zone, Sersic renderer, neighbours, background, joint solve, two estimators
 - [x] Galaxy 1 with 6 exposures per detector; figures 2-4; cutout size and projected download
 
-Checkpoint B
-- [ ] All exposures of the six galaxies; validation 1-7; all figures; `docs/demo_sed_report.md`
-- [ ] Lessons, todo review, guide update, disk report, Trash moves
+Checkpoint B (2026-11-14)
+- [x] All exposures of the six galaxies (2,225 exposures, 2,104 used); validation 1-7; all figures;
+      `docs/demo_sed_report.md`
+- [x] Lessons, todo review, guide update, disk report, Trash moves
+
+Review (2026-11-14)
+- Delivered: `spherex_psb/{archive,products,extraction,spectra,validation,figures}`, `scripts/sed_demo/`
+  (sample, measure, figures, validate, drivers, summary), 22 figures, the report, the IRSA tool input table.
+- What worked: cutout bundles from spherex-retrieval (0.2 MB each, 2,242 in 1.5 h of requests); the joint
+  linear solve with fixed shapes; the quadratic CWAVE background; the three-estimator design (the point-source
+  control catches what the model would hide); the cross-code check (it found the 2 % renderer bias).
+- What did not: the first renderer core sampling (fixed); the QA-stamp choice (fixed); the log filter;
+  network steps without timeouts (fixed with retries and the per-galaxy driver); the task spec never
+  committed (restored and committed now).
+- Open for the user: D3/D4 step is the CO bandhead plus a residual calibration term of 0-0.10 mag that the
+  stars in the same cutouts do not pin down; which "total flux" convention to adopt; pulls 1.1-1.4 in D1-D4
+  at S/N > 30 (a fractional error floor of 0.7-2.4 % per exposure for the three n = 4 galaxies, none
+  detectable for the n = 1 galaxies) and 1.5-2.2 in D1-D3 for the compact and the neighbour galaxy.
+- Next (not started): decide the flux convention; a position-jitter test for compact galaxies; the IRSA tool
+  submission with `results/irsa_spectrophotometry_tool_input.csv`; then the full post-starburst sample.
 
 ## Task 2 (superseded by Task 4): sample and coverage
 

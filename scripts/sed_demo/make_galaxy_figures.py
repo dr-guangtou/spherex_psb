@@ -31,6 +31,28 @@ from spherex_psb.spectra.assemble import (  # noqa: E402
 FIGURE_ROOT = Path(__file__).resolve().parents[2] / "docs" / "figures" / "sed_demo"
 
 
+MODEL_BASED_EXTERNAL = {
+    ("SDSS DR17", "model"),
+    ("2MASS XSC", "total (ext)"),
+    ("Legacy DR10 forced", "Tractor model"),
+    ("AllWISE", "elliptical (gmag)"),
+}
+
+
+def model_based_external_photometry(result_dir: Path) -> pd.DataFrame | None:
+    """External total fluxes comparable to the forced-model flux (validation item 5), once validation has
+    run: SDSS z model, 2MASS XSC total, Legacy Survey forced WISE (AllWISE elliptical where there is none)."""
+    path = result_dir / "validation" / "external_photometry.parquet"
+    if not path.exists():
+        return None
+    external = pd.read_parquet(path)
+    keys = list(zip(external.origin, external.aperture, strict=True))
+    external = external[[k in MODEL_BASED_EXTERNAL for k in keys]]
+    if (external.origin == "Legacy DR10 forced").any():
+        external = external[external.origin != "AllWISE"]
+    return external
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("galaxy")
@@ -89,6 +111,7 @@ def main() -> None:
         binned_model,
         binned_aperture,
         Path(f"{prefix}_fig4_sed.png"),
+        external=model_based_external_photometry(result_dir),
         aperture_key=args.aperture,
     )
 

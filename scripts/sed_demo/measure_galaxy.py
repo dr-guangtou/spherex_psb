@@ -3,7 +3,7 @@
 photometry with both estimators, per-exposure Parquet records and QA stamps.
 
 usage: uv run python scripts/sed_demo/measure_galaxy.py <galaxy_name> [--per-detector N] [--size-deg 0.07]
-       [--background constant|plane|cwave2|plane+cwave2] [--catalogue sdss|ls]
+       [--background constant|plane|cwave2|plane+cwave2] [--catalogue sdss|ls] [--stamps-only]
 The galaxy definitions live in scripts/sed_demo/sample_definition.py (fixed before any SPHEREx data is seen).
 """
 
@@ -23,7 +23,7 @@ from astropy.wcs import FITSFixedWarning
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from sample_definition import DEMO_GALAXIES  # noqa: E402
 
-from spherex_psb import RESULTS_ROOT  # noqa: E402
+from spherex_psb import CUTOUT_ROOT, RESULTS_ROOT  # noqa: E402
 from spherex_psb.archive.cutouts import retrieve_frames  # noqa: E402
 from spherex_psb.archive.discovery import (  # noqa: E402
     describe_counts,
@@ -39,8 +39,59 @@ from spherex_psb.extraction.catalog import (  # noqa: E402
 from spherex_psb.extraction.fit import FitSettings, Source, measure_exposure  # noqa: E402
 from spherex_psb.extraction.render import SersicShape  # noqa: E402
 from spherex_psb.products.bundle import list_bundles, read_bundle  # noqa: E402
+from spherex_psb.spectra.assemble import screen_exposures  # noqa: E402
 
 NEIGHBOUR_DEPTH_MAG = 6.0  # neighbours down to target + 6 mag in z
+
+
+def typical_exposures(table: pd.DataFrame) -> dict[int, str]:
+    """One bundle per detector for the QA stamps: the exposure that survives screening with chi2/dof closest
+    to the detector median, so that the stamps show a typical fit rather than the first file on disk."""
+    usable = screen_exposures(table[table.reject_reason == ""].copy())
+    usable = usable[usable.screen_reason == ""]
+    chosen = {}
+    for detector, sub in usable.groupby("detector"):
+        offset = (sub.chi2_dof_near - sub.chi2_dof_near.median()).abs()
+        chosen[int(detector)] = str(sub.loc[offset.idxmin(), "bundle"])
+    return chosen
+
+
+def save_qa_stamps(table: pd.DataFrame, cutout_dir: Path, sources, settings: FitSettings, out_path: Path):
+    stamps = {}
+    for detector, name in typical_exposures(table).items():
+        bundle = read_bundle(cutout_dir / name)
+        result = measure_exposure(bundle, sources, settings)
+        if result.model is None:
+            continue
+        record = result.record
+        stamps[detector] = {
+            "data": result.data,
+            "model": result.model,
+            "good": result.good,
+            "target": result.target_template,
+            "neighbours": result.neighbour_light,
+            "background": result.background,
+            "variance": bundle.variance,
+            "x0": record["x_cutout"],
+            "y0": record["y_cutout"],
+            "cwave": record["cwave_um"],
+            "obs_id": bundle.obs_id,
+        }
+    np.savez_compressed(out_path, **{f"D{d}_{k}": v for d, s in stamps.items() for k, v in s.items()})
+    return stamps
+
+
+def load_sources(galaxy, neighbours: pd.DataFrame) -> list[Source]:
+    sources = [Source("target", galaxy.ra, galaxy.dec, galaxy.shape, galaxy.mag_z, True)]
+    for i, row in neighbours.iterrows():
+        shape = SersicShape(
+            float(row.sersic_index),
+            float(row.r_e_arcsec),
+            float(row.axis_ratio),
+            float(row.position_angle_deg),
+        )
+        sources.append(Source(f"n{i:03d}", float(row.ra), float(row.dec), shape, float(row.mag_z)))
+    return sources
 
 
 def build_catalogue(galaxy, size_deg: float, source: str):
@@ -65,6 +116,11 @@ def main() -> None:
     parser.add_argument("--background", default="cwave2")
     parser.add_argument("--catalogue", default="auto", choices=["auto", "sdss", "ls"])
     parser.add_argument("--max-workers", type=int, default=2)
+    parser.add_argument(
+        "--stamps-only",
+        action="store_true",
+        help="only rebuild qa_stamps.npz from the existing records, cutouts and neighbour catalogue",
+    )
     args = parser.parse_args()
     warnings.simplefilter("ignore", FITSFixedWarning)
     galaxy = DEMO_GALAXIES[args.galaxy]
@@ -72,6 +128,17 @@ def main() -> None:
     out_dir = RESULTS_ROOT / args.galaxy
     out_dir.mkdir(parents=True, exist_ok=True)
     start = time.time()
+    settings = FitSettings(background_model=args.background, fit_radius_px=galaxy.fit_radius_px)
+
+    if args.stamps_only:
+        table = pd.read_parquet(out_dir / "records.parquet")
+        sources = load_sources(galaxy, pd.read_parquet(out_dir / "neighbours.parquet"))
+        stamps = save_qa_stamps(
+            table, CUTOUT_ROOT / args.galaxy, sources, settings, out_dir / "qa_stamps.npz"
+        )
+        chosen = {detector: stamp["obs_id"] for detector, stamp in stamps.items()}
+        print(f"[{args.galaxy}] QA stamps: {chosen}")
+        return
 
     frames = find_exposures(galaxy.ra, galaxy.dec, size_deg)
     print(f"[{args.galaxy}] discovery: {describe_counts(frames)}")
@@ -92,49 +159,23 @@ def main() -> None:
         f"[{args.galaxy}] catalogue {catalogue_source}: {len(kept)} neighbours kept, "
         f"{len(shreds)} shreds removed"
     )
-    sources = [Source("target", galaxy.ra, galaxy.dec, galaxy.shape, galaxy.mag_z, True)]
-    for i, row in kept.iterrows():
-        shape = SersicShape(
-            float(row.sersic_index),
-            float(row.r_e_arcsec),
-            float(row.axis_ratio),
-            float(row.position_angle_deg),
-        )
-        sources.append(Source(f"n{i:03d}", float(row.ra), float(row.dec), shape, float(row.mag_z)))
+    sources = load_sources(galaxy, kept)
 
-    settings = FitSettings(background_model=args.background, fit_radius_px=galaxy.fit_radius_px)
-    records, stamps = [], {}
+    records = []
     wanted = {f"cutout_{o}_D{d}.fits" for o, d in zip(selected["obs_id"], selected["detector"], strict=True)}
     for path in list_bundles(cutout_dir):
         if path.name not in wanted:
             continue
         bundle = read_bundle(path)
-        result = measure_exposure(bundle, sources, settings)
-        record = result.record
+        record = measure_exposure(bundle, sources, settings).record
         record["bundle"] = path.name
         record["catalogue_source"] = catalogue_source
         records.append(record)
-        if result.model is not None and bundle.detector not in stamps:
-            stamps[bundle.detector] = {
-                "data": result.data,
-                "model": result.model,
-                "good": result.good,
-                "target": result.target_template,
-                "neighbours": result.neighbour_light,
-                "background": result.background,
-                "variance": bundle.variance,
-                "x0": record["x_cutout"],
-                "y0": record["y_cutout"],
-                "cwave": record["cwave_um"],
-                "obs_id": bundle.obs_id,
-            }
     table = pd.DataFrame(records)
     table["galaxy"] = args.galaxy
     table["redshift"] = galaxy.redshift
     table.to_parquet(out_dir / "records.parquet", index=False)
-    np.savez_compressed(
-        out_dir / "qa_stamps.npz", **{f"D{d}_{k}": v for d, s in stamps.items() for k, v in s.items()}
-    )
+    save_qa_stamps(table, cutout_dir, sources, settings, out_dir / "qa_stamps.npz")
     summary = {
         "galaxy": args.galaxy,
         "n_exposures_available": len(frames),

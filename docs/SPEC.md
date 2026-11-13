@@ -109,3 +109,11 @@ spherex-retrieval or our own retry wrapper), `spherex_psb/products` (MEF reader,
 selection, flags), `spherex_psb/extraction` (Sersic renderer, joint linear solve, background
 models, estimators), `spherex_psb/spectra` (per-exposure records in Parquet, binning, extinction),
 `spherex_psb/validation`, `spherex_psb/figures` (shared style). Scripts in `scripts/sed_demo/`.
+
+Decisions from the demo (2026-11-14, `docs/demo_sed_report.md`): background = constant + quadratic in
+CWAVE fitted jointly with the sources (repairs the He I exposures); Sersic templates integrated over the
+core (32 x 32 sub-samples in a 7 x 7 oversampled-pixel block); per-exposure screening on near-target and
+whole-cutout chi2 and on CWAVE; SED error = exposure scatter per channel, with a 1.5 % fractional floor
+per exposure for n = 4 galaxies with R_e <= 2 arcsec; DR1 and QR3 combined without correction. Open
+(user's call): the total-flux convention (analytic Sersic total versus the truncated tractor / SDSS model
+total, 6 % apart for n = 4) and whether a position-jitter term is added before stacking.

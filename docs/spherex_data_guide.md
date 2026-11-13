@@ -94,6 +94,9 @@ Rules stated by the project:
   notice (QR2 vanished from TAP on 2026-11-13).
 - DR1 and QR3 share the same calibration files: `epsf/cal-epsf-v1-2026-191` (v2 for D3),
   `spectral_wcs/cal-swcs-v5-2026-191`, `solid_angle_pixel_map/cal-sapm-v3-2026-191`.
+- Measured (SED demo, 2026-11-14, five galaxies with both releases): QR3 / DR1 forced-model fluxes at
+  matched wavelengths agree to 1-2 % in every detector with no systematic offset (weighted means
+  0.97-1.04, all within their errors), so DR1 and QR3 can be combined without a correction.
 - Explanatory Supplement v2.1 (2026-11-10) is at
   `https://irsa.ipac.caltech.edu/data/SPHEREx/docs/SPHEREx_Expsupp.pdf` (the `_QR.pdf` URL still
   serves v2.0); it adds section 2.5 on the all-sky cubes.
@@ -257,6 +260,11 @@ Cutouts preserve all six HDUs; the PSF/EPSF extension is copied whole, so map cu
 pixels back to the parent frame with CRPIX1A/CRPIX2A before choosing a PSF zone. Full
 frames take long enough that the notebooks set `astropy.utils.data.conf.remote_timeout = 120`
 and wrap `fits.open` in a 3-attempt retry; use `cache=False` for large batches.
+- Measured with hbahk's spherex-retrieval (cutout service, 0.07 deg = 41 x 41 px, EPSF extension
+  truncated after its header and the calibration ePSF attached instead): 0.20 MB per bundle on disk;
+  2,189 bundles in 5,538 s at two concurrent requests (2.5 s per cutout; 4.4 s in a 36-cutout test).
+  The limit is the request rate, not the volume. IRSA TAP returned 502/503 for about an hour and one
+  download hung for three hours during the demo: give every request a timeout and a retry.
 
 ### 5.4 Cloud
 
@@ -310,6 +318,10 @@ Jobs are UWS jobs, so a URL exists per job, but batch submission is not document
 - The He I 1.083 um airglow line sits in bands 1-2 and is 3-30 times brighter than the
   zodiacal light; it also leaks to features near 0.84 um (band 1) and 1.25/1.49 um (band 2).
   Published map work drops the four affected channels.
+  Measured (SED demo): with ZODI subtracted and a constant background, the exposures within
+  0.02 um of He I have chi2/dof 5-9 near a bright galaxy; a background basis quadratic in CWAVE
+  (constant + CWAVE + CWAVE^2, fitted jointly with the sources) brings them to 1-2 and changes
+  their fluxes by 5-9 %, after which only 1-3 exposures per galaxy need to be screened.
 
 ## 7. PSF handling
 
@@ -336,6 +348,12 @@ Jobs are UWS jobs, so a URL exists per job, but batch submission is not document
   (0.9 um) to ~1.3x (4.7 um) for binning.
 - The cutout service does not trim the PSF/EPSF extension; the target position in the
   parent frame is `x_orig = 1 + x_cutout - CRPIX1A` (0-based astropy pixels).
+- The D3/D4 overlap (2.417-2.426 um) is DICHROIC-flagged on both detectors: in 2,225 exposures of
+  six galaxies every exposure with CWAVE in that range was rejected (all target pixels flagged). A
+  detector-boundary test there has to compare exposures on both sides over a window (0.2 um) and,
+  for 0.03 < z < 0.06 galaxies, the 2.29 um CO bandhead falls inside that window, so the galaxy
+  step (+0.06 to +0.17 mag, growing with redshift) is not a calibration measurement; bright stars
+  fitted jointly in the same cutouts give 0.00 +- 0.03 mag.
 
 ## 8. Backgrounds and instrument systematics
 
@@ -533,6 +551,22 @@ Cross-cutting rules
   survey-to-survey repeatability once Surveys 3-4 land; comparison with any existing
   NIR spectra.
 
+Measured in the SED demo (2026-11-14, `docs/demo_sed_report.md`), for the forced-model approach
+of regime 2-3 with fixed optical shapes, neighbours fitted jointly, ZODI subtracted and a quadratic
+CWAVE background:
+- chi2/dof near the target 0.9-2.3 per exposure; model flux / corrected 2 px aperture flux 0.98-1.03
+  with no trend over 0.75-5 um; injected galaxies recovered at 1.00-1.02.
+- Repeat exposures at the same wavelength scatter 1.0-1.4 times the formal error (pooled per
+  detector), with a 0.7-2.4 % fractional floor per exposure for galaxies with R_e <= 2 arcsec and
+  n = 4; use the exposure scatter per channel, not the formal error, as the SED error.
+- Our flux / tractorjax-spherex = 1.015 (n = 1) and 1.06 (n = 4): tractor normalises its
+  mixture-of-Gaussians profiles to unit sum although they only reach ~4 R_e (exp) or ~8 R_e (deV), so
+  tractor-based totals (Legacy Survey, the IRSA tool) are 1 % (n = 1) or 6 % (n = 4) below analytic
+  Sersic totals. SDSS model magnitudes are truncated at 7 R_e as well.
+- SDSS z model fluxes agree with SPHEREx synthetic fluxes to within 8 %; Legacy Survey forced W1 to
+  7-11 %; 2MASS XSC total and AllWISE magnitudes are 0-70 % low for extended galaxies (aperture
+  limited) and only usable for colours.
+
 ## 12. Pitfall checklist
 
 - Assuming IMAGE is sky-subtracted (it is not; ZODI is a model extension).
@@ -554,6 +588,12 @@ Cross-cutting rules
   single-epoch with gaps in specific channels.
 - Astropy caches every remote FITS by default; use `cache=False` for bulk cutouts.
 - Long TAP queries without a spatial constraint time out.
+- Point-sampling a Sersic profile on the 1.23 arcsec ePSF grid: an n = 4 cusp with R_e = 1 arcsec
+  loses 2 % of its flux, and the loss changes with the cutout orientation; integrate the core
+  (validated against a brute-force reference for every profile class).
+- Comparing analytic Sersic totals with tractor or SDSS model totals without the truncation factor.
+- Reading a detector-boundary step as calibration when a spectral edge (CO 2.29 um at z < 0.06)
+  sits in the window.
 
 ## 13. Citation and acknowledgment
 

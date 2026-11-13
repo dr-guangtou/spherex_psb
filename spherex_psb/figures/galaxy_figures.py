@@ -181,8 +181,9 @@ def figure_image_qa(
             slice(int(round(x0)) - half, int(round(x0)) + half + 1),
             slice(int(round(y0)) - half, int(round(y0)) + half + 1),
         )
-        vmax = np.nanpercentile(data_[ys, xs], 99.5)
-        vmin = np.nanpercentile(data_[ys, xs], 1)
+        unmasked = np.where(good[ys, xs], data_[ys, xs], np.nan)  # masked hot pixels must not set the stretch
+        vmax = np.nanpercentile(unmasked, 99.5)
+        vmin = np.nanpercentile(unmasked, 1)
         panels = [
             (data_[ys, xs], "gray_r", vmin, vmax),
             (model[ys, xs], "gray_r", vmin, vmax),
@@ -359,6 +360,8 @@ def figure_sed(
     ax_ratio.set_xlabel(WAVELENGTH_LABEL)
     ax.set_ylabel(FLUX_LABEL)
     ax.set_xlim(0.7, 5.1)
+    low, high = ax.get_ylim()
+    ax.set_ylim(low, high + 0.12 * (high - low))  # room for the panel label and legend above the SED peak
     ax.legend(ncol=2, fontsize=6.5, loc="upper right")
     _mark_airglow(ax)
     top = ax.secondary_xaxis(

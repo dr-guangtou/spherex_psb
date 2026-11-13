@@ -110,3 +110,18 @@ Data lessons (verified live)
   galaxies: the CO bandhead (2.29 um rest) falls at 2.37-2.43 um observed, inside the 0.2 um window, and a
   quadratic in log flux cannot absorb an edge. Stars fitted jointly in the same cutouts give the
   calibration-only step (per-source fluxes are now stored in the records for this).
+- The QA stamps (figure 2) were taken from the first cutout file per detector in alphabetical order, which
+  for two galaxies was an exposure later screened out (a satellite streak; a D6 frame with a bad fit). Pick
+  the exposure whose chi2/dof is closest to the detector median after screening, so that the figure shows a
+  typical fit (`measure_galaxy.py --stamps-only` rebuilds the stamps from the records).
+- A stamp display stretch from percentiles of all pixels is set by masked hot pixels; take the percentiles
+  of the unmasked pixels only.
+- The task spec `docs/sed_demo_task.md` was moved into `docs/` at the start of the session but never
+  committed, and it was gone from the working tree at the end (an untracked copy had reappeared at the
+  repository root, probably through Dropbox sync). Commit the task spec with the first checkpoint; an
+  untracked file in a Dropbox-synced repository is not safe.
+- Comparing SPHEREx synthetic fluxes with external catalogues only works like with like: SDSS z model
+  fluxes agree within 5 % (0.95-1.08), Legacy Survey forced W1 within 10 % (1.07-1.11, which includes the
+  1.06 factor between an analytic Sersic total and the tractor mixture total for n = 4), 2MASS XSC "total"
+  magnitudes are 0-50 % low for the fainter galaxies, and AllWISE profile-fit and elliptical magnitudes are
+  30-70 % low. Treat 2MASS XSC and AllWISE as lower limits for extended galaxies.
