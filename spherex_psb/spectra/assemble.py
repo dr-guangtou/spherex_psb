@@ -18,7 +18,10 @@ import requests
 from spherex_psb.spectra.channels import channel_table
 
 IRSA_DUST = "https://irsa.ipac.caltech.edu/cgi-bin/DUST/nph-dust"
-CHI2_OUTLIER_FACTOR = 5.0  # exposures whose chi2/dof exceeds this times the per-detector median are rejected
+CHI2_OUTLIER_FACTOR = 5.0
+CHI2_ALL_OUTLIER_FACTOR = (
+    10.0  # exposures whose chi2/dof exceeds this times the per-detector median are rejected
+)
 NEIGHBOUR_OUTLIER_SIGMA = 5.0  # exposures off the local running median by this many sigma are rejected
 
 
@@ -55,6 +58,11 @@ def screen_exposures(records: pd.DataFrame, flux_column: str = "flux_model_ujy")
         median_chi2 = np.nanmedian(group.chi2_dof_near)
         bad = group.index[group.chi2_dof_near > CHI2_OUTLIER_FACTOR * median_chi2]
         reason.loc[bad] = "chi2_outlier"
+    measured = reason == ""
+    for _detector, group in table[measured].groupby("detector"):
+        median_chi2_all = np.nanmedian(group.chi2_dof_all)
+        bad = group.index[group.chi2_dof_all > CHI2_ALL_OUTLIER_FACTOR * median_chi2_all]
+        reason.loc[bad] = "cutout_chi2_outlier"  # an artefact elsewhere in the cutout corrupts the joint fit
     measured = reason == ""
     # outlier against nearby wavelengths: running median over the 7 nearest exposures in wavelength
     sub = table[measured].sort_values("cwave_um")

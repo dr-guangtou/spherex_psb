@@ -34,7 +34,9 @@ class Source:
 class FitSettings:
     fit_radius_px: float = 5.0  # chi2 and quality statistics are computed inside this radius of the target
     aperture_radii_px: tuple[float, ...] = (1.5, 2.0, 2.5, 3.0)
-    background_model: str = "constant"
+    background_model: str = (
+        "cwave2"  # neutral away from airglow lines, repairs He I exposures (lessons 2026-11-13)
+    )
     exclude_flags: tuple[str, ...] = DEMO_EXCLUDE
     half_width_px: int = 14
     use_cwave_at_target: bool = True

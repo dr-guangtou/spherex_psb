@@ -62,7 +62,7 @@ def main() -> None:
     parser.add_argument("galaxy")
     parser.add_argument("--per-detector", type=int, default=None)
     parser.add_argument("--size-deg", type=float, default=None)
-    parser.add_argument("--background", default="constant")
+    parser.add_argument("--background", default="cwave2")
     parser.add_argument("--catalogue", default="auto", choices=["auto", "sdss", "ls"])
     parser.add_argument("--max-workers", type=int, default=2)
     args = parser.parse_args()

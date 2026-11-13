@@ -40,6 +40,7 @@ REJECT_MARKERS = {
     "cutout_truncated": "x",
     "model_weight_masked": "+",
     "chi2_outlier": "s",
+    "cutout_chi2_outlier": "D",
     "wavelength_outlier": "d",
     "airglow": "^",
     "target_outside_cutout": "x",
