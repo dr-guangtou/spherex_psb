@@ -6,6 +6,7 @@ requires-python = ">=3.12"
 dependencies = [
     "astropy>=8.0.1",
     "astroquery>=0.4.11",
+    "dust-extinction>=1.7",
     "fsspec[s3]>=2026.9.0",
     "matplotlib>=3.11.2",
     "numpy>=2.5.3",
@@ -15,10 +16,21 @@ dependencies = [
     "pyvo>=1.9.1",
     "requests>=2.34.2",
     "scipy>=1.18.1",
+    "speclite>=1.0.0",
     "spherex-retrieval",
     "tractor-jax",
     "tractorjax-spherex",
 ]
+
+[tool.uv]
+package = true
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["spherex_psb"]
 
 [dependency-groups]
 dev = [

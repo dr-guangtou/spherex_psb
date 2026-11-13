@@ -811,6 +811,16 @@ wheels = [
 ]
 
 [[package]]
+name = "dust-extinction"
+version = "1.7"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "astropy" },
+    { name = "scipy" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/e9/aa/750cf152780c6b31efc7bf02e90935d12ce0fbf1d3860752df29de84170f/dust_extinction-1.7.tar.gz", hash = "sha256:c421eafc44c622e82e9a122ed444c01f0909434c7462b04715e180723aa81064", size = 5344457, upload-time = "2026-02-06T20:29:40.154Z" }
+
+[[package]]
 name = "executing"
 version = "2.2.1"
 source = { registry = "https://pypi.org/simple" }
@@ -3170,12 +3180,28 @@ wheels = [
 ]
 
 [[package]]
+name = "speclite"
+version = "1.0.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "astropy" },
+    { name = "matplotlib" },
+    { name = "pyyaml" },
+    { name = "scipy" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/c8/5c/0ae1e308b957137800d0678d140f918f879f845d259250da3ff366aca36b/speclite-1.0.0.tar.gz", hash = "sha256:51cdff676004e5671cb4696e9e056f9b83505e8ebcf91ae474659015fc730d24", size = 2117483, upload-time = "2026-03-16T22:05:10.85Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/7a/9c/ded2f0569b2f393f149e32126c4055400c2f692990b467bd1136ba9160af/speclite-1.0.0-py3-none-any.whl", hash = "sha256:4bc8cb7f718b347e0ce566cb5ed341684c8efebe4a77f2a49aabe8ee085465d7", size = 2170548, upload-time = "2026-03-16T22:05:09.287Z" },
+]
+
+[[package]]
 name = "spherex-psb"
 version = "0.1.0"
-source = { virtual = "." }
+source = { editable = "." }
 dependencies = [
     { name = "astropy" },
     { name = "astroquery" },
+    { name = "dust-extinction" },
     { name = "fsspec", extra = ["s3"] },
     { name = "matplotlib" },
     { name = "numpy" },
@@ -3185,6 +3211,7 @@ dependencies = [
     { name = "pyvo" },
     { name = "requests" },
     { name = "scipy" },
+    { name = "speclite" },
     { name = "spherex-retrieval" },
     { name = "tractor-jax" },
     { name = "tractorjax-spherex" },
@@ -3202,6 +3229,7 @@ dev = [
 requires-dist = [
     { name = "astropy", specifier = ">=8.0.1" },
     { name = "astroquery", specifier = ">=0.4.11" },
+    { name = "dust-extinction", specifier = ">=1.7" },
     { name = "fsspec", extras = ["s3"], specifier = ">=2026.9.0" },
     { name = "matplotlib", specifier = ">=3.11.2" },
     { name = "numpy", specifier = ">=2.5.3" },
@@ -3211,6 +3239,7 @@ requires-dist = [
     { name = "pyvo", specifier = ">=1.9.1" },
     { name = "requests", specifier = ">=2.34.2" },
     { name = "scipy", specifier = ">=1.18.1" },
+    { name = "speclite", specifier = ">=1.0.0" },
     { name = "spherex-retrieval", git = "https://github.com/hbahk/spherex-retrieval" },
     { name = "tractor-jax", git = "https://github.com/hbahk/tractor-jax" },
     { name = "tractorjax-spherex", git = "https://github.com/hbahk/tractorjax-spherex" },
