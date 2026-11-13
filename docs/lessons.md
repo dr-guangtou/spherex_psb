@@ -60,3 +60,27 @@ Data lessons (verified live)
   GPL-3.
 - A personal repo by an SSDC member (SPHERExSpecPhot) is not evidence of official status;
   it is a simple aperture tool unrelated to the IRSA Spectrophotometry Tool.
+
+## 2026-11-13 SED demo, checkpoint A
+
+- The exposure-level `HE_AIRGLOW_CONT` keyword is True for every D1 and D2 exposure (it marks the detectors
+  the He I 1.083 um line can reach, not the exposures it affects), so it cannot screen exposures. A background
+  basis quadratic in the per-pixel CWAVE across the cutout does the job: on the 1.097 um exposure of the
+  reference galaxy it lowers chi2/dof (near) from 8.9 to 1.8-2.3 and the whole-cutout chi2/dof from 114 to
+  1.7, and changes the galaxy flux by -5 % (1.097 um) and +9 % (1.060 um). A plane in x, y does not help
+  (the airglow band follows the LVF iso-wavelength curves). Decide the default background model from the
+  full-sample comparison, not from one exposure.
+- Adjacent nominal spectral channels overlap by up to 0.018 um (Spectral Channels product); binning by
+  "CWAVE within [WL_MIN, WL_MAX]" puts one exposure into two channels. Assign each exposure to the nearest
+  channel centre of its detector.
+- spherex-retrieval stops each cutout download after the EPSF header and attaches the calibration ePSF,
+  so a 41 x 41 pixel bundle with CWAVE/CBAND/SAPM is 0.2 MB on disk (36 cutouts: 7.4 MB, 157 s at two
+  workers); the per-detector calibration cache is 445 MB once. The 10 GB budget is not a constraint;
+  IRSA request rate is (about 4.4 s per cutout).
+- IRSA TAP footprint queries slow from ~5 s to ~30 s each when several of my own jobs query IRSA
+  concurrently; serialise archive queries.
+- Python prints to a redirected log are block-buffered: use `flush=True` (or `python -u`) for long jobs,
+  or the log stays empty until the end.
+- Legacy Survey DR10 forced WISE photometry (Tractor model) agrees with the SPHEREx model flux of the
+  reference galaxy at W1/W2 within a few per cent, while AllWISE profile-fit magnitudes are 35-40 % low and
+  2MASS XSC "total" magnitudes 15-20 % low: compare like with like (model-based total fluxes).
