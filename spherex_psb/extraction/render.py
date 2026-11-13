@@ -55,6 +55,48 @@ def sersic_total_flux(shape: SersicShape) -> float:
     return 2 * np.pi * q * n * re**2 * np.exp(b) * b ** (-2 * n) * gamma(2 * n)
 
 
+CORE_BLOCK_HALF_WIDTH = 3  # oversampled pixels around the centre that are sampled finely
+CORE_SUBSAMPLE = 32
+
+
+def _flux_fraction_on_block(
+    wcs: WCS,
+    ra: float,
+    dec: float,
+    x0: float,
+    y0: float,
+    shape: SersicShape,
+    oversampling: int,
+    block_half_width: int,
+    subsample: int,
+) -> np.ndarray:
+    """Fraction of the source's total flux in each oversampled pixel of a square block centred on it.
+
+    The profile is point-sampled at ``subsample`` x ``subsample`` points per oversampled pixel; the light
+    inside the elliptical core of semi-major axis half a pitch (which lies within the central pixel) is
+    assigned to the central pixel analytically.
+    """
+    pitch = PIXEL_SCALE_ARCSEC / oversampling
+    m = 2 * block_half_width + 1
+    fine = (np.arange(m * subsample) - (m * subsample - 1) / 2) / (oversampling * subsample)
+    gx, gy = np.meshgrid(x0 + fine, y0 + fine)
+    east, north = sky_offsets_arcsec(wcs, gx.ravel(), gy.ravel(), ra, dec)
+    pa = np.radians(shape.position_angle_deg)
+    major = east * np.sin(pa) + north * np.cos(pa)
+    minor = east * np.cos(pa) - north * np.sin(pa)
+    radius = np.hypot(major, minor / shape.axis_ratio).reshape(gy.shape)
+    n_idx, re = shape.sersic_index, shape.effective_radius_arcsec
+    b = gammaincinv(2 * n_idx, 0.5)
+    profile = np.exp(-b * ((radius / re) ** (1 / n_idx) - 1))
+    core_radius = pitch / 2
+    fine_image = np.where(
+        radius < core_radius, 0.0, profile * (pitch / subsample) ** 2 / sersic_total_flux(shape)
+    )
+    block = fine_image.reshape(m, subsample, m, subsample).sum(axis=(1, 3))
+    block[block_half_width, block_half_width] += gammainc(2 * n_idx, b * (core_radius / re) ** (1 / n_idx))
+    return block
+
+
 def render_source_on_oversampled_grid(
     wcs: WCS,
     ra: float,
@@ -66,31 +108,26 @@ def render_source_on_oversampled_grid(
 ) -> tuple[np.ndarray, float, float]:
     """Unit-total-flux image of the source on the oversampled grid centred on its sky position.
 
+    The central block of 2 x CORE_BLOCK_HALF_WIDTH + 1 oversampled pixels is re-sampled CORE_SUBSAMPLE times
+    finer: with the default 4 x 4 sampling an n = 4 cusp of R_e = 1" lost 2.3 % of its flux (lessons
+    2026-11-13); the fine block brings every tested shape within 0.2 % of a 64 x 64 reference.
+
     Returns the grid, and the source's cutout pixel position (x0, y0).
     """
     x0, y0 = (float(v) for v in wcs.all_world2pix([[ra, dec]], 0)[0])
     n = 2 * half_width_px * oversampling + 1
     centre = n // 2
-    grid = np.zeros((n, n))
     if shape.is_point:
+        grid = np.zeros((n, n))
         grid[centre, centre] = 1.0
         return grid, x0, y0
-    pitch = PIXEL_SCALE_ARCSEC / oversampling
-    fine = (np.arange(n * subsample) - (n * subsample - 1) / 2) / (oversampling * subsample)
-    gx, gy = np.meshgrid(x0 + fine, y0 + fine)
-    east, north = sky_offsets_arcsec(wcs, gx.ravel(), gy.ravel(), ra, dec)
-    pa = np.radians(shape.position_angle_deg)
-    major = east * np.sin(pa) + north * np.cos(pa)
-    minor = east * np.cos(pa) - north * np.sin(pa)
-    radius = np.hypot(major, minor / shape.axis_ratio).reshape(gy.shape)
-    n_idx, re = shape.sersic_index, shape.effective_radius_arcsec
-    b = gammaincinv(2 * n_idx, 0.5)
-    profile = np.exp(-b * ((radius / re) ** (1 / n_idx) - 1))
-    total = sersic_total_flux(shape)
-    core_radius = pitch / 2
-    fine_image = np.where(radius < core_radius, 0.0, profile * (pitch / subsample) ** 2 / total)
-    grid = fine_image.reshape(n, subsample, n, subsample).sum(axis=(1, 3))
-    grid[centre, centre] += gammainc(2 * n_idx, b * (core_radius / re) ** (1 / n_idx))
+    grid = _flux_fraction_on_block(
+        wcs, ra, dec, x0, y0, shape, oversampling, half_width_px * oversampling, subsample
+    )
+    k = CORE_BLOCK_HALF_WIDTH
+    grid[centre - k : centre + k + 1, centre - k : centre + k + 1] = _flux_fraction_on_block(
+        wcs, ra, dec, x0, y0, shape, oversampling, k, CORE_SUBSAMPLE
+    )
     return grid, x0, y0
 
 

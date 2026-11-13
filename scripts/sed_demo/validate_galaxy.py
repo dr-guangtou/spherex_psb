@@ -100,13 +100,16 @@ def main() -> None:
 
     # 5: external photometry
     legacy = legacy_dr10_neighbours(galaxy.ra, galaxy.dec, 0.5, 30.0) if galaxy.catalogue == "ls" else None
-    try:
-        external = query_external(galaxy.ra, galaxy.dec, galaxy.sdss_objid, legacy)
-    except Exception as error:  # noqa: BLE001  (IRSA catalogue services go down now and then)
-        print(f"[{args.galaxy}] external photometry query failed: {str(error)[:120]}")
-        external = pd.DataFrame(
-            columns=["band", "origin", "aperture", "flux_ujy", "flux_err_ujy", "wavelength_um"]
-        )
+    external = pd.DataFrame(
+        columns=["band", "origin", "aperture", "flux_ujy", "flux_err_ujy", "wavelength_um"]
+    )
+    for attempt in range(4):  # IRSA catalogue services go down now and then
+        try:
+            external = query_external(galaxy.ra, galaxy.dec, galaxy.sdss_objid, legacy)
+            break
+        except Exception as error:  # noqa: BLE001
+            print(f"[{args.galaxy}] external query failed (attempt {attempt + 1}): {str(error)[:120]}")
+            time.sleep(90)
     external["galaxy"] = args.galaxy
     external.to_parquet(out_dir / "external_photometry.parquet", index=False)
     ok = sed_model.n_exposures > 0

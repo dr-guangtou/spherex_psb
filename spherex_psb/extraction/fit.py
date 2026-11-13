@@ -7,6 +7,7 @@ Everything is linear in the amplitudes; positions and shapes are fixed. NaN pixe
 
 from __future__ import annotations
 
+import json
 from dataclasses import dataclass, field
 
 import numpy as np
@@ -209,6 +210,13 @@ def measure_exposure(bundle: Bundle, sources: list[Source], settings: FitSetting
     for name, a in zip(names, amplitudes, strict=True):
         if name.startswith("bkg_") and name != "bkg_const":
             record[name] = float(a)
+    record["source_fluxes_ujy"] = json.dumps(
+        {
+            n: [round(float(a * to_ujy), 3), round(float(e * to_ujy), 3)]
+            for n, a, e in zip(names, amplitudes, errors, strict=True)
+            if not n.startswith("bkg_")
+        }
+    )
 
     # model-corrected aperture fluxes at fixed angular radii; flagged pixels filled with the model
     cleaned = np.where(good, data - neighbour_light - background_light, flux_amp * target_template)
