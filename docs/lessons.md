@@ -84,3 +84,29 @@ Data lessons (verified live)
 - Legacy Survey DR10 forced WISE photometry (Tractor model) agrees with the SPHEREx model flux of the
   reference galaxy at W1/W2 within a few per cent, while AllWISE profile-fit magnitudes are 35-40 % low and
   2MASS XSC "total" magnitudes 15-20 % low: compare like with like (model-based total fluxes).
+
+## 2026-11-13 SED demo, checkpoint B
+
+- The Sersic renderer point-sampled the profile 4 x 4 times per oversampled (1.23") pixel outside an
+  analytic core of half a pitch. For n = 4 cusps this lost up to 2.3 % of the flux (R_e = 1", the compact
+  galaxy), and the loss changed with the orientation of the cutout grid, so it also inflated the exposure-to-
+  exposure scatter of the de Vaucouleurs galaxies. Found only through the cross-code check (ours / tractorjax
+  was 1.06-1.08 for n = 4 against 1.015 for n = 1). Fix: a 7 x 7 oversampled-pixel core block sampled 32 x 32
+  (every tested shape within 0.2 % of a 64 x 64 brute-force reference; 30 ms per template, unchanged).
+  Lesson: validate a renderer's integrated flux against a brute-force reference for every profile class
+  before trusting absolute fluxes; an injection test with the same renderer cannot see this.
+- tractor (and tractor-jax, and therefore the Legacy Survey catalogues) normalises the Hogg & Lang
+  mixture-of-Gaussians amplitudes to unit sum, although the mixture only matches the profile out to ~8 R_e
+  (deV) or ~4 R_e (exp). An analytic Sersic total is therefore 1/0.943 = 1.060 (deV) and 1/0.991 (exp) times
+  the tractor "total" for the same image; SDSS deV model magnitudes are truncated at 7 R_e as well. State
+  which total is meant when comparing fluxes between codes and catalogues.
+- The run-log filter `grep -v "^  "` (meant for astropy warning continuation lines) also removed every
+  indented line of the printed tables and JSON summaries. Filter on the warning text, never on indentation.
+- IRSA TAP returned 502/503 for about an hour, Data Lab TAP returned a non-VOTable page once, and one
+  spherex-retrieval download hung for three hours with no open connection. Every network step needs a
+  timeout and a retry, and an unattended driver must continue with the next galaxy after a failure
+  (scripts/sed_demo/run_remaining.py).
+- The detector-boundary test around D3/D4 (2.42 um) is not a pure calibration test for 0.03 < z < 0.06
+  galaxies: the CO bandhead (2.29 um rest) falls at 2.37-2.43 um observed, inside the 0.2 um window, and a
+  quadratic in log flux cannot absorb an edge. Stars fitted jointly in the same cutouts give the
+  calibration-only step (per-source fluxes are now stored in the records for this).

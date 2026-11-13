@@ -78,12 +78,15 @@ def figure_boundaries(out_path: Path) -> pd.DataFrame:
             )
         ax.axhline(0, color=NEUTRAL_GREY, lw=0.6)
         ax.set_xticks(range(len(names)))
-        ax.set_xticklabels(names)
+        ax.set_xticklabels(names, rotation=35, ha="right", rotation_mode="anchor")
         panel_label(ax, label)
-    axes[0].set_ylabel(r"$-2.5\log_{10}(F_{\rm B}/F_{\rm A})$ at the boundary [mag]")
-    axes[0].set_ylim(-0.35, 0.35)
-    axes[2].legend(fontsize=6, loc="lower right", ncol=2)
-    fig.savefig(out_path)
+    axes[0].set_ylabel(r"$-2.5\log_{10}(F_{\rm B}/F_{\rm A})$ [mag]")
+    axes[0].set_ylim(-0.4, 0.35)
+    handles, labels = axes[0].get_legend_handles_labels()
+    fig.legend(
+        handles, labels, fontsize=6.5, ncol=6, loc="lower center", bbox_to_anchor=(0.5, 0.97), frameon=False
+    )
+    fig.savefig(out_path, bbox_inches="tight")
     plt.close(fig)
     return table
 
@@ -142,7 +145,7 @@ def figure_injection_and_pulls(out_path: Path) -> tuple[pd.DataFrame, pd.DataFra
         ax_inj.set_xlabel(r"$\lambda_{\rm obs}\ [\mu{\rm m}]$")
         ax_inj.set_ylabel("recovered / injected flux")
         ax_inj.set_ylim(0.8, 1.2)
-        ax_inj.legend(fontsize=6, ncol=3, loc="upper right")
+        ax_inj.legend(fontsize=6, ncol=3, loc="lower left", frameon=True, framealpha=0.9)
         panel_label(ax_inj, "(a) filled: model; open: corrected aperture")
     if len(pairs):
         bins = np.linspace(-5, 5, 41)
@@ -172,7 +175,7 @@ def figure_injection_and_pulls(out_path: Path) -> tuple[pd.DataFrame, pd.DataFra
         )
         ax_pull.set_xlabel(r"pull $(F_1-F_2)/\sqrt{\sigma_1^2+\sigma_2^2}$")
         ax_pull.set_ylabel("repeat pairs")
-        ax_pull.legend(fontsize=5.5, loc="upper left")
+        ax_pull.legend(fontsize=5.5, loc="upper left", frameon=True, framealpha=0.9)
         panel_label(ax_pull, "(b)", x=0.85)
     fig.savefig(out_path)
     plt.close(fig)

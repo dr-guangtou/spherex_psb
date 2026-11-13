@@ -80,7 +80,7 @@ def optical_image(
         wcs.wcs.crval = [ra, dec]
         wcs.wcs.cdelt = [-0.5 / 3600, 0.5 / 3600]
         wcs.wcs.ctype = ["RA---TAN", "DEC--TAN"]
-        return data, wcs, "SDSS DR17 colour composite"
+        return data, wcs, "SDSS DR17 image"
     return None, None, "no image"
 
 
