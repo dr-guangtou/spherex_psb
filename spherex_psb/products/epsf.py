@@ -1,6 +1,6 @@
 """ePSF zone selection and sampling conventions (R7 effective PSF, QR3 and DR1).
 
-Conventions verified on 2026-11-12/13 (docs/reference_notes/photometry_study_2026-11.md section 10):
+Conventions verified on 2026-11-12/13 (docs/references/studies/photometry_study_2026-11.md section 10):
 each ePSF plane sums to 1 on its 5x oversampled grid, so samples at native pixel spacing sum to 1/25; the
 ePSF already contains the pixel response, so a model is convolved on the oversampled grid and then sampled
 (not integrated) at native pixel centres. The zone is chosen in parent-frame pixel coordinates.

@@ -42,7 +42,7 @@ perfect 2-D model of the galaxy is not the goal, and neither is its total flux.
 
 An earlier study (2026-11-12/13) tested the methods on one real galaxy and in simulations. It lives in the
 git-ignored `temp/` folder of the student's repository, so it is not under our version control. Write the facts
-you rely on, with their source paths, into `docs/reference_notes/photometry_study_2026-11.md`.
+you rely on, with their source paths, into `docs/references/studies/photometry_study_2026-11.md`.
 
 Read, under `/Users/shuang/Dropbox/work/project/otters/spherex_photometry_code/temp/`:
 - `docs/sed_photometry_followup.md`: the latest; its section 5 gives the recommendation.
@@ -284,7 +284,7 @@ Look at every PNG before reporting it.
 - **Checkpoint B.**
   - Measure every exposure of the six galaxies.
   - Run validation items 1-7 and make all figures.
-  - Write the report `docs/demo_sed_report.md`.
+  - Write the report `docs/reports/demo_sed_report.md`.
 - **When to ask me:**
   - downloads that would exceed the budget;
   - changes of scope;

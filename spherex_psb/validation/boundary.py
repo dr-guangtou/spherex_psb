@@ -1,6 +1,7 @@
 """Detector-boundary test: flux ratio between the two detectors that both observe a boundary wavelength.
 
-The detector overlaps (from the ePSF CWAVE ranges; docs/sed_demo_task.md section 7) are narrow and their
+The detector overlaps (from the ePSF CWAVE ranges; docs/reports/sed_demo_task.md section 7) are narrow and
+their
 pixels are mostly DICHROIC-flagged at D3/D4, so instead of requiring exposures inside the overlap, the
 exposures of both detectors within a window around the boundary are fitted jointly with a quadratic in
 wavelength (in log flux, so that the local curvature of the SED is absorbed) plus a constant step for

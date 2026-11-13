@@ -1,7 +1,7 @@
 # spherex_psb specification
 
 Source of truth for scope and architecture. Update before implementing new features.
-Status: v0.2, 2026-11-13, SED demo in progress (see section 7).
+Status: v0.3, 2026-11-14, SED demo complete (section 7); documentation site added (section 9).
 
 ## 1. Scientific goal
 
@@ -29,7 +29,7 @@ plus stacked spectra for sub-samples. Mosaics are a secondary, quick-look produc
   IRSA, accessed via TAP for discovery and the IBE cutout service or S3 for pixels.
   The IRSA Spectrophotometry Tool is the baseline for unresolved and semi-resolved
   targets and the reference against which our own extraction is validated.
-- Knowledge base: `docs/spherex_data_guide.md` (synthesis) and `docs/reference_notes/`
+- Knowledge base: the documentation site in `docs/` (pages `primer.md`, `data_access.md`, `reduction_analysis.md`) and `docs/references/`
   (per-source notes).
 - Third-party tools (permission granted 2026-11-13 for the SED demo): hbahk's
   `spherex-retrieval` (MIT), `tractor-jax` (GPL-2.0) and `tractorjax-spherex` (GPL-3.0) may be
@@ -86,17 +86,17 @@ photometry, and repeat measurements across surveys. Only then run the full sampl
 - First pass: our own per-exposure forced photometry with a PSF-convolved Sersic model at fixed
   optical shape (galaxy and neighbours fitted jointly), plus a model-corrected aperture flux;
   tractorjax-spherex as an independent cross-check; the IRSA tool only as an optional check.
-  Point-source fits are ruled out (see `docs/reference_notes/photometry_study_2026-11.md`).
+  Point-source fits are ruled out (see `docs/references/studies/photometry_study_2026-11.md`).
 - Priority: semi-resolved galaxies first (the bulk of the sample); stacking later.
 
-## 7. SED demo (feature/sed-demo, task spec in `docs/sed_demo_task.md`)
+## 7. SED demo (feature/sed-demo, task spec in `docs/reports/sed_demo_task.md`)
 
 Scope: six SDSS galaxies with fixed roles (reference, compact, large, close neighbour, outside
 the Legacy Survey, post-starburst-like); every DR1 + QR3 wide-survey exposure; per-exposure
 forced photometry; SED assembly on the 102-channel grid; validation (detector-boundary test,
 estimator consistency, point-source negative control, injection-recovery, external photometry,
 cross-code check, error calibration); journal-style PNG figures; report in
-`docs/demo_sed_report.md`. Out of scope: the full sample, stacking, SED fitting, mosaics.
+`docs/reports/demo_sed_report.md`. Out of scope: the full sample, stacking, SED fitting, mosaics.
 
 Data decisions: DR1 + QR3 only (no `l3_flux_corrections`: they apply to QR2 images, which are
 no longer searchable); the R7 ePSF, Spectral WCS (`cal-swcs-v5-2026-191`) and Solid Angle Pixel
@@ -110,10 +110,31 @@ selection, flags), `spherex_psb/extraction` (Sersic renderer, joint linear solve
 models, estimators), `spherex_psb/spectra` (per-exposure records in Parquet, binning, extinction),
 `spherex_psb/validation`, `spherex_psb/figures` (shared style). Scripts in `scripts/sed_demo/`.
 
-Decisions from the demo (2026-11-14, `docs/demo_sed_report.md`): background = constant + quadratic in
+Decisions from the demo (2026-11-14, `docs/reports/demo_sed_report.md`): background = constant + quadratic in
 CWAVE fitted jointly with the sources (repairs the He I exposures); Sersic templates integrated over the
 core (32 x 32 sub-samples in a 7 x 7 oversampled-pixel block); per-exposure screening on near-target and
 whole-cutout chi2 and on CWAVE; SED error = exposure scatter per channel, with a 1.5 % fractional floor
 per exposure for n = 4 galaxies with R_e <= 2 arcsec; DR1 and QR3 combined without correction. Open
 (user's call): the total-flux convention (analytic Sersic total versus the truncated tractor / SDSS model
 total, 6 % apart for n = 4) and whether a position-jitter term is added before stacking.
+
+## 9. Documentation system (2026-11-14)
+
+- The project's knowledge about SPHEREx and its own analysis is published as a static site built from
+  `docs/` with MkDocs and the Material theme (`mkdocs.yml`; `uv run --only-group docs mkdocs build --strict`).
+  Entry point `docs/index.md`; main pages `primer.md`, `data_access.md`, `reduction_analysis.md`,
+  `sed_extraction.md`, `spectral_indices.md`; project pages `SPEC.md`, `todo.md`, `lessons.md`;
+  `docs/reports/` for checkpoint reports and task specifications; `docs/references/` for per-source
+  reading notes (irsa, papers, studies, tools) with `docs/references/sources/` (copied tutorial code and
+  external PDFs) excluded from the site.
+- Figures: `docs/figures/sed_demo/` (analysis figures), `docs/figures/site/` (made by
+  `scripts/site_figures.py` from calibration products and our records), `docs/figures/external/` (figures
+  reproduced from papers, each with a credit line; arXiv sources kept under
+  `/Users/shuang/data/spherex/references/arxiv_src/`).
+- Rules: every SPHEREx fact is cited to its source in a footnote; numbers measured here are marked
+  "measured" with the script named; `strict` builds with anchor validation must pass before a commit;
+  the site deploys to GitHub Pages through `.github/workflows/docs.yml` on pushes to `main` (Pages source
+  must be set to "GitHub Actions" once in the repository settings).
+- The former `docs/spherex_data_guide.md` was split into the primer, data-access and reduction pages and
+  retired; the external `spherex-irsa-access` skill is kept consistent with the data-access and reduction
+  pages.

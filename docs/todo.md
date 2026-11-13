@@ -6,7 +6,7 @@ Goal: build a comprehensive, current picture of the SPHEREx mission, instrument,
 products, pipeline, access, and the methods used in the literature to extract galaxy
 spectra, with emphasis on systematics and backgrounds.
 
-- [x] Per-source reference notes in `docs/reference_notes/`
+- [x] Per-source reference notes in `docs/references/`
   - [x] IRSA SPHEREx mission page and linked pages
   - [x] SPHEREx archive documentation site
   - [x] SPHEREx Explanatory Supplement v2.0 (full read; PDF saved in `external/`)
@@ -16,7 +16,7 @@ spectra, with emphasis on systematics and backgrounds.
   - [x] Spectral map making paper (arXiv:2603.25790)
   - [x] Instrument paper (arXiv:2603.29835)
   - [x] Method references 2604.22012, 2603.12390, 2607.18048, 2607.00543, 2605.06791, 2603.10135
-- [x] Synthesized guide `docs/spherex_data_guide.md`
+- [x] Synthesized guide `docs/spherex_data_guide.md` (retired 2026-11-14 into the site pages)
 - [x] `docs/SPEC.md` v0.1
 - [x] `docs/lessons.md` seeded
 - [x] Live validation against IRSA: TAP tables and columns, SIA collections, QR2 and QR3
@@ -37,7 +37,7 @@ spectra, with emphasis on systematics and backgrounds.
 ## Task 1b: review of existing SPHEREx software (2026-09-23)
 
 - [x] Review the eight user-suggested repos plus GitHub/arXiv search (16 notes in
-      `docs/reference_notes/tools/`, synthesis in `docs/spherex_tools_review.md`)
+      `docs/references/tools/`, synthesis in `docs/reports/spherex_tools_review.md`)
 - [ ] Read Bahk et al. 2026 (arXiv:2606.19875) extended-source validation
 - [ ] Test-build `tractor-spherex` in the uv environment (astrometry.net utils, SWIG)
 - [ ] Decide on vendoring `hbahk/spherex-retrieval` for retrieval and PSF preparation
@@ -52,10 +52,10 @@ spectra, with emphasis on systematics and backgrounds.
 
 ## Task 4: SED demo for low-z SDSS galaxies (2026-11-13, branch feature/sed-demo)
 
-Spec: `docs/sed_demo_task.md`. Facts from the earlier study: `docs/reference_notes/photometry_study_2026-11.md`.
+Spec: `docs/reports/sed_demo_task.md`. Facts from the earlier study: `docs/references/studies/photometry_study_2026-11.md`.
 
 Before coding
-- [x] Branch `feature/sed-demo`; task spec moved to `docs/sed_demo_task.md`
+- [x] Branch `feature/sed-demo`; task spec moved to `docs/reports/sed_demo_task.md`
 - [x] Study note with sources; archive re-verified (DR1 collections, S3 `dr1/` tree, file layout, Supplement v2.1);
       guide sections 2, 4, 5 updated; SPEC sections 3, 6, 7 updated
 - [x] hbahk stack installed with `uv add` (venv 0.94 GB); parent selection reproduced on SkyServer with shapes
@@ -71,7 +71,7 @@ Checkpoint A (stop and show)
 
 Checkpoint B (2026-11-14)
 - [x] All exposures of the six galaxies (2,225 exposures, 2,104 used); validation 1-7; all figures;
-      `docs/demo_sed_report.md`
+      `docs/reports/demo_sed_report.md`
 - [x] Lessons, todo review, guide update, disk report, Trash moves
 
 Review (2026-11-14)
@@ -109,7 +109,7 @@ Review (2026-11-14)
 
 - [x] Evaluate the Hbump_opt index of the H-bump paper on the six demo SEDs: resolution test on the
       cached FSPS grid, exposure counts per window, bootstrap errors, D2/D3 step bias, recovery simulation
-      with the real sampling (`docs/hminus_bump_feasibility.md`, figure 8).
+      with the real sampling (`docs/reports/hminus_bump_feasibility.md`, figure 8).
 - [ ] Settle the D2/D3 step at the 0.3 % level (many field stars, or point-source control per ePSF zone)
       before using any index that straddles 1.64 um observed.
 - [ ] Forward-model index estimator over 1.4-2.0 um using every exposure and its bandpass; validate on
@@ -123,3 +123,13 @@ The index is feasible at the 0.01 mag level per galaxy with today's coverage and
 the four-survey mission, once the D2/D3 step and the estimator bias are handled; the five normal galaxies
 show indices in the TP-AGB-on range and the post-starburst galaxy the weakest bump, neither of which can
 be interpreted before those two systematics are removed.
+
+## Documentation site (2026-11-14)
+
+- [x] MkDocs + Material site with index, primer, data access, reduction and analysis, SED extraction and
+      spectral index pages; project pages and reference notes in the navigation; GitHub Pages workflow.
+- [x] docs/ reorganised: references/{irsa,papers,studies,tools,sources}, reports/, figures/{sed_demo,site,external}.
+- [x] Site figures from calibration products and records (`scripts/site_figures.py`); paper figures with credits.
+- [ ] Enable GitHub Pages (source: GitHub Actions) in the repository settings after the branch is merged.
+- [ ] Propose the matching updates to the external `spherex-irsa-access` skill (not edited from here).
+- [ ] Add a page for the full-sample pipeline once it exists; keep one page per reader question.

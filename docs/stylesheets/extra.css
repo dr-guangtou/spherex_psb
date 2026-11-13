@@ -1,0 +1,29 @@
+/* Figures: image plus caption, centred, with a thin rule. */
+figure {
+  margin: 1.2em auto;
+  text-align: center;
+}
+figure img {
+  max-width: 100%;
+  border: 1px solid var(--md-default-fg-color--lightest);
+}
+figure figcaption {
+  font-size: 0.8rem;
+  text-align: left;
+  margin: 0.4em 0 0 0;
+  color: var(--md-default-fg-color--light);
+}
+figure figcaption .credit {
+  font-style: italic;
+}
+/* Wide tables scroll instead of overflowing. */
+.md-typeset table:not([class]) {
+  font-size: 0.72rem;
+}
+.md-typeset h1 {
+  font-weight: 500;
+}
+figure figcaption {
+  display: block;
+  max-width: 100%;
+}

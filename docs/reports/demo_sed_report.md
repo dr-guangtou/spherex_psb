@@ -1,7 +1,7 @@
 # SED demo report
 
-Branch `feature/sed-demo`; task spec `docs/sed_demo_task.md`; facts from the earlier study in
-`docs/reference_notes/photometry_study_2026-11.md`. Figures in `docs/figures/sed_demo/`.
+Branch `feature/sed-demo`; task spec `docs/reports/sed_demo_task.md`; facts from the earlier study in
+`docs/references/studies/photometry_study_2026-11.md`. Figures in `docs/figures/sed_demo/`.
 
 ## Checkpoint A (2026-11-13): galaxy 1 end to end
 

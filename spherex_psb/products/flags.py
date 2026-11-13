@@ -55,7 +55,8 @@ IRSA_TOOL_EXCLUDE = (
     "SATELLITE_HALO",
 )
 
-# The demo policy (docs/sed_demo_task.md section 5): the tool's set plus TRANSIENT, OVERFLOW, DICHROIC.
+# The demo policy (docs/reports/sed_demo_task.md section 5): the tool set plus TRANSIENT, OVERFLOW,
+# DICHROIC.
 DEMO_EXCLUDE = IRSA_TOOL_EXCLUDE + ("TRANSIENT", "OVERFLOW", "DICHROIC")
 
 # Everything the Mosaic Tool and the all-sky cubes drop (Supplement v2.1 sections 2.5 and 3.4.3).

@@ -39,12 +39,15 @@ dev = [
     "pre-commit>=4.6.2",
     "ruff>=0.16.8",
 ]
+docs = [
+    "mkdocs-material>=9.6",
+]
 
 [tool.ruff]
 line-length = 110
 target-version = "py312"
 # Verbatim copies of official IRSA tutorial sources are reference material, not our code
-extend-exclude = ["docs/reference_notes/irsa_tutorial_sources"]
+extend-exclude = ["docs/references/sources/irsa_tutorial_sources"]
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "N", "UP", "B"]

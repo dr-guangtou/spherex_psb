@@ -116,7 +116,7 @@ Data lessons (verified live)
   typical fit (`measure_galaxy.py --stamps-only` rebuilds the stamps from the records).
 - A stamp display stretch from percentiles of all pixels is set by masked hot pixels; take the percentiles
   of the unmasked pixels only.
-- The task spec `docs/sed_demo_task.md` was moved into `docs/` at the start of the session but never
+- The task spec `docs/reports/sed_demo_task.md` was moved into `docs/` at the start of the session but never
   committed, and it was gone from the working tree at the end (an untracked copy had reappeared at the
   repository root, probably through Dropbox sync). Commit the task spec with the first checkpoint; an
   untracked file in a Dropbox-synced repository is not safe.
@@ -143,3 +143,26 @@ Data lessons (verified live)
 - The SPHEREx response-profile shape (Hui et al. 2026) is not tabulated in the paper; R is defined with
   the equivalent width of the normalised response, not the FWHM. When only R is known, test both a
   Gaussian and a top-hat of the same equivalent width and report the difference.
+
+## Documentation site (2026-11-14)
+
+- A 600-line monolithic guide was the wrong shape for a growing knowledge base: it mixed instrument facts,
+  archive state, pitfalls and project results, and could not be read by topic. Splitting it into pages by
+  reader question (what is the instrument, how do I get data, what must I handle in the data, what did we
+  measure) with cited footnotes and credited figures took one session; keep that structure and add a page
+  per new topic rather than a section to an old one.
+- Figures from arXiv e-print tarballs are the original files (PNG/PDF) and carry no watermark; download
+  them to the data area, convert with pdftoppm, downscale with sips, and keep only the chosen ones in the
+  repository with a credit line. A paper that is served as PDF only (no source) can still yield figures
+  by rendering the page at 200 dpi and cropping.
+- zsh does not word-split unquoted variables: `for f in $FILES` runs once with the whole list. Pipe
+  `grep -l` into `while read -r f` instead. A patch script that asserts every replacement before writing
+  is the right discipline, but after `ruff format` has rewrapped a file the asserted strings no longer
+  match; re-read the file before patching it.
+- The SAPM calibration files name their detector in the IMAGE extension header (DETECTOR as a string),
+  not in the primary header; the CWAVE files do not name it at all and must be identified by their
+  wavelength range.
+- Measured while making the site figures: the ZODI model under-predicts the local background by 4-12 % at
+  ecliptic latitudes below 10 deg and by 11-34 % at 24-46 deg (16th-84th percentiles of the fitted residual
+  over ZODI); the SOURCE flag covers 31-53 % of the pixels in a 41 x 41 cutout around a bright galaxy; HALO
+  and OUTLIER each flag 1.3-2.1 % of pixels and DICHROIC 2.6-2.8 % of D3/D4 pixels.

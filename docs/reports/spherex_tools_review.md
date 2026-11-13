@@ -2,7 +2,7 @@
 
 Scope: the eight repositories suggested by the user plus candidates found by a GitHub and
 arXiv search. Each repository was cloned into a temporary folder, read (not installed or
-run), and written up in `docs/reference_notes/tools/<repo>.md`. This file is the
+run), and written up in `docs/references/tools/<repo>.md`. This file is the
 synthesis. Nothing here is adopted yet; the recommendation section says what to try
 first and in which order.
 

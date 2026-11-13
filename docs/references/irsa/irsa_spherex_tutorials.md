@@ -8,7 +8,7 @@ Sources consulted: the rendered MyST site at
 confirmed to reflect the same code as the `.md` (jupytext MyST) sources; the `.md` sources
 were used as the verbatim record because they are not subject to any client-side
 truncation. Local copies of every source file are saved under
-`docs/reference_notes/irsa_tutorial_sources/` (paths given per-notebook below).
+`docs/references/sources/irsa_tutorial_sources/` (paths given per-notebook below).
 
 ---
 
@@ -844,4 +844,4 @@ Text states: "Support for SPHEREx in MOST was added in June 2026... SPHEREx imag
 
 ---
 
-*All source `.md` files consulted are saved verbatim under `docs/reference_notes/irsa_tutorial_sources/` (see file tree: `spherex.md`, `spherex_intro.md`, `spherex_cutouts.md`, `spherex_mosaic.md`, `spherex_psf.md`, `spherex_source_discovery/README.md`, `spherex_source_discovery/conda-spherex_sdt.yml`, `spherex_source_discovery/spherex_source_discovery_tool_demo.md`, `spherex_source_discovery/spherex_source_discovery_tool/{aperture_photometry,bokeh_viz,firefly_viz,sdt_utils,source_extraction}.py`, `techniques-and-tools/MOST_queries.md`).*
+*All source `.md` files consulted are saved verbatim under `docs/references/sources/irsa_tutorial_sources/` (see file tree: `spherex.md`, `spherex_intro.md`, `spherex_cutouts.md`, `spherex_mosaic.md`, `spherex_psf.md`, `spherex_source_discovery/README.md`, `spherex_source_discovery/conda-spherex_sdt.yml`, `spherex_source_discovery/spherex_source_discovery_tool_demo.md`, `spherex_source_discovery/spherex_source_discovery_tool/{aperture_photometry,bokeh_viz,firefly_viz,sdt_utils,source_extraction}.py`, `techniques-and-tools/MOST_queries.md`).*

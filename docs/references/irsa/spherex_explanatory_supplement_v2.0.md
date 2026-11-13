@@ -1,7 +1,7 @@
 # SPHEREx Explanatory Supplement v2.0 (2026-08-25), full read
 
 Source: SSDC–DP–017, "SPHEREx Explanatory Supplement," Version 2.0, 2026-08-25 (82 pp). Local PDF:
-`/Users/shuang/Dropbox/work/project/otters/spherex_psb/docs/reference_notes/external/SPHEREx_Expsupp_QR_2026-09-22.pdf`.
+`/Users/shuang/Dropbox/work/project/otters/spherex_psb/docs/references/sources/external/SPHEREx_Expsupp_QR_2026-09-22.pdf`.
 This note supplements a prior partial survey (which already covered: the 3-page archive documentation site,
 the FLAGS bitmask Table 16, the PSF header-ordering bug, the Mosaic Tool overview, the Level 3 Tractor
 forced-photometry summary, and the QR2/QR3/DR1 release roadmap) with full, quantitative coverage of every

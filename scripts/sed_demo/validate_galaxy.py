@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-"""Validation items for one galaxy (docs/sed_demo_task.md section 7): detector-boundary ratios for the three
+"""Validation items for one galaxy (docs/reports/sed_demo_task.md section 7): detector-boundary ratios for
+the three
 estimators, estimator consistency, external photometry with synthetic SPHEREx fluxes, injection-recovery on a
 subset of exposures, error calibration from repeat pairs, and the tractorjax-spherex cross-code check on a
 subset. Results go to results/<galaxy>/validation/.
