@@ -63,7 +63,7 @@ def figure_boundaries(out_path: Path) -> pd.DataFrame:
             sub = table[(table.galaxy == galaxy) & (table.flux_column == column)]
             marker, colour = GALAXY_MARKERS[galaxy]
             x = np.array([names.index(b) for b in sub.boundary]) + (k - len(galaxies) / 2) * 0.09
-            err = 2.5 / np.log(10) * sub.ratio_err / sub.ratio_b_over_a
+            err = sub.ratio_mag_err
             ax.errorbar(
                 x,
                 sub.ratio_mag,

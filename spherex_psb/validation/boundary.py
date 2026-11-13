@@ -1,9 +1,10 @@
 """Detector-boundary test: flux ratio between the two detectors that both observe a boundary wavelength.
 
-The detector overlaps (from the ePSF CWAVE ranges; docs/sed_demo_task.md section 7) are narrow, so instead
-of requiring exposures inside the overlap, the exposures of each detector within a window around the
-boundary are fitted with a straight line in wavelength (weighted by their errors) and the two lines are
-evaluated at the boundary wavelength. The ratio B/A and its error come from the line intercepts.
+The detector overlaps (from the ePSF CWAVE ranges; docs/sed_demo_task.md section 7) are narrow and their
+pixels are mostly DICHROIC-flagged at D3/D4, so instead of requiring exposures inside the overlap, the
+exposures of both detectors within a window around the boundary are fitted jointly with a quadratic in
+wavelength (in log flux, so that the local curvature of the SED is absorbed) plus a constant step for
+detector B. The step is the logarithm of the B/A flux ratio.
 """
 
 from __future__ import annotations
@@ -21,31 +22,33 @@ BOUNDARIES_UM = {
 WINDOW_UM = {"D1/D2": 0.12, "D2/D3": 0.15, "D3/D4": 0.20, "D4/D5": 0.12, "D5/D6": 0.10}
 
 
-def _line_at(
-    wavelength: np.ndarray, flux: np.ndarray, err: np.ndarray, x0: float
-) -> tuple[float, float, int]:
-    """Weighted straight-line fit flux = a + b (lambda - x0); returns (a, sigma_a, n)."""
-    good = np.isfinite(flux) & np.isfinite(err) & (err > 0)
-    wavelength, flux, err = wavelength[good], flux[good], err[good]
-    n = len(flux)
-    if n == 0:
-        return np.nan, np.nan, 0
-    if n == 1:
-        return float(flux[0]), float(err[0]), 1
+def _step_fit(wavelength, flux, err, is_b, x0: float) -> tuple[float, float, int, int]:
+    """Joint weighted fit of ln(flux) = p0 + p1 x + p2 x^2 + s [detector B], x = lambda - x0.
+
+    Returns (s, sigma_s, n_a, n_b). The quadratic absorbs the local curvature of the SED; the step s is the
+    logarithm of the detector ratio at every wavelength of the window.
+    """
+    good = np.isfinite(flux) & np.isfinite(err) & (err > 0) & (flux > 0)
+    wavelength, flux, err, is_b = wavelength[good], flux[good], err[good], is_b[good]
+    n_a, n_b = int((~is_b).sum()), int(is_b.sum())
+    if n_a == 0 or n_b == 0 or len(flux) < 5:
+        return np.nan, np.nan, n_a, n_b
     x = wavelength - x0
-    w = 1.0 / err**2
-    if n == 2 or np.ptp(x) < 1e-4:
-        a = np.sum(w * flux) / np.sum(w)
-        return float(a), float(1 / np.sqrt(np.sum(w))), n
-    design = np.stack([np.ones(n), x], axis=1)
+    y = np.log(flux)
+    w = (flux / err) ** 2
+    columns = [np.ones(len(x)), x, is_b.astype(float)]
+    if len(flux) >= 6 and np.ptp(x) > 0.02:
+        columns.insert(2, x**2)
+    design = np.stack(columns, axis=1)
     normal = design.T @ (design * w[:, None])
-    covariance = np.linalg.inv(normal)
-    coefficients = covariance @ (design.T @ (flux * w))
-    return float(coefficients[0]), float(np.sqrt(covariance[0, 0])), n
+    covariance = np.linalg.pinv(normal)
+    coefficients = covariance @ (design.T @ (y * w))
+    k = design.shape[1] - 1
+    return float(coefficients[k]), float(np.sqrt(max(covariance[k, k], 0))), n_a, n_b
 
 
 def boundary_ratios(records: pd.DataFrame, flux_column: str) -> pd.DataFrame:
-    """One row per boundary: ratio of the detector-B to detector-A flux at the boundary wavelength."""
+    """One row per boundary: ratio of the detector-B to detector-A flux across the boundary."""
     err_column = flux_column.replace("_ujy", "_err_ujy")
     usable = records[records.screen_reason == ""]
     rows = []
@@ -61,20 +64,16 @@ def boundary_ratios(records: pd.DataFrame, flux_column: str) -> pd.DataFrame:
             & (usable.cwave_um >= wavelength - 0.03)
             & (usable.cwave_um <= wavelength + window)
         ]
-        fa, ea, na = _line_at(
-            a_rows.cwave_um.to_numpy(),
-            a_rows[flux_column].to_numpy(),
-            a_rows[err_column].to_numpy(),
+        both = pd.concat([a_rows, b_rows])
+        is_b = np.concatenate([np.zeros(len(a_rows), bool), np.ones(len(b_rows), bool)])
+        step, step_err, na, nb = _step_fit(
+            both.cwave_um.to_numpy(),
+            both[flux_column].to_numpy(),
+            both[err_column].to_numpy(),
+            is_b,
             wavelength,
         )
-        fb, eb, nb = _line_at(
-            b_rows.cwave_um.to_numpy(),
-            b_rows[flux_column].to_numpy(),
-            b_rows[err_column].to_numpy(),
-            wavelength,
-        )
-        ratio = fb / fa if (na and nb and fa > 0) else np.nan
-        ratio_err = ratio * np.hypot(ea / fa, eb / fb) if np.isfinite(ratio) else np.nan
+        ratio = float(np.exp(step)) if np.isfinite(step) else np.nan
         rows.append(
             {
                 "boundary": name,
@@ -82,11 +81,10 @@ def boundary_ratios(records: pd.DataFrame, flux_column: str) -> pd.DataFrame:
                 "flux_column": flux_column,
                 "n_a": na,
                 "n_b": nb,
-                "flux_a_ujy": fa,
-                "flux_b_ujy": fb,
                 "ratio_b_over_a": ratio,
-                "ratio_err": ratio_err,
-                "ratio_mag": -2.5 * np.log10(ratio) if np.isfinite(ratio) and ratio > 0 else np.nan,
+                "ratio_err": ratio * step_err if np.isfinite(ratio) else np.nan,
+                "ratio_mag": -2.5 / np.log(10) * step if np.isfinite(step) else np.nan,
+                "ratio_mag_err": 2.5 / np.log(10) * step_err if np.isfinite(step_err) else np.nan,
             }
         )
     return pd.DataFrame(rows)
