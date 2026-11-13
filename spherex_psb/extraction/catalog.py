@@ -39,6 +39,21 @@ def _skyserver(query: str, attempts: int = 4) -> pd.DataFrame:
     return pd.read_csv(io.StringIO(text)) if text.strip() else pd.DataFrame()
 
 
+def _datalab(query: str, attempts: int = 5) -> pd.DataFrame:
+    """Data Lab TAP with retries: the service answers with HTML or 5xx now and then."""
+    import pyvo
+
+    for attempt in range(attempts):
+        try:
+            return pyvo.dal.TAPService(DATALAB_TAP).search(query).to_table().to_pandas()
+        except Exception as error:  # noqa: BLE001
+            if attempt == attempts - 1:
+                raise
+            print(f"Data Lab attempt {attempt + 1} failed ({str(error)[:80]}); retrying", flush=True)
+            time.sleep(60 * (attempt + 1))
+    raise RuntimeError("unreachable")
+
+
 def sdss_neighbours(ra: float, dec: float, radius_arcmin: float, faint_limit_z: float) -> pd.DataFrame:
     query = f"""
     SELECT p.objID, p.ra, p.dec, p.type, p.modelMag_r, p.modelMag_z, p.fracDeV_r,
@@ -87,7 +102,6 @@ def sdss_neighbours(ra: float, dec: float, radius_arcmin: float, faint_limit_z: 
 
 def legacy_dr10_neighbours(ra: float, dec: float, radius_arcmin: float, faint_limit_z: float) -> pd.DataFrame:
     """Legacy Survey DR10 Tractor sources; empty table when the position is outside the footprint."""
-    import pyvo
 
     half = radius_arcmin / 60.0
     cos_dec = np.cos(np.radians(dec))
@@ -96,7 +110,7 @@ def legacy_dr10_neighbours(ra: float, dec: float, radius_arcmin: float, faint_li
         flux_ivar_w1, flux_ivar_w2, maskbits, fitbits, ref_cat, ref_id, fracflux_z
         FROM ls_dr10.tractor WHERE ra BETWEEN {ra - half / cos_dec} AND {ra + half / cos_dec}
         AND dec BETWEEN {dec - half} AND {dec + half}"""
-    table = pyvo.dal.TAPService(DATALAB_TAP).search(query).to_table().to_pandas()
+    table = _datalab(query)
     if table.empty:
         return table
     flux_z = table.flux_z.to_numpy(dtype=float)
@@ -148,13 +162,12 @@ def legacy_dr10_neighbours(ra: float, dec: float, radius_arcmin: float, faint_li
 
 
 def sga_entries(ra: float, dec: float, radius_arcmin: float) -> pd.DataFrame:
-    import pyvo
 
     half = radius_arcmin / 60.0
     query = f"""SELECT sga_id, galaxy, ra, dec, d26, pa, ba, sma_moment, mag_leda, pgc FROM sga2020.ellipse
         WHERE ra BETWEEN {ra - half / np.cos(np.radians(dec))} AND {ra + half / np.cos(np.radians(dec))}
         AND dec BETWEEN {dec - half} AND {dec + half}"""
-    return pyvo.dal.TAPService(DATALAB_TAP).search(query).to_table().to_pandas()
+    return _datalab(query)
 
 
 def remove_shreds(
