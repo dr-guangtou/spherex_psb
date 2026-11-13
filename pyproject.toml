@@ -9,9 +9,15 @@ dependencies = [
     "fsspec[s3]>=2026.9.0",
     "matplotlib>=3.11.2",
     "numpy>=2.5.3",
+    "pandas>=3.1.1",
     "photutils>=3.0.0",
+    "pyarrow>=26.0.1",
     "pyvo>=1.9.1",
     "requests>=2.34.2",
+    "scipy>=1.18.1",
+    "spherex-retrieval",
+    "tractor-jax",
+    "tractorjax-spherex",
 ]
 
 [dependency-groups]
@@ -30,3 +36,8 @@ extend-exclude = ["docs/reference_notes/irsa_tutorial_sources"]
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "N", "UP", "B"]
+
+[tool.uv.sources]
+spherex-retrieval = { git = "https://github.com/hbahk/spherex-retrieval" }
+tractor-jax = { git = "https://github.com/hbahk/tractor-jax" }
+tractorjax-spherex = { git = "https://github.com/hbahk/tractorjax-spherex" }

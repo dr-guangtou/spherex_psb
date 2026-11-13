@@ -1,7 +1,7 @@
 # spherex_psb specification
 
 Source of truth for scope and architecture. Update before implementing new features.
-Status: v0.1, 2026-09-22, learning phase complete; no analysis code yet.
+Status: v0.2, 2026-11-13, SED demo in progress (see section 7).
 
 ## 1. Scientific goal
 
@@ -30,8 +30,15 @@ plus stacked spectra for sub-samples. Mosaics are a secondary, quick-look produc
   The IRSA Spectrophotometry Tool is the baseline for unresolved and semi-resolved
   targets and the reference against which our own extraction is validated.
 - Knowledge base: `docs/spherex_data_guide.md` (synthesis) and `docs/reference_notes/`
-  (per-source notes). No third-party SPHEREx GitHub tools until the user decides
-  otherwise.
+  (per-source notes).
+- Third-party tools (permission granted 2026-11-13 for the SED demo): hbahk's
+  `spherex-retrieval` (MIT), `tractor-jax` (GPL-2.0) and `tractorjax-spherex` (GPL-3.0) may be
+  installed, run and read; licence compatibility is checked before copying code (this
+  repository is GPL-3). Any other third-party SPHEREx tool needs the user's approval.
+  `/Users/shuang/Dropbox/work/project/otters/spherex_photometry_code` is read only, never
+  imported.
+- Data: downloads under `/Users/shuang/data/spherex`; any single download above 300 MB needs
+  approval; demo budget 10 GB; temporary material goes to `~/.Trash/<name>_<date>`.
 - Wavelengths come from the per-pixel CWAVE/CBAND products, never from nominal channels.
 - Backgrounds: ZODI extension subtracted first, then a local background fit per exposure.
   Exposure-level screening for airglow, shuttle glow, Moon and ghost contamination.
@@ -71,9 +78,34 @@ Small scale first: one unresolved, one semi-resolved and one resolved galaxy, ea
 compared against the IRSA Spectrophotometry Tool (where applicable), 2MASS/WISE synthetic
 photometry, and repeat measurements across surveys. Only then run the full sample.
 
-## 6. Open questions for the user
+## 6. Answered questions (2026-11-13)
 
-- Sample definition (redshift range, angular size distribution, parent catalog).
-- Whether to reproduce the Tractor fit locally (SPIFF-like) from the start or rely on the
-  IRSA tool for the first pass.
-- Priority of resolved-galaxy work versus stacking of unresolved targets.
+- Sample: low-redshift SDSS galaxies from the MPA-JHU DR8 selection of
+  `/Users/shuang/data/mpa` (0.03 < z < 0.06, log M* > 10, 48,111 galaxies; r-band R_e 1.6 / 4.3 /
+  10.5 arcsec at the 5 / 50 / 95 percentiles, so mostly semi-resolved).
+- First pass: our own per-exposure forced photometry with a PSF-convolved Sersic model at fixed
+  optical shape (galaxy and neighbours fitted jointly), plus a model-corrected aperture flux;
+  tractorjax-spherex as an independent cross-check; the IRSA tool only as an optional check.
+  Point-source fits are ruled out (see `docs/reference_notes/photometry_study_2026-11.md`).
+- Priority: semi-resolved galaxies first (the bulk of the sample); stacking later.
+
+## 7. SED demo (feature/sed-demo, task spec in `docs/sed_demo_task.md`)
+
+Scope: six SDSS galaxies with fixed roles (reference, compact, large, close neighbour, outside
+the Legacy Survey, post-starburst-like); every DR1 + QR3 wide-survey exposure; per-exposure
+forced photometry; SED assembly on the 102-channel grid; validation (detector-boundary test,
+estimator consistency, point-source negative control, injection-recovery, external photometry,
+cross-code check, error calibration); journal-style PNG figures; report in
+`docs/demo_sed_report.md`. Out of scope: the full sample, stacking, SED fitting, mosaics.
+
+Data decisions: DR1 + QR3 only (no `l3_flux_corrections`: they apply to QR2 images, which are
+no longer searchable); the R7 ePSF, Spectral WCS (`cal-swcs-v5-2026-191`) and Solid Angle Pixel
+Map (`cal-sapm-v3-2026-191`) shared by both releases; ZODI subtracted, then a local background
+fitted jointly with the sources; the IRSA tool's flag set plus TRANSIENT, OVERFLOW and DICHROIC
+excluded; NaN pixels removed from the fit.
+
+Code layout for the demo (subset of section 4): `spherex_psb/archive` (discovery, cutouts via
+spherex-retrieval or our own retry wrapper), `spherex_psb/products` (MEF reader, ePSF zone
+selection, flags), `spherex_psb/extraction` (Sersic renderer, joint linear solve, background
+models, estimators), `spherex_psb/spectra` (per-exposure records in Parquet, binning, extinction),
+`spherex_psb/validation`, `spherex_psb/figures` (shared style). Scripts in `scripts/sed_demo/`.

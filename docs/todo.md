@@ -50,7 +50,30 @@ spectra, with emphasis on systematics and backgrounds.
   tractor-spherex (official fork), copying specific MIT/BSD functions from SPIFF,
   spxquery, spexpi and spherex-pipelines, and re-implementing GPL-3 ideas.
 
-## Task 2 (next): sample and coverage
+## Task 4: SED demo for low-z SDSS galaxies (2026-11-13, branch feature/sed-demo)
+
+Spec: `docs/sed_demo_task.md`. Facts from the earlier study: `docs/reference_notes/photometry_study_2026-11.md`.
+
+Before coding
+- [x] Branch `feature/sed-demo`; task spec moved to `docs/sed_demo_task.md`
+- [x] Study note with sources; archive re-verified (DR1 collections, S3 `dr1/` tree, file layout, Supplement v2.1);
+      guide sections 2, 4, 5 updated; SPEC sections 3, 6, 7 updated
+- [x] hbahk stack installed with `uv add` (venv 0.94 GB); parent selection reproduced on SkyServer with shapes
+- [ ] spherex-retrieval tested on one DR1 and one QR3 cutout
+- [ ] Legacy Survey DR10 access route recorded (Data Lab TAP, ADQL box query works; q3c and the viewer do not)
+
+Sample (figure 1 first)
+- [ ] Candidate pools and SPHEREx coverage per detector; choose galaxies 2-6; sample figure
+
+Checkpoint A (stop and show)
+- [ ] Measurement layer: cutouts, ePSF zone, Sersic renderer, neighbours, background, joint solve, two estimators
+- [ ] Galaxy 1 with 6 exposures per detector; figures 2-4; cutout size and projected download
+
+Checkpoint B
+- [ ] All exposures of the six galaxies; validation 1-7; all figures; `docs/demo_sed_report.md`
+- [ ] Lessons, todo review, guide update, disk report, Trash moves
+
+## Task 2 (superseded by Task 4): sample and coverage
 
 - [ ] Define the post-starburst sample (parent catalog, redshift range, sizes) with the user
 - [ ] Cross-match with SPHEREx coverage via TAP; record per-object exposure counts per band

@@ -1,6 +1,7 @@
 # SPHEREx data guide for spherex_psb
 
-Living guide to SPHEREx data usage for this project. Last full revision: 2026-09-22.
+Living guide to SPHEREx data usage for this project. Last full revision: 2026-09-22; sections 2, 4 and 5
+updated for DR1 on 2026-11-13.
 Every claim below is traceable to a note in `docs/reference_notes/` (official IRSA pages,
 the Explanatory Supplement v2.0, the tutorial notebooks, and the nine papers listed at the
 end) or to a live check against the IRSA archive run on 2026-09-22 (`scripts/`).
@@ -73,17 +74,29 @@ catalogs and all-sky cubes.
 | Release | Pipeline | Content and status (verified 2026-09-22) | DOI |
 |---|---|---|---|
 | QR1 | 6.2.1-6.3.0 | July 2025; retired February 2026, no longer served | 10.26131/IRSA629 |
-| QR2 | 6.4.0-6.5.7 | October 2025 onward; live collection `spherex_qr2` spans observation IDs 2025W17_4B (MJD 60789.75, 2025-04-24) through 2026W29_2A (MJD 61241.0, 2026-07-20); latest files carry VERSION 6.5.7 | 10.26131/IRSA652 |
-| QR3 | 7.0.x (R7) | Ingested at IRSA 2026-09-15/16; live collection `spherex_qr3` starts at 2026W30_1B (2026-07-20) and currently reaches 2026W32 (2026-08-10); files carry VERSION 7.0.5. Survey 3/4 data from 2026-05-16 to 2026-07-19 were first processed with 6.5.x and sit in `spherex_qr2`; their R7 versions come with DR1 | 10.26131/IRSA662 |
-| DR1 | R7.0-7.2 | Year 1 reprocessing (Surveys 1+2), "late fall 2026", adds Level 3 forced-photometry catalogs and all-sky data cubes | not yet assigned |
+| QR2 | 6.4.0-6.5.7 | October 2025 to November 2026; superseded by DR1 + QR3. Since the DR1 release QR2 is no longer returned by IRSA or VO searches (TAP/SIA collections `spherex_qr2*` are gone) but stays downloadable from IBE and S3 (`qr2/`) through February 2027 | 10.26131/IRSA652 |
+| QR3 | 7.0.x (R7) | Released September 2026; collections `spherex_qr3` (wide) and `spherex_qr3_deep`; files `l2b-v27-2026-224`, VERSION 7.0.5. On 2026-11-13 the reference galaxy (RA 168.145, Dec +12.07) has 45 QR3 exposures | 10.26131/IRSA662 |
+| DR1 | 7.0.5 (R7) | Released November 2026 (verified 2026-11-13): reprocessed QR2 spectral images (`l2b-v27-2026-196`), meant to be used with QR3 as one uniformly processed set, plus an all-sky cube (HEALPix order 5 tiles of 512x512 pixels of 12.9 arcsec, 102 channels, visualisation grade, DOI 10.26131/IRSA679). No Level 3 forced-photometry catalogue. Collections `spherex_dr1`, `spherex_dr1_deep`, `spherex_dr1_cube` (SIA) and `spherex_dr1_cal` (TAP per the archive guide). Reference galaxy: 296 DR1 exposures | 10.26131/IRSA678 (images) |
 | DR2 | - | Year 2 reprocessing (Surveys 1-4) | - |
 | HRSC | - | High Reliability Source Catalog, planned July 2027 | - |
 
 Rules stated by the project:
 - Do not combine QR1 and QR2 files.
 - Use caution combining QR2 and QR3: the absolute gain and spectral calibrations changed.
-  A `l3_flux_corrections_D<n>` product (in the `qr3/` tree) rescales QR2 photometry onto
-  the QR3/DR1 gain scale.
+  A `l3_flux_corrections_D<n>` product (in the `qr3/` and `dr1/` trees, same file
+  `cal-flxc-v1-2026-191`) rescales QR2 photometry onto the R7 gain scale. The Explanatory
+  Supplement v2.1 (section 4.3.4) says it exists "to allow users to combine QR2 data using the
+  previous gains with QR3 data using the new gains": it applies to QR2 images only. DR1 images
+  are reprocessed with the new gains and must NOT be corrected. The IRSA Spectrophotometry
+  Tool applies the new gains to QR2 data itself.
+- Use DR1 + QR3 (and their `_deep` collections) for all current work; count exposures per
+  collection in every discovery query, because collections appear and disappear without
+  notice (QR2 vanished from TAP on 2026-11-13).
+- DR1 and QR3 share the same calibration files: `epsf/cal-epsf-v1-2026-191` (v2 for D3),
+  `spectral_wcs/cal-swcs-v5-2026-191`, `solid_angle_pixel_map/cal-sapm-v3-2026-191`.
+- Explanatory Supplement v2.1 (2026-11-10) is at
+  `https://irsa.ipac.caltech.edu/data/SPHEREx/docs/SPHEREx_Expsupp.pdf` (the `_QR.pdf` URL still
+  serves v2.0); it adds section 2.5 on the all-sky cubes.
 - QR2 files processed with 6.4-6.5.5 had a PSF-cube header ordering bug (planes stored
   x-fast, header claimed y-fast; up to +/-5% photometric error in two detector corners).
   Files corrected on 2026-03-31 carry `+psffix1` in VERSION; 6.5.6 and later are native
@@ -188,7 +201,7 @@ Products that matter for spectrum extraction:
 | Dark, nonfunc, dichroic, nonlinear_pars, readnoise_pars, gain_factors, sip | detector characterization | already applied or already reflected in FLAGS |
 | zodi_scaling_v2 (ECSV) | per-band wavelength-dependent rescaling of the Kelsall model | already folded into the ZODI extension; useful to understand the model |
 | aurora_template, he_template (bands 1-2), shuttle_glow_template | 2040x2040 atmospheric emission templates; fit coefficients are in image headers but emission is not subtracted | needed if we model or reject airglow-contaminated exposures ourselves |
-| l3_flux_corrections_D<n> | per-pixel scale factors QR2 -> QR3/DR1 gain scale | needed if QR2 and QR3 measurements are mixed |
+| l3_flux_corrections_D<n> | per-pixel scale factors from the QR2 gains to the R7 (QR3/DR1) gains | apply to QR2 images only, never to DR1 or QR3 |
 | xtalk_class1/2 (ECSV) | crosstalk parameters | provenance |
 
 ## 5. Access methods
@@ -197,7 +210,7 @@ Products that matter for spectrum extraction:
 
 Endpoint `https://irsa.ipac.caltech.edu/TAP`. Tables verified live:
 
-- `spherex.observation` (obsid, `collection` = spherex_qr2 / spherex_qr2_deep / spherex_qr3 / spherex_qr3_deep, observationid, intent, metarelease, ipac_pub_date)
+- `spherex.observation` (obsid, `collection` = spherex_dr1 / spherex_dr1_deep / spherex_qr3 / spherex_qr3_deep as of 2026-11-13 (the spherex_qr2 collections were removed when DR1 appeared), observationid, intent, metarelease, ipac_pub_date)
 - `spherex.plane` (planeid, obsid, productid = D1..D6, `energy_bandpassname` = SPHEREx-D1..D6, `poly` spatial index, time_bounds_lower/upper (MJD), provenance_version (pipeline version), quality_flag, metrics_maglimit, metrics_background, position_resolution, energy_resolvingpower, energy_bounds_lower/upper)
 - `spherex.artifact` (planeid, `uri` relative IBE path, contenttype, contentlength)
 - `spherex.obscore` (IVOA ObsCore view: obs_collection, obs_id, s_ra, s_dec, s_region, t_min, t_max, obs_publisher_did, access_url = DataLink)
@@ -228,7 +241,7 @@ first.
 from astroquery.ipac.irsa import Irsa
 
 Irsa.list_collections(servicetype="SIA", filter="spherex")
-# spherex_qr2, spherex_qr2_deep, spherex_qr3, spherex_qr3_deep (live 2026-09-22)
+# 2026-11-13: spherex_dr1, spherex_dr1_cube, spherex_dr1_deep, spherex_qr3, spherex_qr3_deep
 results = Irsa.query_sia(pos=(coord, 1 * u.arcsec), collection="spherex_qr3")
 ```
 
@@ -238,7 +251,7 @@ list. Raw endpoint: `https://irsa.ipac.caltech.edu/SIA?COLLECTION=spherex_qr3&PO
 
 ### 5.3 Direct files and cutouts (IBE)
 
-Root `https://irsa.ipac.caltech.edu/ibe/data/spherex/<qr2|qr3>/level2/<PlanningPeriod>/l2b-v<ver>-<date>/<det>/<file>.fits`.
+Root `https://irsa.ipac.caltech.edu/ibe/data/spherex/<dr1|qr3|qr2>/level2/<PlanningPeriod>/l2b-v<ver>-<date>/<det>/<file>.fits` (DR1: `l2b-v27-2026-196`; QR3: `l2b-v27-2026-224`).
 Append `?center=RA,DEC&size=SIZE_DEG` (the notebooks write `center=RA,DECd`) for a cutout.
 Cutouts preserve all six HDUs; the PSF/EPSF extension is copied whole, so map cutout
 pixels back to the parent frame with CRPIX1A/CRPIX2A before choosing a PSF zone. Full
@@ -247,7 +260,7 @@ and wrap `fits.open` in a 3-attempt retry; use `cache=False` for large batches.
 
 ### 5.4 Cloud
 
-Bucket `nasa-irsa-spherex`, region us-east-1, anonymous access, no egress charge.
+Bucket `nasa-irsa-spherex`, region us-east-1, anonymous access, no egress charge. Top-level prefixes `dr1/`, `qr3/`, `qr2/`. In DR1 and QR3 L2 files IMAGE, VARIANCE and ZODI are uncompressed 2040x2040 float32 (HTTP range reads of detector rows work, 8160 bytes per row per extension); FLAGS is RICE-compressed (11.5 MB, read whole); EPSF is a 3.9 MB table; a file is ~65 MB. The IRSA cutout service returns ~4-5 MB per cutout because it copies EPSF whole; spherex-retrieval avoids that by closing the stream after the EPSF header.
 `fits.open('s3://nasa-irsa-spherex/qr3/level2/...', fsspec_kwargs={'anon': True})` works;
 the AWS registry page still only documents the `qr2/` tree. The official Source Discovery
 notebook is the reference for the S3 pattern and for the NASA Fornax platform setup.
