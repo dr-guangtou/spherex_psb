@@ -24,14 +24,23 @@ def find_exposures(
     size_deg: float,
     collections: tuple[str, ...] = WIDE_COLLECTIONS,
     bandpass: str | None = None,
+    attempts: int = 4,
 ) -> Table:
     from spherex_retrieval.query import find_overlapping
 
     coord = SkyCoord(ra, dec, unit="deg")
     start = time.time()
-    frames = find_overlapping(
-        coord, size_deg * u.deg, backend="pyvo", collections=collections, bandpass=bandpass
-    )
+    for attempt in range(attempts):  # IRSA TAP answers 502/503 now and then; back off and retry
+        try:
+            frames = find_overlapping(
+                coord, size_deg * u.deg, backend="pyvo", collections=collections, bandpass=bandpass
+            )
+            break
+        except Exception as error:  # noqa: BLE001
+            if attempt == attempts - 1:
+                raise
+            print(f"discovery attempt {attempt + 1} failed ({str(error)[:80]}); retrying", flush=True)
+            time.sleep(30 * (attempt + 1))
     frames.meta["query_seconds"] = round(time.time() - start, 1)
     counts = {}
     for collection in collections:
