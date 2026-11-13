@@ -17,6 +17,8 @@ from spherex_psb.products.bundle import UJY_PER_MJY, Bundle
 from spherex_psb.products.epsf import epsf_plane, select_zone, zone_record
 from spherex_psb.products.flags import DEMO_EXCLUDE, FLAG_BITS, flagged
 
+MINIMUM_TEMPLATE_FRACTION = 1e-3  # fraction of a source's flux that must fall in the cutout to fit it
+
 
 @dataclass
 class Source:
@@ -139,8 +141,8 @@ def measure_exposure(bundle: Bundle, sources: list[Source], settings: FitSetting
             shape,
             settings.half_width_px,
         )
-        if template.sum() <= 0:
-            continue
+        if template.sum() < MINIMUM_TEMPLATE_FRACTION and not source.is_target:
+            continue  # the source puts no usable light in the cutout; its amplitude would be unconstrained
         templates.append(template)
         names.append(source.name)
         captured[source.name] = frac

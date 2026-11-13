@@ -59,15 +59,15 @@ Before coding
 - [x] Study note with sources; archive re-verified (DR1 collections, S3 `dr1/` tree, file layout, Supplement v2.1);
       guide sections 2, 4, 5 updated; SPEC sections 3, 6, 7 updated
 - [x] hbahk stack installed with `uv add` (venv 0.94 GB); parent selection reproduced on SkyServer with shapes
-- [ ] spherex-retrieval tested on one DR1 and one QR3 cutout
-- [ ] Legacy Survey DR10 access route recorded (Data Lab TAP, ADQL box query works; q3c and the viewer do not)
+- [x] spherex-retrieval tested on one DR1 and one QR3 cutout (works; collections passed explicitly)
+- [x] Legacy Survey DR10 access route recorded (Data Lab TAP, RA/Dec box in the WHERE clause; q3c and the viewer do not work)
 
 Sample (figure 1 first)
-- [ ] Candidate pools and SPHEREx coverage per detector; choose galaxies 2-6; sample figure
+- [x] Candidate pools and SPHEREx coverage per detector; galaxies 2-6 chosen; figure 1
 
 Checkpoint A (stop and show)
-- [ ] Measurement layer: cutouts, ePSF zone, Sersic renderer, neighbours, background, joint solve, two estimators
-- [ ] Galaxy 1 with 6 exposures per detector; figures 2-4; cutout size and projected download
+- [x] Measurement layer: cutouts, ePSF zone, Sersic renderer, neighbours, background, joint solve, two estimators
+- [x] Galaxy 1 with 6 exposures per detector; figures 2-4; cutout size and projected download
 
 Checkpoint B
 - [ ] All exposures of the six galaxies; validation 1-7; all figures; `docs/demo_sed_report.md`

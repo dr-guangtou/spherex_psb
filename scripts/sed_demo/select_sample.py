@@ -69,12 +69,42 @@ def choose(table: pd.DataFrame) -> dict[str, pd.Series]:
     picks["g3_large"] = (
         isolated[(isolated.pool == "large") & isolated.in_legacy].sort_values("r_e", ascending=False).iloc[0]
     )
+    # a real companion: 5-13 arcsec away (entries closer than 5 arcsec are SDSS duplicates or shreds of the
+    # target), within one magnitude in z; a star is preferred because its model is exact
     close = usable[
-        (usable.n_within_15.fillna(0) > 0) & (usable.brightest15_dz.abs() <= 1.0) & (usable.nearest_sep <= 13)
-    ]
-    picks["g4_neighbour"] = close.assign(score=close.brightest15_dz.abs()).sort_values("score").iloc[0]
-    outside = isolated[~isolated.in_legacy & (isolated.pool != "psb")]
-    picks["g5_no_legacy"] = outside.sort_values("petroMag_z").iloc[0] if len(outside) else None
+        (usable.nearest_sep >= 5) & (usable.nearest_sep <= 13) & (usable.brightest15_dz.abs() <= 1.0)
+    ].copy()
+    close["score"] = close.brightest15_dz.abs() + np.where(close.nearest_type == 6, 0.0, 0.5)
+    picks["g4_neighbour"] = close.sort_values("score").iloc[0]
+    g5_pool = pd.read_parquet(SAMPLE_ROOT / "candidate_g5_pool.parquet")
+    g5_coverage = pd.read_parquet(SAMPLE_ROOT / "candidate_g5_coverage.parquet")
+    g5 = g5_pool.merge(g5_coverage, on="specobjid")
+    g5["n_detectors_wide"] = sum((g5[f"dr1_D{d}"] + g5[f"qr3_D{d}"] > 0).astype(int) for d in range(1, 7))
+    g5 = g5[(g5.n_dr10 == 0) & (g5.n_dr9 == 0) & (g5.n_detectors_wide == 6)].sort_values("petroMag_z")
+    parent_row = table.iloc[0:0]
+    if len(g5):
+        full = pd.read_parquet(SAMPLE_ROOT / "parent_with_sdss_shapes.parquet")
+        full["specobjid"] = full.specobjid.astype(str)
+        parent_row = full[full.specobjid == g5.specobjid.iloc[0]].copy()
+        for column in (
+            "n_wide",
+            "n_deep",
+            "min_per_detector",
+            "n_within_15",
+            "nearest_sep",
+            "brightest15_dz",
+            "nearest_type",
+        ):
+            parent_row[column] = np.nan
+        parent_row["pool"] = "sgc_high_dec"
+        parent_row["in_legacy"] = False
+        wide = [c for c in g5.columns if c.startswith(("dr1_D", "qr3_D"))]
+        parent_row["n_wide"] = float(g5[wide].iloc[0].sum())
+        parent_row["n_deep"] = 0.0
+        parent_row["min_per_detector"] = float(
+            min(g5[f"dr1_D{d}"].iloc[0] + g5[f"qr3_D{d}"].iloc[0] for d in range(1, 7))
+        )
+    picks["g5_no_legacy"] = parent_row.iloc[0] if len(parent_row) else None
     psb = isolated[(isolated.pool == "psb") & isolated.in_legacy]
     picks["g6_post_starburst"] = psb.sort_values("psb_score", ascending=False).iloc[0]
     chosen = {k: v for k, v in picks.items() if v is not None}
@@ -153,9 +183,9 @@ def figure_sample(parent: pd.DataFrame, picks: dict[str, pd.Series], out_path: P
             mew=0.5,
             ls="none",
         )
-    axes[0].legend(fontsize=6, loc="upper left", handletextpad=0.2)
+    axes[0].legend(fontsize=6, loc="upper right", handletextpad=0.2)
     for ax, letter in zip(axes, "abc", strict=True):
-        panel_label(ax, f"({letter})", x=0.84, y=0.96)
+        panel_label(ax, f"({letter})", x=0.04, y=0.96)
     fig.savefig(out_path)
     plt.close(fig)
 

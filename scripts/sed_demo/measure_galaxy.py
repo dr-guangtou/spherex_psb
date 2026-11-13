@@ -44,7 +44,7 @@ NEIGHBOUR_DEPTH_MAG = 6.0  # neighbours down to target + 6 mag in z
 
 
 def build_catalogue(galaxy, size_deg: float, source: str):
-    radius_arcmin = size_deg * 60 / 2 * 1.5 + 0.3
+    radius_arcmin = size_deg * 60 / 2 * 1.1 + 0.25  # sources just outside the cutout still leak light into it
     faint = galaxy.mag_z + NEIGHBOUR_DEPTH_MAG
     if source == "ls":
         catalogue = legacy_dr10_neighbours(galaxy.ra, galaxy.dec, radius_arcmin, faint)
