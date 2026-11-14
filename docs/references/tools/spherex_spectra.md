@@ -1,0 +1,86 @@
+# gregreen/spherex_spectra
+
+## Metadata
+
+- **Author**: Gregory Green (GitHub `gregreen`; commits signed "Gregory Maurice Green" / "Gregory M. Green"). No institutional affiliation stated anywhere (no README, `AUTHORS`, or author field in `pyproject.toml`). All 12 commits by this one person; no co-authors.
+- **License**: none. No `LICENSE` file; GitHub reports the license as unspecified — treat as "all rights reserved" until stated otherwise, relevant if code is to be copied rather than just read for ideas.
+- **Language**: pure Python (`jax`, `equinox`). No notebooks, no compiled extensions.
+- **Stars/forks**: 0/0, 0 open issues (checked 2026-09-23). No releases or tags.
+- **Commit history**: 12 commits. First `6b1a1eb` (2026-07-30): "Initial commit. Can produce simple SPHEREx-like images with blackbody point sources and a constant background..." Last `24935ec` (2026-09-22): "Implement NeuralNetSpectrum as configurable option... in the end-to-end mock test." ~7 weeks old, still active (3 of the last commits, 2026-09-21/22, all add `NeuralNetSpectrum`).
+- **PyPI**: not published. `pyproject.toml`: `name = "spherex"` (generic, collision risk if released), `version = "0.1.0"`.
+- **Tests**: present — 7 files, 1,472 lines, vs. ~1,730 lines of library code, a healthy ratio. No CI (`.github/` and `*.yml`/`*.yaml` both absent), so not run automatically.
+- **Docs**: no `README.md`. Instead a single, unusually careful `explanatory_supplement.md` (480 lines, 8 sections) — the "careful design document" of its reputation, and the best entry point into the code.
+- **Associated paper**: none. `spherex/config.py` cites the SPHEREx instrument page and IRSA mission page as background references only.
+
+## Purpose and scope
+
+`spherex_spectra` (package name `spherex`) is a from-scratch JAX + Equinox forward-model-and-fit pipeline for recovering per-source spectra from multi-exposure SPHEREx-like images ("Modular SPHEREx PSF photometry pipeline in JAX + Equinox," per `pyproject.toml`). As of this snapshot it is **exclusively a synthetic-data pipeline**: it generates its own mock detector images from a catalog and an idealized instrument model, then fits that same forward model back to its own mock images to recover amplitude, spectral shape, and per-exposure background. No code path reads a real SPHEREx L2 product, queries IRSA, or ingests real data — worth stating plainly, since the name and the missing README invite over-crediting.
+
+What the repo is genuinely useful for: (1) a rigorously worked-out pattern for wavelength-integrated, PSF-convolved, multi-exposure forced photometry in JAX, with several sub-pixel-accuracy and numerical-stability details documented; (2) an instructive from-scratch example of exploiting linearity-in-amplitude for a fast closed-form flux solve interleaved with nonlinear shape/background optimization. Both are transferable ideas, not turnkey SPHEREx code.
+
+## Data access layer
+
+None. No SIA/TAP/IBE/S3 client anywhere. `grep -rniE "astropy|fits|irsa|wcs" . --include='*.py'` finds only `astropy.units`/`SkyCoord`/`WCS` used to *construct synthetic* WCS objects for the mock detector (`scripts/mock_spherex_images.py:512` `_make_wcs()`, and `examples/simple_simulation.py`), plus incidental unit handling in tests. No `astropy.io.fits` import exists anywhere — no L2 MEF file is ever opened. No release version (QR2/QR3/DR1) is referenced, no hard-coded IRSA URL, no caching, because there is no downloading. `spherex/config.py:10` cites the IRSA mission page as a doc comment only, not an integration point.
+
+## Data model handling
+
+Because there is no real-data path, most of this is "not applicable" rather than "implemented incorrectly":
+
+- **Extensions read**: none — no IMAGE, FLAGS, VARIANCE, ZODI, PSF, EPSF, or WCS-WAVE is ever parsed.
+- **PSF vs EPSF**: not applicable. A single closed-form idealized PSF, `GaussianPSF` (`spherex/psf.py`): circular Gaussian, FWHM linear in wavelength, `FWHM(λ)=fwhm_ref·λ/λ_ref` with `fwhm_ref=6.0″` at `λ_ref=1.0 µm` (`spherex/config.py:36-37`), normalized to integrate to 1 over arcsec². No ingestion of the real QR2 PSF cube or QR3 EPSF table; supporting one means a new PSF module implementing the same `__call__(omega_p, omega_s, wavelength)` contract against a real oversampled stamp.
+- **Flags**: none — neither `MP_*` (QR2) nor `MSKN`/`MSKM` (QR3) appears anywhere.
+- **Wavelengths**: no `WCS-WAVE`, no `CWAVE`/`CBAND`. Instead a synthetic LVF model, `GaussianFilterTransmission` (`spherex/transmission.py`): central wavelength `λ_c(y_p)=λ_intercept+λ_slope·y_p`, Gaussian transmission profile of width set by an assumed resolving power R. The band table in `spherex/config.py:44-52` (`_BANDS`) hard-codes roughly-real per-band ranges/R (Band 1: 0.75–1.09 µm, R=41 … Band 6: 4.42–5.00 µm, R=130) — a reasonable match to the real instrument, but the within-band transmission *shape* is an idealized Gaussian, not the real filter curve, and there is no CWAVE/CBAND lookup.
+- **ZODI**: not modeled as the real, unsubtracted map. The mock instead adds one **constant-per-exposure background** (`BACKGROUND_FACTOR = 2.0 × peak rate of the faintest star`, `scripts/mock_spherex_images.py`, `_compute_background`) standing in for sky+zodi+dark current combined, uniform across the detector. No spatially varying background, no separate zodi term.
+- **VARIANCE**: not read (none to read); a Poisson-plus-floor noise model is assumed for both simulation and fitting: `σ_i = sqrt(true_counts_i + 1.0²)` (`explanatory_supplement.md` §2.6, §7.9). §7.9 documents a previously-fixed bug: using *noisy* rather than *true* counts inside the sqrt inflated σ at low background and suppressed χ² below 1 — a transferable caution once a real VARIANCE array replaces the true-counts assumption.
+- **Solid Angle map**: not applicable; flux/rate conversion uses a fixed aperture (`_APERTURE=π·0.10² m²`) and pixel scale (`6.2″`, matching the real value) directly in the photon-rate integral, not a per-pixel solid-angle extension.
+- **Cutout-to-parent mapping**: not applicable in the IRSA-cutout sense; the mock builds full synthetic 2048×2048 (optionally `DOWNSAMPLE`d) frames, and postage stamps are windows into that same frame, positions from `wcs.world_to_pixel` (`scripts/mock_spherex_images.py:578`).
+
+## Photometry / extraction method
+
+The strongest part of the repository.
+
+- **Forward model** (`spherex/image.py`, `image3.py`; `explanatory_supplement.md` §2.4–2.6, §4): for each source, only pixels within `half_stamp` (~5× PSF FWHM) are computed. Each pixel splits into `K×K` sub-pixels; per sub-pixel, `K_λ` wavelength samples are drawn at evenly spaced **quantiles of the transmission CDF** (`GaussianFilterTransmission.quantile`, via `erfinv`) rather than a uniform grid — importance sampling concentrating samples where the filter has support; `T(λ)` is *not* included again in the integrand since it's already absorbed into the sampling density (double-counting flagged as a gotcha, §7.11). Claimed accuracy: RMS residual `2.3e-5` vs. a 63-sample reference at `N_LAMBDA=1`. Per-sub-pixel rate is `(λ/hc)·f_λ(λ)·PSF(Ω_p|Ω_s,λ)` averaged over samples, times aperture/pixel-scale factors, averaged per pixel. `ImageGenerator` processes sources via `jax.lax.scan`; `ImageGenerator3` batches via `jax.lax.map(...,batch_size=...)` and exposes `source_stamps(...)` for the amplitude solver. A third module, `image2.py`, is explicitly `.. deprecated::` in its own docstring ("FROZEN... outdated/legacy," old linspace+trapezoid quadrature) and not wired into `config.py` (which imports only `.image`/`.image3`) — confirmed dead code.
+- **Source parameterization**: `(1+P,)` vector per source — column 0 is `log(amplitude)` at a single global `λ_0=1.0 µm` shared across bands (`LOG_AMPLITUDE_INDEX=0`, `spherex/spectrum.py`); remaining `P` columns feed a `spectrum_model`. Two interchangeable models: `BlackbodySpectrum` (`P=1`, log-T in kK, closed-form Planck shape) and `NeuralNetSpectrum` (small Equinox MLP, added in the final two commits, output rescaled to match the blackbody's dynamic range, frozen-weights invariant unit-tested). The forward model is **exactly linear in amplitude** for either, by construction.
+- **Likelihood/optimizer**: Gaussian per-pixel likelihood, `χ²/n_pixels` summed over *all* exposures then divided by the *global* pixel count (not a mean of per-exposure means), so the loss is ~1 at a good fit regardless of exposure count/size. Two optimizers: SGD (clip → RMS-scale → momentum, warmup-cosine schedule) and a from-scratch Levenberg–Marquardt on `optimistix.AbstractGaussNewton` with a custom trust region (`_InitStepTrustRegion`) fixing two real `optimistix` defaults for log-parameterized models (hardcoded `initial_step_size=1.0` far too aggressive; unbounded trust-region growth causes CG hangs on a near-singular Gauss–Newton Hessian) — §7.1–7.2, genuinely specific engineering notes rather than marketing.
+- **Multi-exposure joint fits**: yes. Exposures sharing a band are grouped and processed with one `jax.lax.scan` (§5.1); the amplitude solve is explicitly joint across the whole exposure stack.
+- **Direct amplitude least-squares solve** (`solve_log_amplitudes`, §5.5, interleaved with SGD every `amp_solve_every=16` steps): exploits amplitude-linearity to form/solve normal equations `(MᵀM)a=Mᵀy` with `M` built directly from `source_stamps` (not autodiff), via a hand-rolled `jax.lax.while_loop` CG, compiled once (`_make_amplitude_solver`) and reused — §7.16 measures an 18.8× speedup (2.2s→0.116s at 128 sources × 32 exposures) from avoiding repeated JAX retracing. Two safeguards: mandatory Jacobi/diagonal preconditioning (the unscaled normal matrix spans tens of decades in amplitude units, overflowing float32 without it, §7.13), and exclusion of sources whose design-matrix diagonal is >6 orders of magnitude below the max (near-off-detector) rather than driving them to a gradient-killing near-zero amplitude (§7.14).
+- **Deblending**: implicit only — all sources in a stamp/exposure group are fit simultaneously; no explicit iterative/hierarchical deblender.
+- **Error propagation**: none exposed — no covariance or per-parameter error output anywhere in `scripts/inference.py`, only point estimates and loss/χ² diagnostics.
+- **Output grid**: per-source amplitude + shape parameters, not a per-visit flux/wavelength table; turning that into a `(wavelength, flux, error)` spectrum is left to the caller (mock diagnostics reconstruct `f_λ(λ)` only for plotting).
+
+## Extended-source support
+
+None, unambiguously: `grep -rniE "sersic|ellip|half_light|re_arcsec|position_angle|axis_ratio" . --include='*.py'` returns zero hits. Every source is a point convolved with the PSF; the only non-positional freedom is `(log_amplitude, shape_params)`, where `shape_params` is *spectral* shape, never spatial. No half-light radius, Sérsic index, ellipticity, or PA anywhere in `source_params`, and no extended-profile-times-PSF convolution. Adding this needs a materially new module — an analytic or GalSim-backed 2-D profile generator plumbed into the `_one_subpixel_rate`/`ImageGenerator3` chain in place of the point-source delta function — not a parameter toggle.
+
+## Code quality
+
+- **Structure**: small and clean. `spherex/` (10 files, ~1,730 lines) plus `scripts/inference.py` (1,386) and `scripts/mock_spherex_images.py` (1,839, the CLI-driven mock/demo driver). Model classes (`BlackbodySpectrum`, `NeuralNetSpectrum`, `GaussianPSF`, `GaussianFilterTransmission`) are `equinox.Module`s with an enforced interface contract (transmission needs `quantile`/`total_transmission`; spectrum models take `(wavelength:(N_λ,), shape_params:(P,))→(N_λ,)`, one source × many wavelengths, batching left to the caller's `vmap`/`scan`/`map` — §7.17 explains why self-batching would break). Real modularity, demonstrated by `NeuralNetSpectrum` dropping in for `BlackbodySpectrum` with a single-argument change to `_build_band`.
+- **Dependencies**: `jax>=0.4.30`, `equinox>=0.11.0`, `optimistix>=0.0.7`, `lineax>=0.0.5`, `numpy>=1.24`; dev extras `pytest`, `matplotlib`. No GPU extra declared; examples are CPU-sized, and §7.12 explicitly warns to test at tiny scale before scaling up on CPU — transferable advice.
+- **Hard-coded values**: SPHEREx instrument constants (6.2″ pixels, 2048×2048 detector, 0.10 m aperture radius, six-band table) centralized in `spherex/config.py:28-52` — a good pattern even though the same file only builds idealized PSF/LVF models, not real calibration products.
+- **Robustness to QR3 EPSF / flag-header changes**: not applicable — nothing here reads real FITS products, so nothing breaks, but nothing here already solves it either; a real-data path is a from-scratch build informed only by this repo's rendering/fitting math.
+- **Tests**: present and reasonably thorough (1,472 lines, including `ImageGenerator`≡`ImageGenerator3` numerical equivalence, amplitude-solve regression tests, and a frozen-weights invariant for `NeuralNetSpectrum`). Not run in CI, so current pass/fail status is unverified from the repo alone (not executed here).
+
+## Reusable pieces for our project
+
+Given no real-data ingestion and no extended-source model, nothing here is turnkey for extracting post-starburst-galaxy spectra from real L2 cutouts. The value is transplantable patterns:
+
+- **Quantile/importance-sampling wavelength integration** — `_one_subpixel_rate` (`spherex/image.py`) and `GaussianFilterTransmission.quantile`/`total_transmission` (`spherex/transmission.py`). If our own forward model integrates a source SED against a band transmission (even the real tabulated SPHEREx LVF), replacing naive linspace+trapezoid with quantile sampling of a numerically inverted CDF is directly adaptable accuracy-per-sample.
+- **Float32-safe Planck gradient** — `BlackbodySpectrum.__call__` (`spherex/spectrum.py`), `inv_T_scale=HC/(λ·KB)` prefactor avoiding `(kB·T)²` underflow. Reusable if we fit a blackbody/graybody continuum in JAX/float32.
+- **Linear-in-amplitude closed-form flux solve** — `solve_log_amplitudes`/`_make_amplitude_solver` (`scripts/inference.py`) plus its Jacobi preconditioning and low-information-source exclusion (§5.5, §7.13–7.14). Our own problem (fixed PSF/position, solving per-visit flux for known targets) is exactly amplitude-linear; the "compile once, pass data as JIT arguments not closures" lesson (§7.16) generalizes to any repeated per-visit/per-stack solve.
+- **JAX/Equinox module interface discipline** — the "one source × many wavelengths, caller batches" contract (§7.17) and explicit `quantile`/`total_transmission` contracts are a good template for our own swappable PSF/background/SED modules.
+- **Custom LM trust region** (`_InitStepTrustRegion`, §7.1–7.2) — directly reusable if we use `optimistix` for a log-parameterized nonlinear fit, since the `optimistix.LevenbergMarquardt` bug it works around is upstream, not local to this repo.
+- **Not reusable**: `GaussianPSF`, `GaussianFilterTransmission` (both wrong shape for real data), the mock catalog/exposure generator (synthetic-only), and `NeuralNetSpectrum` (orthogonal SED-flexibility experiment).
+
+## Risks and limitations
+
+- **No real-data path at all.** Zero code reads a real L2 FITS file or handles IMAGE/FLAGS/VARIANCE/ZODI/PSF/EPSF/WCS-WAVE/CWAVE/CBAND. Everything called "photometry" here is fit-the-model-to-its-own-mock-output, not a validated measurement against real instrument systematics.
+- **No extended-source model** — needs new development to add.
+- **No license** — cannot be safely redistributed or incorporated wholesale; study and reimplement ideas independently.
+- **Idealized PSF and bandpass are optimistic simplifications** even for point sources — a circular Gaussian PSF and Gaussian LVF ignore real asymmetry/wings/ripple; trusting these *numbers* (not just their structure) on real data would understate systematics.
+- **No CI, 0 stars/forks, single author, ~7 weeks old, pre-1.0.** Unreviewed early research code; the honest gotchas section (§7) is a good sign, but it has only been exercised by its author.
+- **No formal uncertainty propagation** — point estimates only, no covariance/error output, which stacking would require.
+- **Generic PyPI name (`spherex`)** — collision risk if ever published; irrelevant beyond noting this is not an installable dependency today.
+
+## Verdict
+
+**Read for ideas only.** Not usable as a SPHEREx data-reduction tool — no real-data ingestion, no real PSF/EPSF/bandpass products, no extended-source model, so nothing plugs directly into a pipeline reading real L2 cutouts. Its value is a well-documented, honestly-debugged reference implementation of transferable numerical patterns for a JAX PSF forward-model + multi-exposure forced-photometry fit: quantile wavelength integration, float32-safe blackbody gradients, a closed-form linear-in-amplitude flux solve with correct preconditioning/degeneracy handling, and disciplined JAX/Equinox interfaces. Read `explanatory_supplement.md` in full before designing our own JAX forward model (especially §5.5 and §7); do not copy code verbatim given the missing license, and do not trust its instrument numbers (PSF FWHM, LVF width) as SPHEREx-accurate.
