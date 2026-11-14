@@ -218,5 +218,5 @@ __marimo__/
 .streamlit/secrets.toml
 
 # Large downloaded reference documents stay on disk (Dropbox) but out of git
-docs/reference_notes/external/*.pdf
+docs/references/sources/external/*.pdf
 spherex_tap_results_*.ecsv
