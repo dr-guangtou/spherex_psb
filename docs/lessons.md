@@ -166,3 +166,18 @@ Data lessons (verified live)
   ecliptic latitudes below 10 deg and by 11-34 % at 24-46 deg (16th-84th percentiles of the fitted residual
   over ZODI); the SOURCE flag covers 31-53 % of the pixels in a 41 x 41 cutout around a bright galaxy; HALO
   and OUTLIER each flag 1.3-2.1 % of pixels and DICHROIC 2.6-2.8 % of D3/D4 pixels.
+
+## note-style conversion (2026-11-14)
+
+- A `.gitignore` pattern names a path: when a folder is moved (`docs/reference_notes/external/` to
+  `docs/references/sources/external/`), the pattern must move with it, or the next `git add` commits what
+  it used to exclude. Two 30 MB PDFs reached GitHub this way; check `git ls-files` sizes after any move.
+- Sphinx only reports a warning when it re-reads the source, so a strict build that "passes" after an
+  incremental run proves nothing; use `-E` (fresh environment) for the build that gates a commit.
+- Pygments treats `{ra}` placeholders inside a `sql` fence as an error and Sphinx turns that into a warning
+  under `-W`; type such templates as `text`.
+- Furo sets `overflow-wrap: break-word` on the article, so table cells in a narrow column split words
+  ("Us ed"); and a MyST `:width:` is an absolute width, so an 820 px figure overflows a 390 px screen.
+  Both are fixed in the project stylesheet, not in the shared note-style files.
+- Side-by-side image pairs have no MyST figure equivalent; two consecutive figures with their own credit
+  lines read better on narrow screens anyway.

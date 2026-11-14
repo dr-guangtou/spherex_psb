@@ -40,13 +40,12 @@ Rules stated by the project and what we measured:
 
 ## Where the data are
 
-<figure markdown="span">
-  ![Pipeline data flow](figures/external/akeson2026_PipelineFlow.png){ width="520" }
-  <figcaption><span class="credit">Credit: Akeson et al. 2026 (ApJS 285, 67; arXiv:2511.15823), pipeline
-  flow figure.</span> From raw downlink through Level 1 (detector corrections), Level 2 (calibrated spectral
-  images, the product that is archived) to Level 3 (forced photometry, mosaics) and Level 4 science
-  products.</figcaption>
-</figure>
+```{figure} figures/external/akeson2026_PipelineFlow.png
+:width: 520px
+:alt: Pipeline data flow
+
+*Credit: Akeson et al. 2026 (ApJS 285, 67; arXiv:2511.15823), pipeline flow figure.* From raw downlink through Level 1 (detector corrections), Level 2 (calibrated spectral images, the product that is archived) to Level 3 (forced photometry, mosaics) and Level 4 science products.
+```
 
 All public SPHEREx data are served by IRSA (NASA/IPAC Infrared Science Archive) and mirrored in an AWS
 Open Data bucket.[^archive]
@@ -67,7 +66,7 @@ Endpoint `https://irsa.ipac.caltech.edu/TAP`. Tables verified live on 2026-11-13
 
 The canonical exposure search, from the official cutout notebook:[^tutorials]
 
-```sql
+```text
 SELECT 'https://irsa.ipac.caltech.edu/' || a.uri || '?center={ra},{dec}d&size={size_deg}' AS uri,
        p.time_bounds_lower, p.energy_bandpassname, p.provenance_version, o.collection
 FROM spherex.artifact a

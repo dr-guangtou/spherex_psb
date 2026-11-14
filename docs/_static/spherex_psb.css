@@ -1,0 +1,25 @@
+/* Project additions on top of the shared note-style stylesheet (keep note_style.css unmodified). */
+
+/* Tables: words stay whole, wide tables scroll inside Furo's wrapper instead of breaking cells. */
+article table.docutils {
+  font-size: 0.85em;
+}
+article table.docutils td,
+article table.docutils th,
+article table.docutils :is(td, th) p {
+  overflow-wrap: normal;
+  word-break: normal;
+}
+
+/* Figures: a requested width is a maximum; the image never exceeds the reading column. */
+article figure img,
+article img {
+  max-width: 100%;
+  height: auto;
+}
+article figure {
+  max-width: 100%;
+}
+article figcaption p {
+  text-align: left;
+}

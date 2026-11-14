@@ -86,7 +86,7 @@ Tip given in text: list SPHEREx SIA collections dynamically with
 ```python
 Irsa.list_collections(servicetype="SIA", filter="spherex")
 ```
-**Gotcha (stated explicitly):** *"SPHEREx data are ingested on a weekly basis. Due to the nature of the ingestion process, availability via SIA will lag on the order of a day. To avoid this delay, users can access data through the browsable directories or the SPHEREx Data Explorer GUI ... or do a TAP query as shown in {ref}`spherex-cutouts`."*
+**Gotcha (stated explicitly):** *"SPHEREx data are ingested on a weekly basis. Due to the nature of the ingestion process, availability via SIA will lag on the order of a day. To avoid this delay, users can access data through the browsable directories or the SPHEREx Data Explorer GUI ... or do a TAP query as shown in [spherex-cutouts]."*
 
 **Retry pattern for transient read errors** (used identically across all notebooks that open FITS by URL):
 ```python

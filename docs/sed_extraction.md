@@ -7,13 +7,15 @@ distributions (SEDs) and validated eight ways. The task specification is in the
 [SED demo report](reports/demo_sed_report.md). This page gives the method, the numbers that matter and the
 questions that remain.
 
-!!! abstract "Outcome"
-    2,225 exposures measured, 2,104 (95 %) used; all 102 channels of every galaxy filled; per-exposure
-    chi2/dof 0.9-2.3; forced-model and aperture estimators agree to 0.98-1.03 with no trend over 0.75-5 um;
-    injected galaxies recovered at 1.00-1.02; QR3 and DR1 agree at 1-2 %; a cross-code check against
-    tractorjax-spherex reproduces the expected 1.5 % (n = 1) and 6 % (n = 4) flux-convention offsets.
-    Open: the D1/D2 and D3/D4 detector steps, the total-flux convention, and the error floor of compact
-    galaxies.
+:::{admonition} Outcome
+:class: tip
+2,225 exposures measured, 2,104 (95 %) used; all 102 channels of every galaxy filled; per-exposure
+chi2/dof 0.9-2.3; forced-model and aperture estimators agree to 0.98-1.03 with no trend over 0.75-5 um;
+injected galaxies recovered at 1.00-1.02; QR3 and DR1 agree at 1-2 %; a cross-code check against
+tractorjax-spherex reproduces the expected 1.5 % (n = 1) and 6 % (n = 4) flux-convention offsets.
+Open: the D1/D2 and D3/D4 detector steps, the total-flux convention, and the error floor of compact
+galaxies.
+:::
 
 ## Why forced photometry on exposures
 
@@ -27,13 +29,12 @@ zones).[^study] A Sersic model with the shape fixed from optical imaging, fitted
 exposure's own ePSF, removes this; mosaics would instead smear the PSF by 1.3-1.6x and bin away the
 per-exposure wavelength ([reduction page](reduction_analysis.md#mosaics-versus-exposures)).
 
-<figure markdown="span">
-  ![Parent sample and the six galaxies](figures/sed_demo/fig1_sample.png){ width="820" }
-  <figcaption>Figure 1. The parent sample (SDSS DR17 SkyServer, class GALAXY, zWarning = 0,
-  0.03 <= z <= 0.059, MPA-JHU log M* >= 10; 45,569 galaxies) in (a) the redshift-stellar-mass plane and (b)
-  the Dn4000-HdA plane, and (c) the distribution of the r-band effective radius with the 6.15 arcsec SPHEREx
-  pixel marked; the six demonstration galaxies are the coloured symbols used throughout.</figcaption>
-</figure>
+```{figure} figures/sed_demo/fig1_sample.png
+:width: 820px
+:alt: Parent sample and the six galaxies
+
+Figure 1. The parent sample (SDSS DR17 SkyServer, class GALAXY, zWarning = 0, 0.03 <= z <= 0.059, MPA-JHU log M* >= 10; 45,569 galaxies) in (a) the redshift-stellar-mass plane and (b) the Dn4000-HdA plane, and (c) the distribution of the r-band effective radius with the 6.15 arcsec SPHEREx pixel marked; the six demonstration galaxies are the coloured symbols used throughout.
+```
 
 ## The six galaxies
 
@@ -84,23 +85,19 @@ Per exposure, on a 41 x 41 pixel cutout bundle (53 x 53 for the large galaxy) fr
    error-weighted mean and its error the exposure-to-exposure scatter (with the formal error as fallback);
    Galactic extinction corrected with the Schlafly and Finkbeiner E(B-V).
 
-<figure markdown="span">
-  ![Image QA for the reference galaxy](figures/sed_demo/g1_reference_fig2_image_qa.png){ width="820" }
-  <figcaption>Figure 2 (reference galaxy). (a) Legacy Survey DR10 z image, 150 arcsec wide, with the
-  target's model ellipse (orange), the fitted neighbours (green circles scaled by brightness), the 2 pixel
-  aperture (blue dashed) and the fit radius (grey dotted). (b)-(d) For one typical exposure per detector
-  (chi2/dof at the detector median): data, model and residual / sigma in a 19 x 19 pixel window, with
-  masked pixels in pink.</figcaption>
-</figure>
+```{figure} figures/sed_demo/g1_reference_fig2_image_qa.png
+:width: 820px
+:alt: Image QA for the reference galaxy
 
-<figure markdown="span">
-  ![Per-exposure diagnostics of the reference galaxy](figures/sed_demo/g1_reference_fig3_diagnostics.png){ width="820" }
-  <figcaption>Figure 3 (reference galaxy). Per exposure against wavelength: (a) chi2/dof within the fit
-  radius for the galaxy model (filled) and the point-source control (open); (b) the fraction of the target
-  template's weight on masked pixels; (c) the fitted residual background (filled) and the ZODI model
-  (open). Rejected and screened exposures are black symbols keyed by reason; the He I 1.083 um line is
-  marked.</figcaption>
-</figure>
+Figure 2 (reference galaxy). (a) Legacy Survey DR10 z image, 150 arcsec wide, with the target's model ellipse (orange), the fitted neighbours (green circles scaled by brightness), the 2 pixel aperture (blue dashed) and the fit radius (grey dotted). (b)-(d) For one typical exposure per detector (chi2/dof at the detector median): data, model and residual / sigma in a 19 x 19 pixel window, with masked pixels in pink.
+```
+
+```{figure} figures/sed_demo/g1_reference_fig3_diagnostics.png
+:width: 820px
+:alt: Per-exposure diagnostics of the reference galaxy
+
+Figure 3 (reference galaxy). Per exposure against wavelength: (a) chi2/dof within the fit radius for the galaxy model (filled) and the point-source control (open); (b) the fraction of the target template's weight on masked pixels; (c) the fitted residual background (filled) and the ZODI model (open). Rejected and screened exposures are black symbols keyed by reason; the He I 1.083 um line is marked.
+```
 
 The whole pipeline ran unattended in 1 h 52 min for the six galaxies: 552-1,702 s of measurement per galaxy
 (1.3-4.1 s per exposure; the galaxy with 141 sources in its model is the slowest) and 144-301 s of
@@ -108,23 +105,19 @@ validation. The code is `spherex_psb/extraction/` and `scripts/sed_demo/`.
 
 ## Results
 
-<figure markdown="span">
-  ![SED of the post-starburst galaxy](figures/sed_demo/g6_post_starburst_fig4_sed.png){ width="820" }
-  <figcaption>Figure 4 (post-starburst galaxy). (a) The model flux of every used exposure, coloured by
-  detector, with formal errors; the binned model SED (black, error = channel scatter) and the binned
-  corrected 2 pixel aperture SED (grey dashed); external photometry of the same convention (SDSS z model,
-  2MASS XSC total, Legacy Survey forced W1/W2) as open diamonds; rest-frame axis on top with the CaT, 1.6 um
-  CO, 1.9 um water, 2.29 um CO, 3.3 um PAH and 4.6 um CO positions. (b) The ratio of the two estimators per
-  exposure and binned.</figcaption>
-</figure>
+```{figure} figures/sed_demo/g6_post_starburst_fig4_sed.png
+:width: 820px
+:alt: SED of the post-starburst galaxy
 
-<figure markdown="span">
-  ![All six rest-frame SEDs](figures/sed_demo/fig7_all_seds_rest_frame.png){ width="820" }
-  <figcaption>Figure 7. The six binned model SEDs, corrected for Galactic extinction, in the rest frame,
-  normalised at 1.6 um. All share the 1.6 um bump, the 1.9 um water band and the CO drop beyond 2.3 um;
-  the three star-forming or post-starburst galaxies show the 3.3 um PAH feature and a flatter 3.5-5 um
-  continuum.</figcaption>
-</figure>
+Figure 4 (post-starburst galaxy). (a) The model flux of every used exposure, coloured by detector, with formal errors; the binned model SED (black, error = channel scatter) and the binned corrected 2 pixel aperture SED (grey dashed); external photometry of the same convention (SDSS z model, 2MASS XSC total, Legacy Survey forced W1/W2) as open diamonds; rest-frame axis on top with the CaT, 1.6 um CO, 1.9 um water, 2.29 um CO, 3.3 um PAH and 4.6 um CO positions. (b) The ratio of the two estimators per exposure and binned.
+```
+
+```{figure} figures/sed_demo/fig7_all_seds_rest_frame.png
+:width: 820px
+:alt: All six rest-frame SEDs
+
+Figure 7. The six binned model SEDs, corrected for Galactic extinction, in the rest frame, normalised at 1.6 um. All share the 1.6 um bump, the 1.9 um water band and the CO drop beyond 2.3 um; the three star-forming or post-starburst galaxies show the 3.3 um PAH feature and a flatter 3.5-5 um continuum.
+```
 
 The other galaxies' figures 2-4 are in `docs/figures/sed_demo/` and listed in the report.
 
@@ -144,11 +137,12 @@ For each of the five boundaries the exposures of both detectors within a window 
 -2.5 log10(F_B / F_A), positive when the redder detector is fainter. No exposure sits in an overlap: the
 overlaps are 0.01-0.03 um wide and the D3/D4 one is DICHROIC-flagged.
 
-<figure markdown="span">
-  ![Detector boundary steps](figures/sed_demo/fig5_detector_boundaries.png){ width="820" }
-  <figcaption>Figure 5. The step at the five boundaries for the six galaxies, for (a) the model flux,
-  (b) the corrected 2 pixel aperture flux and (c) the point-source control.</figcaption>
-</figure>
+```{figure} figures/sed_demo/fig5_detector_boundaries.png
+:width: 820px
+:alt: Detector boundary steps
+
+Figure 5. The step at the five boundaries for the six galaxies, for (a) the model flux, (b) the corrected 2 pixel aperture flux and (c) the point-source control.
+```
 
 | Boundary | Galaxies, model flux (weighted mean) | Isolated bright stars in the same cutouts | Reading |
 |---|---|---|---|
@@ -167,12 +161,12 @@ the target and the neighbours in the model: recovered / injected = 0.997-1.018 (
 2.5-3.8 um, 1.025 +- 0.061 at 3.8-5.1 um. The injection uses our own renderer, so it cannot see a renderer
 bias; the cross-code check did.
 
-<figure markdown="span">
-  ![Injection recovery and repeat-pair pulls](figures/sed_demo/fig6_injection_and_errors.png){ width="820" }
-  <figcaption>Figure 6. (a) Recovered / injected flux of the synthetic galaxies against wavelength, model
-  (filled) and corrected aperture (open). (b) Pull distributions of repeat pairs per detector with their
-  robust widths; dashed: a unit Gaussian.</figcaption>
-</figure>
+```{figure} figures/sed_demo/fig6_injection_and_errors.png
+:width: 820px
+:alt: Injection recovery and repeat-pair pulls
+
+Figure 6. (a) Recovered / injected flux of the synthetic galaxies against wavelength, model (filled) and corrected aperture (open). (b) Pull distributions of repeat pairs per detector with their robust widths; dashed: a unit Gaussian.
+```
 
 ### Cross-code check
 

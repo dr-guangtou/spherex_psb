@@ -126,10 +126,26 @@ be interpreted before those two systematics are removed.
 
 ## Documentation site (2026-11-14)
 
-- [x] MkDocs + Material site with index, primer, data access, reduction and analysis, SED extraction and
-      spectral index pages; project pages and reference notes in the navigation; GitHub Pages workflow.
+- [x] First site version (MkDocs + Material) with index, primer, data access, reduction and analysis, SED
+      extraction and spectral index pages; project pages and reference notes in the navigation; GitHub Pages
+      workflow. Replaced the same day by the note-style conversion below.
 - [x] docs/ reorganised: references/{irsa,papers,studies,tools,sources}, reports/, figures/{sed_demo,site,external}.
 - [x] Site figures from calibration products and records (`scripts/site_figures.py`); paper figures with credits.
 - [ ] Enable GitHub Pages (source: GitHub Actions) in the repository settings after the branch is merged.
 - [ ] Propose the matching updates to the external `spherex-irsa-access` skill (not edited from here).
 - [ ] Add a page for the full-sample pipeline once it exists; keep one page per reader question.
+
+## note-style conversion (2026-11-14)
+
+- [x] Adopt the `note-style` skill for Claude Code (symlink in `~/.claude/skills/`), copy its rule book to
+      `docs/html_documentation_guide.md`, and make note-style the only documentation standard in `CLAUDE.md`.
+- [x] Convert the site to Sphinx + MyST + customised Furo: starter assets and bundled MathJax copied, Material
+      syntax (admonitions, figure blocks, grid cards) translated, toctrees with short titles, strict build clean.
+- [x] Untrack the two Explanatory Supplement PDFs that the folder move had let into git (they stay on disk).
+- [ ] Check the light-mode switch, saved preference and Firefox/Safari rendering on the deployed site.
+- [ ] The two PDFs remain in the pushed history of `main` (60 MB); decide whether to rewrite history or accept.
+
+### Review
+
+The conversion kept every page, figure, footnote and link (the strict build with `nitpicky` verifies them);
+the only content changes are four two-image figures split into pairs and one SQL block typed as text.
