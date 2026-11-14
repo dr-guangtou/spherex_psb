@@ -121,10 +121,11 @@ total, 6 % apart for n = 4) and whether a position-jitter term is added before s
 ## 9. Documentation system (2026-11-14)
 
 - The project's knowledge about SPHEREx and its own analysis is published as a static site built from
-  `docs/` following the note-style documentation standard (rule book version 0.4, copied to
+  `docs/` following the note-style documentation standard (rule book version 0.5, copied to
   `docs/html_documentation_guide.md`; skill folder `guangtou_vibe/skills/note-style`). Publisher: Sphinx
-  9.1.1 with MyST parser 5.2.0 and Furo 2025.12.19 (the versions tested by the skill's starter) plus
-  sphinx-design 0.8.0 for the card grid of the index page; pinned in `uv.lock`, docs dependency group.
+  9.1.1 with MyST parser 5.2.0 and Furo 2025.12.19 and sphinx-design 0.8.0 (the versions tested by the
+  skill's starter; card grids are part of the standard since rule book 0.5); pinned in `uv.lock`, docs
+  dependency group.
   Build:
   `uv run --only-group docs sphinx-build -E -W --keep-going -b html docs docs/_build/html`.
 - Layout: `docs/conf.py` (project settings; the theme palette and font stacks are the starter's);

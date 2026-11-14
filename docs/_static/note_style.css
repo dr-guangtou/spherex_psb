@@ -125,3 +125,20 @@ article a {
     color-scheme: light;
   }
 }
+
+/* Card grids (sphinx-design grid and grid-item-card): the title is a larger heading in the link
+   colour so the whole card reads as a link; the body is a short description. */
+.sd-card .sd-card-title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  line-height: 1.3;
+  color: var(--color-link);
+}
+.sd-card:hover .sd-card-title,
+.sd-card:focus-within .sd-card-title {
+  text-decoration: underline;
+  text-underline-offset: 0.16em;
+}
+.sd-card .sd-card-text {
+  line-height: 1.55;
+}

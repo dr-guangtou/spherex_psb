@@ -1,8 +1,8 @@
-% Copied from the note-style skill (`guangtou_vibe/skills/note-style/references/note_style_guide.md`, rule book version 0.4, 2026-11-14) as the skill's portable adoption instruction asks. The project-specific decisions are recorded in [the specification](SPEC.md#9-documentation-system-2026-11-14). Links to the skill's starter and font note are given as paths inside the skill folder.
+% Copied from the note-style skill (`guangtou_vibe/skills/note-style/references/note_style_guide.md`, rule book version 0.5, 2026-11-15) as the skill's portable adoption instruction asks. The project-specific decisions are recorded in [the specification](SPEC.md#9-documentation-system-2026-11-14). Links to the skill's starter and font note are given as paths inside the skill folder.
 
 # note-style Rule Book and Style Guide
 
-Version 0.4, self-contained skill, 2026-11-14 (0.3 plus self-hosted Latin fonts and the card-grid extension after the first real conversion).
+Version 0.5, self-contained skill, 2026-11-15 (0.3 plus self-hosted Latin fonts and built-in card grids after the first real conversion).
 
 ## Purpose and adoption status
 
@@ -112,7 +112,7 @@ The Source Han families provide Chinese-capable font assets. A font name in a co
 
 ### Overview pages and card grids
 
-A collection overview may present its main chapters as a grid of linked cards instead of a list. Furo has no card element of its own; use the `sphinx-design` extension (`grid` and `grid-item-card` directives, `:link-type: doc`) with a one-column layout on narrow screens, and keep each card to a title and one or two sentences. This is the one additional dependency the first conversion needed; record it in the project's specification.
+A collection overview may present its main chapters as a grid of linked cards instead of a list. Furo has no card element of its own, so the profile includes the `sphinx-design` extension (a starter dependency and extension) and styles its cards: the card title is a larger heading in the link colour, so the card reads as a link, and the body is one or two sentences. Use the `grid` directive with a one-column layout on narrow screens (`::::{grid} 1 1 2 2`) and `grid-item-card` with `:link:` and `:link-type: doc`; the starter's `index.md` shows the markup.
 
 ### Mathematics and interactive figures
 
@@ -158,7 +158,7 @@ Publish the generated `_build/html/` directory together with its assets. Chinese
 The Sphinx configuration enables the MyST parser and math renderer and selects Furo.
 
 ```python
-extensions = ["myst_parser", "sphinx.ext.mathjax"]  # add "sphinx_design" for card grids
+extensions = ["myst_parser", "sphinx.ext.mathjax", "sphinx_design"]
 source_suffix = {".md": "markdown"}
 html_theme = "furo"
 ```
