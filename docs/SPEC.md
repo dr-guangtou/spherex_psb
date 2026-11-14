@@ -121,23 +121,26 @@ total, 6 % apart for n = 4) and whether a position-jitter term is added before s
 ## 9. Documentation system (2026-11-14)
 
 - The project's knowledge about SPHEREx and its own analysis is published as a static site built from
-  `docs/` following the note-style documentation standard (rule book version 0.3, copied to
+  `docs/` following the note-style documentation standard (rule book version 0.4, copied to
   `docs/html_documentation_guide.md`; skill folder `guangtou_vibe/skills/note-style`). Publisher: Sphinx
-  9.1.1 with MyST parser 5.2.0 and Furo 2025.12.19 (the versions tested by the skill's starter; pinned
-  in `uv.lock`, docs dependency group). Build:
+  9.1.1 with MyST parser 5.2.0 and Furo 2025.12.19 (the versions tested by the skill's starter) plus
+  sphinx-design 0.8.0 for the card grid of the index page; pinned in `uv.lock`, docs dependency group.
+  Build:
   `uv run --only-group docs sphinx-build -E -W --keep-going -b html docs docs/_build/html`.
 - Layout: `docs/conf.py` (project settings; the theme palette and font stacks are the starter's);
   shared assets copied unmodified from the starter: `docs/_static/note_style.css`,
   `docs/_static/note_style_theme.js` (dark-first theme with saved reader choice),
-  `docs/_templates/base.html`, `docs/mathjax_config.js`, and `docs/_static/vendor/` (MathJax 4.1.3
-  runtime and the mathjax-newcm font, Apache-2.0, 32 MB, served from the site itself). Project
+  `docs/_templates/base.html`, `docs/mathjax_config.js`, `docs/_static/fonts/` (Source Sans 3 and
+  Source Code Pro, variable WOFF2, Latin subsets, OFL 1.1, 316 KB) and `docs/_static/vendor/` (MathJax
+  4.1.3 runtime and the mathjax-newcm font, Apache-2.0, 32 MB), all served from the site itself. Project
   additions live in `docs/_static/spherex_psb.css` only (table word-wrapping, image maximum width).
 - Project-specific decisions: `numfig = False`, because the analysis figures carry explicit numbers
   (figure 1-8 of the SED demonstration, named after the scripts that make them) that reports and
   scripts refer to; `myst_heading_anchors = 4` so the former `page.md#section` links keep working;
   page titles in the navigation are given in the `index.md` toctrees; two-image figures of the former
-  site were split into consecutive single figures; `nitpicky` and `-W` keep every link, anchor and
-  figure path valid.
+  site were split into consecutive single figures; ADQL/SQL blocks with `{placeholders}` use the
+  `postgresql` Pygments lexer (the generic `sql` lexer rejects braces under `-W`); `nitpicky` and `-W`
+  keep every link, anchor and figure path valid.
 - Entry point `docs/index.md`; main pages `primer.md`, `data_access.md`, `reduction_analysis.md`,
   `sed_extraction.md`, `spectral_indices.md`; project pages `SPEC.md`, `todo.md`, `lessons.md`,
   `html_documentation_guide.md`; `docs/reports/` for checkpoint reports and task specifications;

@@ -66,7 +66,7 @@ Endpoint `https://irsa.ipac.caltech.edu/TAP`. Tables verified live on 2026-11-13
 
 The canonical exposure search, from the official cutout notebook:[^tutorials]
 
-```text
+```postgresql
 SELECT 'https://irsa.ipac.caltech.edu/' || a.uri || '?center={ra},{dec}d&size={size_deg}' AS uri,
        p.time_bounds_lower, p.energy_bandpassname, p.provenance_version, o.collection
 FROM spherex.artifact a

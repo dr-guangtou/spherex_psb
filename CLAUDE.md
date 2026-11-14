@@ -26,9 +26,9 @@ AGB/TP-AGB stars.
   `/Users/shuang/Dropbox/work/project/vibe/guangtou_vibe/skills/note-style`, read it before changing
   the documentation setup). Its first implementation is Sphinx, MyST Markdown and customised Furo:
   sources stay ordinary `.md` files, the shared assets `docs/_static/note_style.css`,
-  `docs/_static/note_style_theme.js`, `docs/_templates/base.html`, `docs/mathjax_config.js` and the
-  bundled MathJax under `docs/_static/vendor/` are copied from the skill's starter and are not edited
-  here (project additions go in `docs/_static/spherex_psb.css`). Do not introduce another site
+  `docs/_static/note_style_theme.js`, `docs/_templates/base.html`, `docs/mathjax_config.js`, the
+  bundled fonts under `docs/_static/fonts/` and the bundled MathJax under `docs/_static/vendor/` are
+  copied from the skill's starter and are not edited here (project additions go in `docs/_static/spherex_psb.css`). Do not introduce another site
   generator, theme or CDN-hosted math runtime. Record the adopted guide version, publisher versions and
   project-specific decisions in `docs/SPEC.md`; preserve source provenance, stable document identifiers
   and working links during conversion. Build with

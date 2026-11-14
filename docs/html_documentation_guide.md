@@ -1,8 +1,8 @@
-% Copied from the note-style skill (`guangtou_vibe/skills/note-style/references/note_style_guide.md`, rule book version 0.3, 2026-11-14) as the skill's portable adoption instruction asks. The project-specific decisions are recorded in [the specification](SPEC.md#9-documentation-system-2026-11-14). Links to the skill's starter and font note are given as paths inside the skill folder.
+% Copied from the note-style skill (`guangtou_vibe/skills/note-style/references/note_style_guide.md`, rule book version 0.4, 2026-11-14) as the skill's portable adoption instruction asks. The project-specific decisions are recorded in [the specification](SPEC.md#9-documentation-system-2026-11-14). Links to the skill's starter and font note are given as paths inside the skill folder.
 
 # note-style Rule Book and Style Guide
 
-Version 0.3, self-contained skill, 2026-11-14.
+Version 0.4, self-contained skill, 2026-11-14 (0.3 plus self-hosted Latin fonts and the card-grid extension after the first real conversion).
 
 ## Purpose and adoption status
 
@@ -80,8 +80,8 @@ With independently built books, search normally covers the current build. Collec
 
 ### Typography
 
-- Use one shared body-font stack and one shared code-font stack across adopted projects.
-- The owner's preferred Chinese face is XiQueSongTiJF_std. Its web-embedding terms need foundry clarification as described in the skill's `references/font_integration.md`. Source Sans 3 and the existing Chinese-capable fallback stack keep the current starter functional. IBM Plex Mono is the code candidate.
+- Use one shared body-font stack and one shared code-font stack across adopted projects. The adopted Latin faces are Source Sans 3 (body) and Source Code Pro (code), served from the publication's own `_static/fonts/` as variable-weight WOFF2 files (Latin and Latin Extended subsets, SIL Open Font License 1.1, from the fontsource packages 5.3.1). A face that is only named in a configuration renders as whatever the reader's system substitutes; the first real conversion showed PingFang substituting for the body font on macOS until the files were bundled.
+- The owner's preferred Chinese face is XiQueSongTiJF_std. Its web-embedding terms need foundry clarification as described in the skill's `references/font_integration.md`. The bundled Source Sans 3 and the Chinese-capable fallback stack keep the starter functional for Latin and Chinese text.
 - Assess Chinese punctuation, Latin symbols, numerals, bold weights, inline mathematics, and mixed-language headings together before adopting font assets.
 - Use relative text sizing and content-driven block heights. Preserve reading and navigation when text is enlarged.
 - Keep paragraphs within a comfortable reading column. Allow long technical tables, equations, and figures to use a wider region or their own scroll container when needed.
@@ -110,6 +110,10 @@ The Source Han families provide Chinese-capable font assets. A font name in a co
 - Use callouts consistently. A note adds context, a caution identifies a relevant failure mode, and an engineering status identifies the maturity or revision of the actual record.
 - Preserve meaningful requirement identifiers, release identifiers, and source provenance during conversion.
 
+### Overview pages and card grids
+
+A collection overview may present its main chapters as a grid of linked cards instead of a list. Furo has no card element of its own; use the `sphinx-design` extension (`grid` and `grid-item-card` directives, `:link-type: doc`) with a one-column layout on narrow screens, and keep each card to a title and one or two sentences. This is the one additional dependency the first conversion needed; record it in the project's specification.
+
 ### Mathematics and interactive figures
 
 - Keep mathematics in editable LaTeX-style source. Label equations that are referenced elsewhere.
@@ -135,6 +139,8 @@ docs/
   _static/
     note_style.css
     note_style_theme.js
+    fonts/            (Source Sans 3, Source Code Pro, WOFF2 and licences)
+    vendor/           (MathJax runtime and math fonts, licences)
   _templates/
     base.html
 ```
@@ -147,12 +153,12 @@ uv run sphinx-build -W --keep-going -b html docs _build/html
 uv run python -m http.server 8765 --directory _build/html --bind 127.0.0.1
 ```
 
-Publish the generated `_build/html/` directory together with its assets. Final font distribution, Chinese search, and interactive scientific figures are subsequent profile refinements. The starter uses system body-font fallbacks and bundled MathJax 4.1.3 runtime and math-font assets served from its own static publication.
+Publish the generated `_build/html/` directory together with its assets. Chinese font distribution, Chinese search, and interactive scientific figures are subsequent profile refinements. The starter bundles Source Sans 3 and Source Code Pro (`docs/_static/fonts/`, with their licence texts) and the MathJax 4.1.3 runtime and math-font assets, all served from its own static publication.
 
 The Sphinx configuration enables the MyST parser and math renderer and selects Furo.
 
 ```python
-extensions = ["myst_parser", "sphinx.ext.mathjax"]
+extensions = ["myst_parser", "sphinx.ext.mathjax"]  # add "sphinx_design" for card grids
 source_suffix = {".md": "markdown"}
 html_theme = "furo"
 ```
@@ -225,7 +231,7 @@ Repository-specific instructions continue to govern language, dependencies, rele
 
 ## Decisions still to make
 
-- Adopt the final body fonts, Chinese font distribution, palettes, and layout settings after visual comparison.
+- Adopt the Chinese font distribution, palettes, and layout settings after visual comparison; the Latin body and code fonts are settled (Source Sans 3, Source Code Pro).
 - Decide whether individual publications need translated editions, mixed-language pages, or both.
 - Define collection-wide search when independently built books are assembled into the website.
 

@@ -22,11 +22,44 @@ galaxies at 0.03 < z < 0.06.
 
 ## The pages
 
-- **[SPHEREx primer](primer.md)**: The telescope, the linear variable filters, the six detectors, the survey plan, and the numbers that set what can be measured: pixel scale, resolving power, depth, cadence.
-- **[Data access](data_access.md)**: Releases and their pipeline versions, the IRSA archive services (TAP, SIA, cutouts, S3), the Data Explorer tools, what we measured about request rates and outages, and the lessons learned.
-- **[Data reduction and analysis](reduction_analysis.md)**: What is inside a Level 2 image, the flag bits, per-pixel wavelengths, the empirical PSF, the zodiacal light and the atmospheric emission lines, the dichroic boundary, and a checklist of pitfalls.
-- **[SED extraction for SDSS galaxies](sed_extraction.md)**: Our forced Sersic photometry on every exposure of six galaxies, its validation (boundaries, injection, cross-code, repeat pairs, external photometry), the results and the open questions.
-- **[Spectral index measurement](spectral_indices.md)**: What a spectral index means at R = 40 with irregular sampling, the 1.6 um H-minus bump index as the worked example, and what limits it on real SPHEREx SEDs.
+::::{grid} 1 1 2 2
+:gutter: 3
+
+:::{grid-item-card} SPHEREx primer
+:link: primer
+:link-type: doc
+
+The telescope, the linear variable filters, the six detectors, the survey plan, and the numbers that set what can be measured: pixel scale, resolving power, depth, cadence.
+:::
+
+:::{grid-item-card} Data access
+:link: data_access
+:link-type: doc
+
+Releases and their pipeline versions, the IRSA archive services (TAP, SIA, cutouts, S3), the Data Explorer tools, what we measured about request rates and outages, and the lessons learned.
+:::
+
+:::{grid-item-card} Data reduction and analysis
+:link: reduction_analysis
+:link-type: doc
+
+What is inside a Level 2 image, the flag bits, per-pixel wavelengths, the empirical PSF, the zodiacal light and the atmospheric emission lines, the dichroic boundary, and a checklist of pitfalls.
+:::
+
+:::{grid-item-card} SED extraction for SDSS galaxies
+:link: sed_extraction
+:link-type: doc
+
+Our forced Sersic photometry on every exposure of six galaxies, its validation (boundaries, injection, cross-code, repeat pairs, external photometry), the results and the open questions.
+:::
+
+:::{grid-item-card} Spectral index measurement
+:link: spectral_indices
+:link-type: doc
+
+What a spectral index means at R = 40 with irregular sampling, the 1.6 um H-minus bump index as the worked example, and what limits it on real SPHEREx SEDs.
+:::
+::::
 
 ## How to read the citations
 

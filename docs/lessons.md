@@ -181,3 +181,11 @@ Data lessons (verified live)
   Both are fixed in the project stylesheet, not in the shared note-style files.
 - Side-by-side image pairs have no MyST figure equivalent; two consecutive figures with their own credit
   lines read better on narrow screens anyway.
+- A font that is only named in a CSS stack is not a font choice: the note-style starter named Source Sans 3
+  without shipping it, so macOS rendered the pages in PingFang. The old site looked better because Material
+  loaded Source Sans 3 and Source Code Pro from Google Fonts; they are now bundled (316 KB of WOFF2) in
+  the skill and the project, which also removes the third-party request.
+- Pygments' generic `sql` lexer rejects `{ra}` placeholders; the `postgresql` lexer accepts them, so SQL
+  blocks keep their highlighting without relaxing `-W`.
+- On this machine `rm` and `cp` are aliased (trash and interactive copy); inside `&&` chains use
+  `/bin/rm` and `/bin/cp -f`, otherwise the chain stops silently at an "overwrite?" prompt.

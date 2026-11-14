@@ -2,7 +2,7 @@
 
 project = "spherex_psb"
 copyright = "2026, the spherex_psb project"
-extensions = ["myst_parser", "sphinx.ext.mathjax", "sphinx.ext.githubpages"]
+extensions = ["myst_parser", "sphinx.ext.mathjax", "sphinx.ext.githubpages", "sphinx_design"]
 source_suffix = {".md": "markdown"}
 root_doc = "index"
 language = "en"
@@ -34,7 +34,7 @@ html_theme_options = {
             '"Source Sans 3", "Source Han Sans SC", "Noto Sans CJK SC", '
             '"PingFang SC", "Microsoft YaHei", sans-serif'
         ),
-        "font-stack--monospace": ('"IBM Plex Mono", "SFMono-Regular", Consolas, "PingFang SC", monospace'),
+        "font-stack--monospace": ('"Source Code Pro", "SFMono-Regular", Consolas, "PingFang SC", monospace'),
         "color-brand-primary": "#236b69",
         "color-brand-content": "#236b69",
         "color-background-primary": "#fafaf8",

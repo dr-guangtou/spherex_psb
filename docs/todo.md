@@ -142,6 +142,8 @@ be interpreted before those two systematics are removed.
 - [x] Convert the site to Sphinx + MyST + customised Furo: starter assets and bundled MathJax copied, Material
       syntax (admonitions, figure blocks, grid cards) translated, toctrees with short titles, strict build clean.
 - [x] Untrack the two Explanatory Supplement PDFs that the folder move had let into git (they stay on disk).
+- [x] Fonts: Source Sans 3 and Source Code Pro self-hosted (skill starter and project); index cards with
+      sphinx-design; SQL blocks highlighted with the `postgresql` lexer (rule book 0.4).
 - [ ] Check the light-mode switch, saved preference and Firefox/Safari rendering on the deployed site.
 - [ ] The two PDFs remain in the pushed history of `main` (60 MB); decide whether to rewrite history or accept.
 
