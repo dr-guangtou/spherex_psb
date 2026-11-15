@@ -5,13 +5,12 @@ caveats of turning a stack of such images into the spectrum of one galaxy. The p
 Explanatory Supplement and the map-making paper are the sources for the products and the official
 algorithms; the numbers marked "measured" come from this project's 2,225 exposures of six SDSS galaxies.
 
-<figure markdown="span">
-  ![A real Level 2 exposure](figures/external/cukierman2026_exp_panel_real_2025W33_2C_0068_1.png){ width="760" }
-  <figcaption><span class="credit">Credit: Cukierman et al. 2026 (ApJS 286, 22; arXiv:2603.25790), real
-  exposure panel.</span> One SPHEREx exposure, all six detectors. The horizontal gradients and stripes are
-  the zodiacal light and the atmospheric emission lines seen through the linear variable filters; the
-  stars and galaxies are the astrophysical content.</figcaption>
-</figure>
+```{figure} figures/external/cukierman2026_exp_panel_real_2025W33_2C_0068_1.png
+:width: 760px
+:alt: A real Level 2 exposure
+
+*Credit: Cukierman et al. 2026 (ApJS 286, 22; arXiv:2603.25790), real exposure panel.* One SPHEREx exposure, all six detectors. The horizontal gradients and stripes are the zodiacal light and the atmospheric emission lines seen through the linear variable filters; the stars and galaxies are the astrophysical content.
+```
 
 ## The Level 2 image
 
@@ -77,14 +76,12 @@ SATELLITE_HALO from their fits; the mosaic tool also drops TRANSIENT, DICHROIC, 
 GHOST bits and STREAK, and propagates OVERFLOW, SOURCE and OUTLIER. Lee et al. keep only flags 0 or 2097152
 and reject bits 0, 1 and 7.[^lee] Our demo excludes the tool set plus TRANSIENT, OVERFLOW and DICHROIC.
 
-<figure markdown="span">
-  ![Flag frequencies in the demo cutouts](figures/site/flag_statistics.png){ width="820" }
-  <figcaption>Fraction of pixels carrying each flag in the 2,242 cutouts (41 x 41 or 53 x 53 pixels,
-  4.2 million pixels) of the six demonstration galaxies, per detector; flags that never occur are omitted
-  (measured). SOURCE covers 31-53 % of the pixels around a bright galaxy; HALO and OUTLIER 1.3-2.1 %;
-  DICHROIC 2.6-2.8 % of D3 and D4 pixels; TRANSIENT 0.6-0.9 %; everything else below 1 %. Made by
-  <code>scripts/site_figures.py</code>.</figcaption>
-</figure>
+```{figure} figures/site/flag_statistics.png
+:width: 820px
+:alt: Flag frequencies in the demo cutouts
+
+Fraction of pixels carrying each flag in the 2,242 cutouts (41 x 41 or 53 x 53 pixels, 4.2 million pixels) of the six demonstration galaxies, per detector; flags that never occur are omitted (measured). SOURCE covers 31-53 % of the pixels around a bright galaxy; HALO and OUTLIER 1.3-2.1 %; DICHROIC 2.6-2.8 % of D3 and D4 pixels; TRANSIENT 0.6-0.9 %; everything else below 1 %. Made by `scripts/site_figures.py`.
+```
 
 Two points about SOURCE: the target is itself flagged SOURCE, so masks must not use that bit; and source
 masks are sized from Reference Catalog magnitudes (faint limit 19 AB) and only unresolved or compact
@@ -121,13 +118,12 @@ IMAGE is a surface brightness in MJy/sr. The flux density of a source is the sum
 pixel solid angle; the official tools use the Solid Angle Pixel Map, which includes the optical distortion,
 rather than a constant (6.15 arcsec)^2.[^expsupp4]
 
-<figure markdown="span">
-  ![Solid angle pixel maps](figures/site/solid_angle_maps.png){ width="760" }
-  <figcaption>The DR1/QR3 Solid Angle Pixel Map of each detector divided by the nominal (6.15 arcsec)^2.
-  The pixel solid angle ranges from 0.989 to 1.017 of nominal (37.41-38.48 arcsec^2); using a constant
-  pixel area would therefore mis-scale fluxes by up to 1.7 % depending on where the source lands
-  (measured). Made by <code>scripts/site_figures.py</code>.</figcaption>
-</figure>
+```{figure} figures/site/solid_angle_maps.png
+:width: 760px
+:alt: Solid angle pixel maps
+
+The DR1/QR3 Solid Angle Pixel Map of each detector divided by the nominal (6.15 arcsec)^2. The pixel solid angle ranges from 0.989 to 1.017 of nominal (37.41-38.48 arcsec^2); using a constant pixel area would therefore mis-scale fluxes by up to 1.7 % depending on where the source lands (measured). Made by `scripts/site_figures.py`.
+```
 
 A useful conversion for aperture sums: 1 MJy/sr over one 6.15 arcsec pixel is 23.5045 x 6.15^2 / 1000 =
 0.889 mJy (the official mosaic notebook's formula).[^tutorials]
@@ -170,17 +166,12 @@ wavelength-dependent scaling factor was derived against SPHEREx data at |b| > 30
 per wavelength (the `zodi_scaling` product; header ZODIMDL = KEL98_WAVESCL_V1). It tracks the spatial and
 temporal variation well but it is a model, not a fit to the image, and it is not subtracted.[^expsupp3]
 
-<figure markdown="span">
-  ![Zodiacal light, residual background and S/N in the demo](figures/site/background_levels.png){ width="820" }
-  <figcaption>(a) The ZODI model at the position of each demonstration galaxy against wavelength; the
-  legend gives the ecliptic latitude. At 1 um the model is 0.13-0.30 MJy/sr for latitudes 46 to 6 deg, and
-  0.31-0.57 MJy/sr at 5 um where the thermal emission of the dust rises. (b) The local background that our
-  joint fit finds after subtracting ZODI, divided by ZODI: +4 to +12 % for the two galaxies at low ecliptic
-  latitude and +11 to +34 % for the four at 24-46 deg (16th-84th percentiles), so ZODI alone is not a sky
-  subtraction and the model's scaling is latitude dependent at the 10-20 % level. (c) The
-  per-exposure signal-to-noise ratio of the forced model flux of the six galaxies (SDSS z = 14.3-15.7):
-  40-90 at 1-3.5 um, about 10 at 5 um (measured). Made by <code>scripts/site_figures.py</code>.</figcaption>
-</figure>
+```{figure} figures/site/background_levels.png
+:width: 820px
+:alt: Zodiacal light, residual background and S/N in the demo
+
+(a) The ZODI model at the position of each demonstration galaxy against wavelength; the legend gives the ecliptic latitude. At 1 um the model is 0.13-0.30 MJy/sr for latitudes 46 to 6 deg, and 0.31-0.57 MJy/sr at 5 um where the thermal emission of the dust rises. (b) The local background that our joint fit finds after subtracting ZODI, divided by ZODI: +4 to +12 % for the two galaxies at low ecliptic latitude and +11 to +34 % for the four at 24-46 deg (16th-84th percentiles), so ZODI alone is not a sky subtraction and the model's scaling is latitude dependent at the 10-20 % level. (c) The per-exposure signal-to-noise ratio of the forced model flux of the six galaxies (SDSS z = 14.3-15.7): 40-90 at 1-3.5 um, about 10 at 5 um (measured). Made by `scripts/site_figures.py`.
+```
 
 What the various extractions do about it: the Spectrophotometry Tool ignores ZODI and subtracts a local
 background from a 15-pixel box around each source with known sources masked; the Level 3 pipeline first fits
@@ -192,20 +183,19 @@ or two-dimensional background around the object is what every published extracti
 first reduces the dynamic range and removes the smooth spectral shape of the zodiacal light, but a residual
 local sky must still be fitted (panel b above).
 
-<figure markdown="span">
-  ![Contour filter](figures/external/cukierman2026_filter_panel_2025W49_1A_0130_1.png){ width="760" }
-  <figcaption><span class="credit">Credit: Cukierman et al. 2026, contour-filter panel.</span> An exposure
-  before and after the contour filter, which subtracts the mean within thin bins that follow the curved
-  iso-wavelength contours of the filter: the zodiacal gradient and the He I airglow stripe are removed at
-  the cost of any real structure larger than the field of view.</figcaption>
-</figure>
+```{figure} figures/external/cukierman2026_filter_panel_2025W49_1A_0130_1.png
+:width: 760px
+:alt: Contour filter
 
-<figure markdown="span">
-  ![Zodi deprojection of a full-sky map](figures/external/cukierman2026_deproj_fullsky_a1_sc1.png){ width="820" }
-  <figcaption><span class="credit">Credit: Cukierman et al. 2026, full-sky deprojection panel.</span> A
-  full-sky channel map at 0.76 um before and after fitting and subtracting a scaled zodiacal-light template
-  with a monopole: the ecliptic S-curve is removed while the Galactic structure stays.</figcaption>
-</figure>
+*Credit: Cukierman et al. 2026, contour-filter panel.* An exposure before and after the contour filter, which subtracts the mean within thin bins that follow the curved iso-wavelength contours of the filter: the zodiacal gradient and the He I airglow stripe are removed at the cost of any real structure larger than the field of view.
+```
+
+```{figure} figures/external/cukierman2026_deproj_fullsky_a1_sc1.png
+:width: 820px
+:alt: Zodi deprojection of a full-sky map
+
+*Credit: Cukierman et al. 2026, full-sky deprojection panel.* A full-sky channel map at 0.76 um before and after fitting and subtracting a scaled zodiacal-light template with a monopole: the ecliptic S-curve is removed while the Galactic structure stays.
+```
 
 ### Atmospheric emission
 
@@ -226,14 +216,19 @@ All of these are present in IMAGE, not subtracted, and included in VARIANCE:[^ex
 - Earthshine at local zenith angles above 24 deg, measured at 0.05 e-/s at 42 deg, about 40 times fainter
   than the zodiacal light and short-wavelength weighted.
 
-<figure markdown="span">
-  ![Shuttle glow versus ram angle](figures/external/korngut2026_ShuttleRamPhil.png){ width="380" }
-  ![Moonshine measurement](figures/external/korngut2026_Moonshine_meas_lbl.png){ width="420" }
-  <figcaption><span class="credit">Credit: Figures 24 and 21 of Korngut et al. 2026 (arXiv:2603.29835).</span>
-  Left: the 4.5 um shuttle-glow intensity against ram angle, with the 70 deg survey limit. Right: band-2
-  photocurrent during the lunar stray-light experiment, with the Moon at decreasing separations: the
-  off-axis response is asymmetric across the field.</figcaption>
-</figure>
+```{figure} figures/external/korngut2026_ShuttleRamPhil.png
+:width: 380px
+:alt: Shuttle glow versus ram angle
+
+*Credit: Figure 24 of Korngut et al. 2026 (arXiv:2603.29835).* The 4.5 um shuttle-glow intensity against ram angle, with the 70 deg survey limit.
+```
+
+```{figure} figures/external/korngut2026_Moonshine_meas_lbl.png
+:width: 420px
+:alt: Moonshine measurement
+
+*Credit: Figure 21 of Korngut et al. 2026.* Band-2 photocurrent during the lunar stray-light experiment, with the Moon at decreasing separations: the off-axis response is asymmetric across the field.
+```
 
 Templates (`he_template_D<n>` for bands 1-2, `aurora_template` for band 1, `shuttle_glow_template` for
 band 5 in R7) are provided with fit coefficients in the headers. R7 headers also carry the booleans
@@ -292,7 +287,8 @@ From the Explanatory Supplement section 2.3 and the pipeline paper:[^expsupp23][
   corners, captured by the SIP terms; about 3 % of images failed fine astrometry before R7, below 1 %
   after, with failures clustered in crowded fields.
 - Rice compression quantises pixel values at half the expected noise; harmless for aperture sums but worth
-  knowing. A curated list of heavily contaminated images is kept at `spherex.caltech.edu/page/anomalyimages`.
+  knowing. A curated list of heavily contaminated images is kept on the
+  [SPHEREx anomalous-images page](https://spherex.caltech.edu/page/anomalyimages).
 
 ## Calibration accuracy
 
@@ -339,21 +335,19 @@ QR2 `MP_*` keywords and breaks on R7 headers.[^tutorials]
 
 ## Mosaics versus exposures
 
-<figure markdown="span">
-  ![LVF gradient in a coadd](figures/external/cukierman2026_coadd_panel_heart_a5_sc3.png){ width="760" }
-  <figcaption><span class="credit">Credit: Cukierman et al. 2026, coaddition panel (Heart and Soul
-  Nebula, 3.9 um).</span> A channel mosaic with, per map pixel, the hit count and the mean central
-  wavelength of the contributing detector pixels: under sparse coverage the wavelength gradient within a
-  channel survives into the map.</figcaption>
-</figure>
+```{figure} figures/external/cukierman2026_coadd_panel_heart_a5_sc3.png
+:width: 760px
+:alt: LVF gradient in a coadd
 
-<figure markdown="span">
-  ![Banding near an emission line and spectral interpolation](figures/external/cukierman2026_interp_panel_helix_a6_sc8_00S9.png){ width="820" }
-  <figcaption><span class="credit">Credit: Cukierman et al. 2026, spectral-interpolation panel (Helix
-  Nebula, H2 line at 4.69 um).</span> Near a sharp emission line the within-channel wavelength gradient
-  produces "banding" in a mosaic; interpolating narrow sub-channel mosaics to a common wavelength suppresses
-  but does not remove it.</figcaption>
-</figure>
+*Credit: Cukierman et al. 2026, coaddition panel (Heart and Soul Nebula, 3.9 um).* A channel mosaic with, per map pixel, the hit count and the mean central wavelength of the contributing detector pixels: under sparse coverage the wavelength gradient within a channel survives into the map.
+```
+
+```{figure} figures/external/cukierman2026_interp_panel_helix_a6_sc8_00S9.png
+:width: 820px
+:alt: Banding near an emission line and spectral interpolation
+
+*Credit: Cukierman et al. 2026, spectral-interpolation panel (Helix Nebula, H2 line at 4.69 um).* Near a sharp emission line the within-channel wavelength gradient produces "banding" in a mosaic; interpolating narrow sub-channel mosaics to a common wavelength suppresses but does not remove it.
+```
 
 The map-making paper's lessons carry over to any per-exposure extraction:[^cukierman] the two
 dichroic-adjacent channels and the four helium channels are routinely dropped; the mean wavelength of what

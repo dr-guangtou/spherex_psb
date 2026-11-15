@@ -1,0 +1,278 @@
+/* Self-hosted body and code fonts: Source Sans 3 and Source Code Pro, variable weight, Latin and
+   Latin Extended subsets, from the fontsource packages 5.3.1 (SIL Open Font License 1.1; the
+   licence texts are in fonts/LICENSE-*.txt). Other scripts fall back to the system font stack. */
+/* source-sans-3-latin-ext-wght-normal */
+@font-face {
+  font-family: "Source Sans 3";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 200 900;
+  src: url("fonts/source-sans-3-latin-ext-wght-normal.woff2") format("woff2-variations");
+  unicode-range: U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C4,U+2113,U+2C60-2C7F,U+A720-A7FF;
+}
+/* source-sans-3-latin-wght-normal */
+@font-face {
+  font-family: "Source Sans 3";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 200 900;
+  src: url("fonts/source-sans-3-latin-wght-normal.woff2") format("woff2-variations");
+  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+/* source-sans-3-latin-ext-wght-italic */
+@font-face {
+  font-family: "Source Sans 3";
+  font-style: italic;
+  font-display: swap;
+  font-weight: 200 900;
+  src: url("fonts/source-sans-3-latin-ext-wght-italic.woff2") format("woff2-variations");
+  unicode-range: U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C4,U+2113,U+2C60-2C7F,U+A720-A7FF;
+}
+/* source-sans-3-latin-wght-italic */
+@font-face {
+  font-family: "Source Sans 3";
+  font-style: italic;
+  font-display: swap;
+  font-weight: 200 900;
+  src: url("fonts/source-sans-3-latin-wght-italic.woff2") format("woff2-variations");
+  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+/* source-code-pro-latin-ext-wght-normal */
+@font-face {
+  font-family: "Source Code Pro";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 200 900;
+  src: url("fonts/source-code-pro-latin-ext-wght-normal.woff2") format("woff2-variations");
+  unicode-range: U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C4,U+2113,U+2C60-2C7F,U+A720-A7FF;
+}
+/* source-code-pro-latin-wght-normal */
+@font-face {
+  font-family: "Source Code Pro";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 200 900;
+  src: url("fonts/source-code-pro-latin-wght-normal.woff2") format("woff2-variations");
+  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+/* source-code-pro-latin-ext-wght-italic */
+@font-face {
+  font-family: "Source Code Pro";
+  font-style: italic;
+  font-display: swap;
+  font-weight: 200 900;
+  src: url("fonts/source-code-pro-latin-ext-wght-italic.woff2") format("woff2-variations");
+  unicode-range: U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C4,U+2113,U+2C60-2C7F,U+A720-A7FF;
+}
+/* source-code-pro-latin-wght-italic */
+@font-face {
+  font-family: "Source Code Pro";
+  font-style: italic;
+  font-display: swap;
+  font-weight: 200 900;
+  src: url("fonts/source-code-pro-latin-wght-italic.woff2") format("woff2-variations");
+  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+
+:root {
+  color-scheme: light dark;
+}
+
+:root:has(body[data-theme="dark"]) {
+  color-scheme: dark;
+}
+
+:root:has(body[data-theme="light"]) {
+  color-scheme: light;
+}
+
+article {
+  line-height: 1.75;
+  min-inline-size: 0;
+}
+
+article :is(p, li, dd, blockquote) {
+  overflow-wrap: anywhere;
+}
+
+article :is(td, th),
+article :is(td, th) p {
+  overflow-wrap: normal;
+  word-break: normal;
+}
+
+article img {
+  max-width: 100%;
+  height: auto;
+}
+
+article > :is(p, ul, ol, dl, blockquote) {
+  max-inline-size: 68ch;
+}
+
+article h1 {
+  font-size: 2rem;
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+article h2 {
+  font-size: 1.45rem;
+  font-weight: 600;
+  margin-block-start: 2rem;
+}
+
+article h3 {
+  font-size: 1.15rem;
+  font-weight: 600;
+}
+
+article a {
+  text-underline-offset: 0.16em;
+}
+
+@supports (font-size-adjust: from-font) {
+  article {
+    font-size-adjust: from-font;
+  }
+}
+
+.note_style_figure {
+  margin-inline: 0;
+  padding-block: 1rem;
+  border-block: 1px solid var(--color-foreground-border);
+}
+
+.note_style_controls {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr));
+  gap: 1rem;
+  min-inline-size: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.note_style_controls legend {
+  margin-block-end: 0.75rem;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.note_style_control_heading {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.25rem 0.75rem;
+}
+
+.note_style_control input {
+  inline-size: 100%;
+  min-block-size: 3rem;
+  margin: 0;
+  accent-color: var(--color-brand-content);
+  font: inherit;
+}
+
+.note_style_control input:focus-visible {
+  outline: 2px solid var(--color-brand-content);
+  outline-offset: 2px;
+}
+
+.note_style_chart {
+  display: block;
+  inline-size: 100%;
+  block-size: 20rem;
+  margin-block: 0.75rem;
+  overflow: visible;
+  font-family: var(--font-stack);
+  font-size: 0.875rem;
+}
+
+.note_style_chart_grid {
+  stroke: var(--color-foreground-border);
+}
+
+.note_style_chart_axes {
+  fill: currentColor;
+}
+
+.note_style_chart_axes line {
+  stroke: currentColor;
+}
+
+.note_style_chart_curve {
+  fill: none;
+  stroke: var(--color-brand-content);
+  stroke-width: 3;
+}
+
+.note_style_chart_marker {
+  fill: var(--color-background-primary);
+  stroke: var(--color-brand-content);
+  stroke-width: 3;
+}
+
+.note_style_metrics {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 2rem;
+  margin-block: 1rem;
+}
+
+.note_style_metrics dt {
+  font-size: 0.875rem;
+  font-weight: 400;
+}
+
+.note_style_metrics dd {
+  margin: 0;
+  font-size: 1.25rem;
+}
+
+.note_style_figure output {
+  font-variant-numeric: tabular-nums;
+}
+
+.note_style_figure figcaption {
+  font-size: 0.875rem;
+  line-height: 1.7;
+}
+
+.note_style_status {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+@media print {
+  :root:has(body[data-theme]) {
+    color-scheme: light;
+  }
+}
+
+/* Card grids (sphinx-design grid and grid-item-card): the title is a larger heading in the link
+   colour so the whole card reads as a link; the body is a short description. */
+.sd-card .sd-card-title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  line-height: 1.3;
+  color: var(--color-link);
+}
+.sd-card:hover .sd-card-title,
+.sd-card:focus-within .sd-card-title {
+  text-decoration: underline;
+  text-underline-offset: 0.16em;
+}
+.sd-card .sd-card-text {
+  line-height: 1.55;
+}
+
+.sd-hide-link-text {
+  font-size-adjust: none;
+}

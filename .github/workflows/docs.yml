@@ -5,7 +5,6 @@ on:
     branches: [main]
     paths:
       - "docs/**"
-      - "mkdocs.yml"
       - "pyproject.toml"
       - "uv.lock"
       - ".github/workflows/docs.yml"
@@ -29,10 +28,10 @@ jobs:
         with:
           enable-cache: true
       - name: Build the site
-        run: uv run --only-group docs mkdocs build --strict
+        run: uv run --locked --only-group docs sphinx-build -E -W --keep-going -b html docs docs/_build/html
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: site
+          path: docs/_build/html
 
   deploy:
     needs: build

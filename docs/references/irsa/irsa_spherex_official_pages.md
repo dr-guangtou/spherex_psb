@@ -8,50 +8,49 @@ was available; it is by far the most detailed and load-bearing source in this no
 
 ## Pages visited (URL list with one-line description each)
 
-- `https://irsa.ipac.caltech.edu/Missions/spherex.html` — SPHEREx mission landing page at IRSA; links to
+- [IRSA SPHEREx mission page](https://irsa.ipac.caltech.edu/Missions/spherex.html) — SPHEREx mission landing page at IRSA; links to
   every data product, tool, DOI and documentation page below.
-- `https://irsa.ipac.caltech.edu/data/SPHEREx/docs/overview_qr.html` — the authoritative Quick Release (QR)
+- [IRSA Quick Release overview](https://irsa.ipac.caltech.edu/data/SPHEREx/docs/overview_qr.html) — the authoritative Quick Release (QR)
   overview: release history (QR1/QR2/QR3), DOIs, acknowledgment text, data-access method list.
-- `https://irsa.ipac.caltech.edu/data/SPHEREx/docs/SPHEREx_Expsupp_QR.pdf` — **SPHEREx Explanatory
-  Supplement**, v2.0, dated 2026-08-25 (SSDC-DP-017). Full pipeline/data-product/calibration reference.
-- `https://irsa.ipac.caltech.edu/data/SPHEREx/docs/psfhdrerr.html` — PSF FITS-layer header-ordering erratum
+- [SPHEREx Explanatory Supplement (PDF)](https://irsa.ipac.caltech.edu/data/SPHEREx/docs/SPHEREx_Expsupp_QR.pdf) — v2.0, dated 2026-08-25 (SSDC-DP-017). Full pipeline/data-product/calibration reference.
+- [PSF header-ordering erratum](https://irsa.ipac.caltech.edu/data/SPHEREx/docs/psfhdrerr.html) — PSF FITS-layer header-ordering erratum
   page (production URL; a linked staging-domain copy at `irsatest.ipac.caltech.edu` returned HTTP 403).
-- `https://irsa.ipac.caltech.edu/data/SPHEREx/SPLICES/` — SPHEREx List of Ice Sources (SPLICES) target
+- [SPHEREx List of Ice Sources (SPLICES)](https://irsa.ipac.caltech.edu/data/SPHEREx/SPLICES/) — target
   catalog overview page.
-- `https://irsa.ipac.caltech.edu/data/SPHEREx/docs/comet3iatlas/index.html` — SPHEREx observations of
+- [SPHEREx comet 3I/ATLAS data page](https://irsa.ipac.caltech.edu/data/SPHEREx/docs/comet3iatlas/index.html) — SPHEREx observations of
   interstellar comet 3I/ATLAS, a special spectral-image data product.
-- `https://irsa.ipac.caltech.edu/cloud_access/#spherex` — IRSA cloud (AWS Open Data) access page, SPHEREx
+- [IRSA cloud access page](https://irsa.ipac.caltech.edu/cloud_access/#spherex) — IRSA cloud (AWS Open Data) access page, SPHEREx
   section.
-- `https://irsa.ipac.caltech.edu/applications/spherex` — SPHEREx Data Explorer web app (JavaScript SPA;
+- [SPHEREx Data Explorer](https://irsa.ipac.caltech.edu/applications/spherex) — web app (JavaScript SPA;
   WebFetch could not render app content, only the empty shell/title).
-- `https://irsa.ipac.caltech.edu/data/SPHEREx/docs/cutout_tool.html` — cutout-service documentation and
+- [SPHEREx cutout tool documentation](https://irsa.ipac.caltech.edu/data/SPHEREx/docs/cutout_tool.html) — cutout-service documentation and
   example URL.
-- `https://irsa.ipac.caltech.edu/data/SPHEREx/docs/spherex_spectral_calibrations.html` — page describing the
+- [SPHEREx spectral calibrations page](https://irsa.ipac.caltech.edu/data/SPHEREx/docs/spherex_spectral_calibrations.html) — page describing the
   normalized spectral transmission-curve products (separate from the pipeline's absolute gain/spectral-WCS
   calibration products).
-- `https://irsa.ipac.caltech.edu/voapi.html` — general IRSA VO/API index page; no SPHEREx-specific text was
+- [IRSA VO/API index](https://irsa.ipac.caltech.edu/voapi.html) — general IRSA VO/API index page; no SPHEREx-specific text was
   present in the static HTML (menu of Catalogs/Images/Spectra/MOST/IBE APIs; SPHEREx SIA/TAP entries appear
   to be populated by JavaScript at runtime, not visible in the raw HTML fetched via curl).
-- `https://caltech-ipac.github.io/spherex-archive-documentation/` — **SPHEREx Archive User Guide** (MyST/GitHub
-  Pages site), dated 2026-02-18, home page.
-- `https://caltech-ipac.github.io/spherex-archive-documentation/spherex-data-access` — Archive User Guide,
+- [SPHEREx Archive User Guide](https://caltech-ipac.github.io/spherex-archive-documentation/) — MyST/GitHub
+  Pages site, dated 2026-02-18, home page.
+- [SPHEREx Archive User Guide: Data Access](https://caltech-ipac.github.io/spherex-archive-documentation/spherex-data-access) — Archive User Guide,
   "SPHEREx Data Access" chapter: SIA2 endpoint, collections, IBE paths, cutout syntax, astroquery/PyVO,
   cloud access notes.
-- `https://caltech-ipac.github.io/spherex-archive-documentation/spherex-data-products` — Archive User Guide,
+- [SPHEREx Archive User Guide: Data Products](https://caltech-ipac.github.io/spherex-archive-documentation/spherex-data-products) — Archive User Guide,
   "SPHEREx Data Products" chapter: product list, filename conventions, MEF structure.
-- `https://registry.opendata.aws/spherex-qr/` — AWS Registry of Open Data entry for the `nasa-irsa-spherex`
+- [AWS Open Data registry: SPHEREx QR](https://registry.opendata.aws/spherex-qr/) — AWS Registry of Open Data entry for the `nasa-irsa-spherex`
   S3 bucket; enumerates every top-level S3 prefix (as of the QR2 processing epoch) with ARNs and example
   AWS CLI commands.
-- `https://arxiv.org/abs/2511.02985` — Bock et al., "The SPHEREx Satellite Mission" (submitted 2025-11-04,
+- [arXiv:2511.02985](https://arxiv.org/abs/2511.02985) — Bock et al., "The SPHEREx Satellite Mission" (submitted 2025-11-04,
   published ApJ 999(1):139, March 2026; doi:10.3847/1538-4357/ae2be2).
-- `https://arxiv.org/abs/2511.15823` — Akeson et al., "The SPHEREx Image and Spectrophotometry Processing
+- [arXiv:2511.15823](https://arxiv.org/abs/2511.15823) — Akeson et al., "The SPHEREx Image and Spectrophotometry Processing
   Pipeline" (submitted 2025-11-19, published ApJS 285(2):67, August 2026; doi:10.3847/1538-4365/ae8843).
 
 Pages named on the landing page but **not separately fetched in depth** (time/priority; content largely
 duplicated elsewhere or is a thin wrapper tool page): Spectrophotometry Tool
 (`/applications/spherex/tool-spectrophotometry`), Mosaic Tool (`/applications/spherex/tool-mosaic`), Moving
 Object Search Tool (`/applications/MOST`), Source Discovery Tool demo notebook, and the three
-`caltech-ipac.github.io/irsa-tutorials` Python-notebook pages (intro, cutouts, PSF) — these are tutorial
+[IRSA tutorials](https://caltech-ipac.github.io/irsa-tutorials) Python-notebook pages (intro, cutouts, PSF) — these are tutorial
 notebooks whose technical content (cutout syntax, PSF-fix code) is already captured from the Explanatory
 Supplement and the Archive User Guide.
 
@@ -180,7 +179,7 @@ QR1 and QR2 is slightly different and science users should NOT combine files fro
   by roughly one day.
 
 ### IBE (IRSA Batch/Bulk Engine) — direct file access / cutouts
-- Root path: `https://irsa.ipac.caltech.edu/ibe/data/spherex/qr2/` (QR2 shown; QR3 presumably
+- Root path: [IRSA IBE SPHEREx QR2 directory](https://irsa.ipac.caltech.edu/ibe/data/spherex/qr2/) (QR2 shown; QR3 presumably
   `.../spherex/qr3/`, not independently confirmed — see Open Questions).
 - Path structure: `level2/<Planning Period>/l2b-v<Version>-<Processing Date>/<Detector>/<filename>.fits` for
   spectral images; calibration products under sibling directories named for each product
@@ -198,7 +197,7 @@ QR1 and QR2 is slightly different and science users should NOT combine files fro
   fetched content (see Open Questions — would need the tutorial notebooks for exact code).
 
 ### SPHEREx Data Explorer (GUI)
-- URL: `https://irsa.ipac.caltech.edu/applications/spherex`
+- URL: [SPHEREx Data Explorer](https://irsa.ipac.caltech.edu/applications/spherex)
 - A JavaScript single-page app; WebFetch could only retrieve the page shell/title ("IRSA: SPHEREx"), not its
   functional description. Per the Archive User Guide, it provides interactive search/visualization; it wraps
   the Spectrophotometry Tool (`/applications/spherex/tool-spectrophotometry`) and Mosaic Tool
@@ -207,8 +206,8 @@ QR1 and QR2 is slightly different and science users should NOT combine files fro
 ### Cloud / AWS S3 access
 - Bucket: `nasa-irsa-spherex`, region `us-east-1`, **no AWS account or credentials required**
   (`--no-sign-request` / `anonymous=True`), no egress charges (NASA/AWS Open Data Sponsorship Program).
-- Browsable index: `https://nasa-irsa-spherex.s3.us-east-1.amazonaws.com/index.html`
-- AWS Open Data Registry listing: `https://registry.opendata.aws/spherex-qr/` — **as surveyed, this registry
+- Browsable index: [SPHEREx S3 bucket index](https://nasa-irsa-spherex.s3.us-east-1.amazonaws.com/index.html)
+- AWS Open Data Registry listing: [SPHEREx QR registry entry](https://registry.opendata.aws/spherex-qr/) — **as surveyed, this registry
   entry only describes the `qr2/` prefix tree** (last updated for the QR2 epoch; does not yet list `qr3/` —
   flagged below as something that may have changed very recently and should be re-checked).
 - Enumerated S3 prefixes (ARNs), all under `arn:aws:s3:::nasa-irsa-spherex/qr2/...`:
@@ -231,7 +230,7 @@ QR1 and QR2 is slightly different and science users should NOT combine files fro
   the standard acknowledgment text (QR3's 10.26131/IRSA662 is not yet reflected on this AWS registry page).
 
 ### VO API index page
-- `https://irsa.ipac.caltech.edu/voapi.html` lists IRSA's general API catalog (Catalogs, Images, Spectra,
+- [IRSA VO/API index page](https://irsa.ipac.caltech.edu/voapi.html) lists IRSA's general API catalog (Catalogs, Images, Spectra,
   Dust Extinction, ZTF Lightcurves, MOST, IBE) but the static HTML fetched via curl contained **zero**
   occurrences of the string "spherex" — the SPHEREx-specific entries visible to a browser are almost
   certainly populated by client-side JavaScript and were not captured by either WebFetch or curl. TAP-specific
@@ -241,21 +240,21 @@ QR1 and QR2 is slightly different and science users should NOT combine files fro
 
 Documents identified:
 1. **SPHEREx Explanatory Supplement** (SSDC-DP-017), current version **2.0, dated 2026-08-25**, 82 pages,
-   PDF at `https://irsa.ipac.caltech.edu/data/SPHEREx/docs/SPHEREx_Expsupp_QR.pdf`. Authored by the SPHEREx
+   [SPHEREx Explanatory Supplement v2.0 (PDF)](https://irsa.ipac.caltech.edu/data/SPHEREx/docs/SPHEREx_Expsupp_QR.pdf). Authored by the SPHEREx
    Science Data Center team (Akeson, Dubois-Felsmann, Faisst, Fatahi, Goldina, Kwon, Masters, Nelson,
    Paladini, Torrini, Velicheti) with Science Team contributors. This is the primary technical reference; see
    detailed summary below.
-2. **SPHEREx Archive User Guide** — `https://caltech-ipac.github.io/spherex-archive-documentation/`,
+2. **SPHEREx Archive User Guide** — [SPHEREx Archive User Guide](https://caltech-ipac.github.io/spherex-archive-documentation/),
    MyST-generated GitHub Pages site, dated 2026-02-18, source at
-   `https://github.com/Caltech-IPAC/spherex-archive-documentation`. Chapters: "SPHEREx Overview," "SPHEREx
+   [Caltech-IPAC/spherex-archive-documentation](https://github.com/Caltech-IPAC/spherex-archive-documentation). Chapters: "SPHEREx Overview," "SPHEREx
    Data Access," "SPHEREx Data Products." More concise/operational than the Explanatory Supplement; useful
    for exact IBE paths and SIA collection names, but is dated Feb 2026 and pre-dates the September 2026 QR3
    release, so some collection names may be stale.
 3. **PSF Extension Header Error erratum page** —
-   `https://irsa.ipac.caltech.edu/data/SPHEREx/docs/psfhdrerr.html` (see Known Issues).
-4. **QR Overview page** — `https://irsa.ipac.caltech.edu/data/SPHEREx/docs/overview_qr.html`, the release/DOI
+   [PSF header-ordering erratum](https://irsa.ipac.caltech.edu/data/SPHEREx/docs/psfhdrerr.html) (see Known Issues).
+4. **QR Overview page** — [IRSA Quick Release overview](https://irsa.ipac.caltech.edu/data/SPHEREx/docs/overview_qr.html), the release/DOI
    authority.
-5. Python tutorial notebooks at `caltech-ipac.github.io/irsa-tutorials` (intro, cutouts, PSF, source
+5. Python tutorial notebooks at [IRSA tutorials](https://caltech-ipac.github.io/irsa-tutorials) (intro, cutouts, PSF, source
    discovery tool demo) — not fully surveyed in this pass.
 6. Canonical papers: Bock et al. (2026, ApJ 999, 139; arXiv:2511.02985) mission paper; Akeson et al. (2026,
    ApJS 285, 67; arXiv:2511.15823) pipeline paper; both cited throughout the Explanatory Supplement as the
@@ -439,7 +438,7 @@ AWS registry page):
 - QR2: `10.26131/IRSA652`
 - QR3: `10.26131/IRSA662`
 - SPLICES catalog: `10.26131/IRSA554` (cite jointly with Ashby et al. 2023, ApJ,
-  `https://iopscience.iop.org/article/10.3847/1538-4357/acc86b`)
+  [doi:10.3847/1538-4357/acc86b](https://iopscience.iop.org/article/10.3847/1538-4357/acc86b))
 
 **Canonical instrument/pipeline papers** to cite alongside DOIs:
 - Bock et al. 2026, ApJ 999(1):139, "The SPHEREx Satellite Mission," doi:10.3847/1538-4357/ae2be2
@@ -509,7 +508,7 @@ AWS registry page):
   prefix listing was seen at all.
 - **`irsatest.ipac.caltech.edu` domain**: the mission landing page links the PSF-erratum notice to a URL on
   this staging/test subdomain, which returned **HTTP 403 Forbidden** when fetched. The production URL
-  (`irsa.ipac.caltech.edu/data/SPHEREx/docs/psfhdrerr.html`, HTTP 200) was used instead and appears to carry
+  ([PSF erratum page](https://irsa.ipac.caltech.edu/data/SPHEREx/docs/psfhdrerr.html), HTTP 200) was used instead and appears to carry
   the same content, but I could not determine why the landing page itself points to the non-public staging
   URL — possibly a temporary authoring artifact on IRSA's side.
 - **DOI for the Comet 3I/ATLAS data product**: none was found on the dedicated product page.

@@ -126,10 +126,40 @@ be interpreted before those two systematics are removed.
 
 ## Documentation site (2026-11-14)
 
-- [x] MkDocs + Material site with index, primer, data access, reduction and analysis, SED extraction and
-      spectral index pages; project pages and reference notes in the navigation; GitHub Pages workflow.
+- [x] First site version (MkDocs + Material) with index, primer, data access, reduction and analysis, SED
+      extraction and spectral index pages; project pages and reference notes in the navigation; GitHub Pages
+      workflow. Replaced the same day by the note-style conversion below.
 - [x] docs/ reorganised: references/{irsa,papers,studies,tools,sources}, reports/, figures/{sed_demo,site,external}.
 - [x] Site figures from calibration products and records (`scripts/site_figures.py`); paper figures with credits.
 - [ ] Enable GitHub Pages (source: GitHub Actions) in the repository settings after the branch is merged.
 - [ ] Propose the matching updates to the external `spherex-irsa-access` skill (not edited from here).
 - [ ] Add a page for the full-sample pipeline once it exists; keep one page per reader question.
+
+## note-style conversion (2026-11-14)
+
+- [x] Adopt the `note-style` skill for Claude Code (symlink in `~/.claude/skills/`), copy its rule book to
+      `docs/html_documentation_guide.md`, and make note-style the only documentation standard in `CLAUDE.md`.
+- [x] Convert the site to Sphinx + MyST + customised Furo: starter assets and bundled MathJax copied, Material
+      syntax (admonitions, figure blocks, grid cards) translated, toctrees with short titles, strict build clean.
+- [x] Untrack the two Explanatory Supplement PDFs that the folder move had let into git (they stay on disk).
+- [x] Fonts: Source Sans 3 and Source Code Pro self-hosted (skill starter and project); index cards with
+      sphinx-design; SQL blocks highlighted with the `postgresql` lexer (rule book 0.4). Card grids made
+      part of the standard with the title as a larger link-coloured heading (rule book 0.5, 2026-11-15).
+- [ ] Check the light-mode switch, saved preference and Firefox/Safari rendering on the deployed site.
+- [ ] The two PDFs remain in the pushed history of `main` (60 MB); decide whether to rewrite history or accept.
+
+### Review
+
+The conversion kept every page, figure, footnote and link (the strict build with `nitpicky` verifies them);
+the only content changes are four two-image figures split into pairs and one SQL block typed as text.
+
+## Publication scope and links (2026-11-15)
+
+- [x] Internal pages (specification, to do, lessons, SED demo task, rule-book copy, photometry study note)
+      excluded from the public site and built separately for review (`-t internal`, `docs/_build/internal`).
+- [x] Public pages no longer link to internal ones (primer, index, SED page and report reworded).
+- [x] Printed web addresses in published pages replaced by descriptive hyperlinks.
+- [x] Third-party tool notes and review, and the SED demo and H-minus reports, made internal (owner's
+      decision 2026-11-15); local paths in public pages accepted for now.
+- [x] Aligned with note-style 0.6: shared CSS (table wrapping, responsive images, card-link-text reset),
+      font provenance notice, rule-book copy, locked fresh build as the gate; redundant project CSS removed.

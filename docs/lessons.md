@@ -166,3 +166,40 @@ Data lessons (verified live)
   ecliptic latitudes below 10 deg and by 11-34 % at 24-46 deg (16th-84th percentiles of the fitted residual
   over ZODI); the SOURCE flag covers 31-53 % of the pixels in a 41 x 41 cutout around a bright galaxy; HALO
   and OUTLIER each flag 1.3-2.1 % of pixels and DICHROIC 2.6-2.8 % of D3/D4 pixels.
+
+## note-style conversion (2026-11-14)
+
+- A `.gitignore` pattern names a path: when a folder is moved (`docs/reference_notes/external/` to
+  `docs/references/sources/external/`), the pattern must move with it, or the next `git add` commits what
+  it used to exclude. Two 30 MB PDFs reached GitHub this way; check `git ls-files` sizes after any move.
+- Sphinx only reports a warning when it re-reads the source, so a strict build that "passes" after an
+  incremental run proves nothing; use `-E` (fresh environment) for the build that gates a commit.
+- Pygments treats `{ra}` placeholders inside a `sql` fence as an error and Sphinx turns that into a warning
+  under `-W`; type such templates as `text`.
+- Furo sets `overflow-wrap: break-word` on the article, so table cells in a narrow column split words
+  ("Us ed"); and a MyST `:width:` is an absolute width, so an 820 px figure overflows a 390 px screen.
+  Both are fixed in the project stylesheet, not in the shared note-style files.
+- Side-by-side image pairs have no MyST figure equivalent; two consecutive figures with their own credit
+  lines read better on narrow screens anyway.
+- A font that is only named in a CSS stack is not a font choice: the note-style starter named Source Sans 3
+  without shipping it, so macOS rendered the pages in PingFang. The old site looked better because Material
+  loaded Source Sans 3 and Source Code Pro from Google Fonts; they are now bundled (316 KB of WOFF2) in
+  the skill and the project, which also removes the third-party request.
+- Pygments' generic `sql` lexer rejects `{ra}` placeholders; the `postgresql` lexer accepts them, so SQL
+  blocks keep their highlighting without relaxing `-W`.
+- On this machine `rm` and `cp` are aliased (trash and interactive copy); inside `&&` chains use
+  `/bin/rm` and `/bin/cp -f`, otherwise the chain stops silently at an "overwrite?" prompt.
+
+## Publication scope and links (2026-11-15)
+
+- The first site published the specification, task list and lessons alongside the science pages, and the
+  notes printed raw web addresses. Both are now rules in `CLAUDE.md`: project documents are internal
+  (`INTERNAL_DOCUMENTS` in `docs/conf.py`), and web pages are linked with descriptive text.
+- Sphinx never deletes output pages that are no longer built: after excluding a page, its old HTML stays
+  in the output folder and a check of that folder reports a leak that is not there. Build into an empty
+  folder (the build script now removes both output folders first).
+- zsh again: `tag="-t internal"; sphinx-build $tag ...` passes one argument, so the internal build ran
+  without its tag. Write the arguments out, or use an array.
+- Listing internal pages one by one in `conf.py` did not scale once whole folders became internal; the
+  scope is now a set of glob patterns plus one internal index page (`internal.md`) that carries the
+  navigation, so adding a report needs no configuration change.

@@ -2,7 +2,7 @@
 
 ## Metadata
 
-- **URL**: https://github.com/Caltech-IPAC/tractor-spherex
+- **Repository**: [Caltech-IPAC/tractor-spherex](https://github.com/Caltech-IPAC/tractor-spherex)
 - **License**: `NOASSERTION` per GitHub API (`license.key: other`) — the fork keeps upstream's verbatim GPLv2 text without a repo-specific SPDX header. `FORK.md`: **GPLv2 only** (no "or later" clause anywhere); fork modifications `Copyright (C) 2023-2026, California Institute of Technology`; upstream copyright (`Dustin Lang & David W. Hogg`) preserved verbatim in `README.md`.
 - **Language**: Python (100%), plus SWIG-wrapped C extensions built via `setup.py`.
 - **Size**: 43,743 KB on GitHub; ~23 MB shallow clone.

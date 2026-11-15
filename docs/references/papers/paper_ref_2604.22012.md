@@ -8,7 +8,7 @@ Lead author Jonathan Gagné (Planétarium de Montréal; Université de Montréal
 
 - Release: **SPHEREx Quick Release 2 (QR2)**.
 - Product type: individual **L2 image cutouts** (not full 2048×2048 frames) retrieved as small 20×20-pixel FITS cutouts.
-- Access mechanism: the **IPAC SIA2 service** is queried with a 5″ cone search around each target to identify the URLs of individual exposures, and the cutouts are then pulled from **Amazon S3** storage. The official IRSA "spectrophotometry tool" (https://irsa.ipac.caltech.edu/applications/spherex/tool-spectrophotometry) is used as a point of comparison/benchmark rather than as the primary extraction path — the authors built their own tool (SPIFF) instead.
+- Access mechanism: the **IPAC SIA2 service** is queried with a 5″ cone search around each target to identify the URLs of individual exposures, and the cutouts are then pulled from **Amazon S3** storage. The official IRSA [spectrophotometry tool](https://irsa.ipac.caltech.edu/applications/spherex/tool-spectrophotometry) is used as a point of comparison/benchmark rather than as the primary extraction path — the authors built their own tool (SPIFF) instead.
 - The compiled library is additionally hosted on the Montreal Open Clusters and Associations database (mocadb.ca) and archived with a versioned DOI on Zenodo (10.5281/zenodo.19051216).
 - Sample size: 6003 high-quality spectrophotometric products for 6003 objects total (2050 known ultracool dwarfs, 3008 known photometric candidates, 945 newly identified ultracool dwarfs), each built from many individual per-epoch/per-channel SPHEREx exposures (SPHEREx revisits each sky position multiple times over the survey, producing repeated small-bandwidth photometric samples per object).
 
@@ -22,7 +22,7 @@ All targets are **unresolved point sources** (brown dwarfs/ultracool dwarfs, L0 
 
 ## Spectrum / photometry extraction method
 
-Tool: **SPIFF** ("SPHEREx Photometry and Image Fitting Framework"), open source at https://github.com/jgagneastro/SPIFF.
+Tool: **SPIFF** ("SPHEREx Photometry and Image Fitting Framework"), open source as [jgagneastro/SPIFF](https://github.com/jgagneastro/SPIFF).
 
 Step-by-step:
 1. **Cutout retrieval** — for each target and epoch, query IPAC SIA2 for exposures within 5″, pull a 20×20-pixel cutout from S3 (rather than downloading full-frame images), with the expected detector position of the source shifted for its proper motion at that epoch.

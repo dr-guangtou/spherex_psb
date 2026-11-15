@@ -8,7 +8,7 @@ Authors: Joseph L. Hora, Jinyoung K. Noh, Gary J. Melnick, Brandon S. Hensley, R
 
 - Release/pipeline version: **SPHEREx Science Data Center (SSDC) pipeline, QR2 version** — "the same version currently available on the IRSA archive."
 - Product types: **Level 2 (L2) images** (individual calibrated exposures, used to build custom narrow-band spectral-feature mosaics) and **Level 3 (L3) spectrophotometry** (point-source forced photometry via a Tractor-based pipeline) for compact sources.
-- Access: L2 images are **publicly available via the IRSA SPHEREx site** (https://irsa.ipac.caltech.edu/Missions/spherex.html).
+- Access: L2 images are **publicly available via the IRSA SPHEREx site** ([IRSA SPHEREx mission page](https://irsa.ipac.caltech.edu/Missions/spherex.html)).
 - Observation dates/exposure counts: Cygnus mosaics were built from two observing windows, **2025 April 26 – 2025 July 5** and **2025 October 10 – 2025 November 2**, with an **average of 148 individual exposures** per mosaic pixel/wavelength range. For the LDN 935 field, data span **2025 May 9 – 2025 July 5** and **2025 October 23 – 2025 November 18**, with an average of **52 exposures** per wavelength range. All individual integrations use the standard SPHEREx exposure time of **113.5826 s**.
 - For most fully covered regions in this dataset, roughly **100 spectral samples** per sky position are available from the L2 images (i.e., each sky location is revisited enough times across the six SPHEREx bands/detectors to build a coarse spectral map).
 

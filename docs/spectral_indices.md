@@ -4,7 +4,7 @@ Can a spectral index defined for spectra be measured from a SPHEREx SED? The SED
 photometry is a set of flux densities at irregular wavelengths, each with its own bandwidth of about
 lambda / 40, with a handful of samples per nominal channel and detector boundaries at fixed observed
 wavelengths. This page sets out what that does to an index, using the 1.6 um H-minus bump index as the
-worked example; the full study is in the [feasibility report](reports/hminus_bump_feasibility.md).
+worked example.
 
 ## What an index sees in SPHEREx data
 
@@ -39,17 +39,12 @@ stronger bump is more negative. In the paper's FSPS mocks the rapid-quenching cl
 track is 0.006-0.023 mag, and the classifier gain requires a precision of 0.005-0.010 mag; at 0.020 mag the
 gain is small. The paper measured the index at an instrumental R = 100.
 
-<figure markdown="span">
-  ![H-minus bump feasibility](figures/sed_demo/fig8_hminus_bump_feasibility.png){ width="820" }
-  <figcaption>Figure 8. (a) A TP-AGB-on FSPS spectrum 1 Gyr after quenching at the paper's R = 100 and
-  degraded to the SPHEREx resolving power with a Gaussian and a top-hat of equivalent width lambda / 41.4;
-  shaded: the Hbump_opt windows. (b) Hbump_opt along the t_q = 3 Gyr, tau_q = 0.3 Gyr solar track for the
-  three kernels; solid TP-AGB on, dotted off. (c) Exposures of the reference galaxy and of the
-  post-starburst galaxy (offset +0.18) divided by their pseudo-continuum, D2 and D3 in the detector colours,
-  with the two models at SPHEREx resolution. (d) Hbump_opt of the six galaxies: filled, from the exposures
-  with bootstrap errors; open, from the 102-channel SED; grey, after removing each galaxy's measured D2/D3
-  ratio; bands, the model ranges after quenching. Script: <code>scripts/sed_demo/hminus_bump_feasibility.py</code>.</figcaption>
-</figure>
+```{figure} figures/sed_demo/fig8_hminus_bump_feasibility.png
+:width: 820px
+:alt: H-minus bump feasibility
+
+Figure 8. (a) A TP-AGB-on FSPS spectrum 1 Gyr after quenching at the paper's R = 100 and degraded to the SPHEREx resolving power with a Gaussian and a top-hat of equivalent width lambda / 41.4; shaded: the Hbump_opt windows. (b) Hbump_opt along the t_q = 3 Gyr, tau_q = 0.3 Gyr solar track for the three kernels; solid TP-AGB on, dotted off. (c) Exposures of the reference galaxy and of the post-starburst galaxy (offset +0.18) divided by their pseudo-continuum, D2 and D3 in the detector colours, with the two models at SPHEREx resolution. (d) Hbump_opt of the six galaxies: filled, from the exposures with bootstrap errors; open, from the 102-channel SED; grey, after removing each galaxy's measured D2/D3 ratio; bands, the model ranges after quenching. Script: `scripts/sed_demo/hminus_bump_feasibility.py`.
+```
 
 ### Resolution: not a limitation
 

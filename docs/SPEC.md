@@ -1,7 +1,7 @@
 # spherex_psb specification
 
 Source of truth for scope and architecture. Update before implementing new features.
-Status: v0.3, 2026-11-14, SED demo complete (section 7); documentation site added (section 9).
+Status: v0.4, 2026-11-14, SED demo complete (section 7); documentation site on note-style (section 9).
 
 ## 1. Scientific goal
 
@@ -121,20 +121,62 @@ total, 6 % apart for n = 4) and whether a position-jitter term is added before s
 ## 9. Documentation system (2026-11-14)
 
 - The project's knowledge about SPHEREx and its own analysis is published as a static site built from
-  `docs/` with MkDocs and the Material theme (`mkdocs.yml`; `uv run --only-group docs mkdocs build --strict`).
-  Entry point `docs/index.md`; main pages `primer.md`, `data_access.md`, `reduction_analysis.md`,
-  `sed_extraction.md`, `spectral_indices.md`; project pages `SPEC.md`, `todo.md`, `lessons.md`;
-  `docs/reports/` for checkpoint reports and task specifications; `docs/references/` for per-source
-  reading notes (irsa, papers, studies, tools) with `docs/references/sources/` (copied tutorial code and
-  external PDFs) excluded from the site.
+  `docs/` following the note-style documentation standard (rule book version 0.6, copied to
+  `docs/html_documentation_guide.md`; canonical skill folder `dr-guangtou.science/skills/note-style`,
+  mirrored in `guangtou_vibe/skills/note-style`). Publisher: Sphinx
+  9.1.1 with MyST parser 5.2.0 and Furo 2025.12.19 and sphinx-design 0.8.0 (the versions tested by the
+  skill's starter; card grids are part of the standard since rule book 0.5); pinned in `uv.lock`, docs
+  dependency group.
+  Delivery and commit gate: a fresh locked build,
+  `uv run --locked --only-group docs sphinx-build -E -W --keep-going -b html docs docs/_build/html`.
+- Layout: `docs/conf.py` (project settings; the theme palette and font stacks are the starter's);
+  shared assets copied unmodified from the starter: `docs/_static/note_style.css`,
+  `docs/_static/note_style_theme.js` (dark-first theme with saved reader choice),
+  `docs/_templates/base.html`, `docs/mathjax_config.js`, `docs/_static/fonts/` (Source Sans 3 and
+  Source Code Pro, variable WOFF2, Latin subsets, OFL 1.1, 316 KB) and `docs/_static/vendor/` (MathJax
+  4.1.3 runtime and the mathjax-newcm font, Apache-2.0, 32 MB), all served from the site itself; the
+  fonts folder carries the 0.6 provenance notice. Project additions live in
+  `docs/_static/spherex_psb.css` only (smaller table text, left-aligned captions); table word-wrapping,
+  responsive images and the card-link-text reset are shared rules since 0.6. The starter's
+  `note_style_interactive.js` drives only its exposure-time sample and is not loaded here until a page has
+  an interactive figure.
+- Project-specific decisions: `numfig = False`, because the analysis figures carry explicit numbers
+  (figure 1-8 of the SED demonstration, named after the scripts that make them) that reports and
+  scripts refer to; `myst_heading_anchors = 4` so the former `page.md#section` links keep working;
+  page titles in the navigation are given in the `index.md` toctrees; two-image figures of the former
+  site were split into consecutive single figures; ADQL/SQL blocks with `{placeholders}` use the
+  `postgresql` Pygments lexer (the generic `sql` lexer rejects braces under `-W`); `nitpicky` and `-W`
+  keep every link, anchor and figure path valid.
+- Entry point `docs/index.md`; main pages `primer.md`, `data_access.md`, `reduction_analysis.md`,
+  `sed_extraction.md`, `spectral_indices.md`; project pages `SPEC.md`, `todo.md`, `lessons.md`,
+  `html_documentation_guide.md`; `docs/reports/` for checkpoint reports and task specifications;
+  `docs/references/` for per-source reading notes (irsa, papers, studies, tools) with
+  `docs/references/sources/` (copied tutorial code and external PDFs, the PDFs untracked) excluded from
+  the build.
 - Figures: `docs/figures/sed_demo/` (analysis figures), `docs/figures/site/` (made by
   `scripts/site_figures.py` from calibration products and our records), `docs/figures/external/` (figures
   reproduced from papers, each with a credit line; arXiv sources kept under
   `/Users/shuang/data/spherex/references/arxiv_src/`).
+- Two versions from one source tree (2026-11-15): the public site (`docs/_build/html`, the default
+  build that GitHub Pages publishes) and the internal site (`docs/_build/internal`, built with
+  `-t internal`). Public: `index`, the five science pages, `references/irsa/*`, `references/papers/*`.
+  Internal (`INTERNAL_PATTERNS` in `docs/conf.py`): `internal` (the owner's index of internal pages),
+  `SPEC`, `todo`, `lessons`, `html_documentation_guide`, `reports/*` (for now), `references/studies/*`,
+  `references/tools/*`. The public build excludes them, so neither the pages, their sources nor the
+  search index reach the public site, and a link from a public page to an internal one fails the strict
+  build. A `source-read` hook adds the "Internal" navigation entry and a banner on each internal page in
+  the internal build only. `scripts/build_docs.sh` builds both from empty folders and opens the internal
+  one.
+- Links: web pages are cited as hyperlinks with descriptive text, never as printed addresses; service
+  endpoints, URL templates, example requests, install commands and quoted code stay as inline code.
 - Rules: every SPHEREx fact is cited to its source in a footnote; numbers measured here are marked
-  "measured" with the script named; `strict` builds with anchor validation must pass before a commit;
-  the site deploys to GitHub Pages through `.github/workflows/docs.yml` on pushes to `main` (Pages source
-  must be set to "GitHub Actions" once in the repository settings).
+  "measured" with the script named; the strict build must pass before a commit; the site deploys to
+  GitHub Pages through `.github/workflows/docs.yml` on pushes to `main` (Pages source must be set to
+  "GitHub Actions" once in the repository settings). Verification record of the conversion
+  (2026-11-14): warning-free strict build of 43 pages; headless Chrome 1400 px and 390 px screenshots of
+  the index, primer and SED pages checked (dark first visit, navigation, figures, tables, footnotes);
+  the light-mode switch and saved preference were not exercised here (the starter's own verification
+  covers them); Firefox and Safari not tested.
 - The former `docs/spherex_data_guide.md` was split into the primer, data-access and reduction pages and
-  retired; the external `spherex-irsa-access` skill is kept consistent with the data-access and reduction
-  pages.
+  retired; the MkDocs setup of the first site version (commit d6e9267) was replaced the same day. The
+  external `spherex-irsa-access` skill is kept consistent with the data-access and reduction pages.

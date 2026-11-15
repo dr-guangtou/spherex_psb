@@ -16,14 +16,12 @@ plus two deep fields near the ecliptic poles that are visited far more often. Th
 with resolving power R = 35-130 and 6.15 arcsec pixels, and yields of order 10^9 galaxy spectra and 10^8
 stellar spectra.[^expsupp1][^korngut]
 
-<figure markdown="span">
-  ![SPHEREx instrument overview](figures/external/korngut2026_Instrument_Overview.png){ width="760" }
-  <figcaption><span class="credit">Credit: Figure 1 of Korngut et al. 2026 (arXiv:2603.29835).</span>
-  The instrument: an unobscured f/3 reflective triplet telescope with a 20 cm pupil behind three V-groove
-  radiators and photon shields, feeding two focal-plane assemblies through a dichroic beamsplitter. The
-  insets show the mid-wave focal plane with its thermal straps and the three filters mounted over the
-  detector.</figcaption>
-</figure>
+```{figure} figures/external/korngut2026_Instrument_Overview.png
+:width: 760px
+:alt: SPHEREx instrument overview
+
+*Credit: Figure 1 of Korngut et al. 2026 (arXiv:2603.29835).* The instrument: an unobscured f/3 reflective triplet telescope with a 20 cm pupil behind three V-groove radiators and photon shields, feeding two focal-plane assemblies through a dichroic beamsplitter. The insets show the mid-wave focal plane with its thermal straps and the three filters mounted over the detector.
+```
 
 ## Telescope and focal planes
 
@@ -47,22 +45,19 @@ at one edge to 1.11 um at the other, and the whole 3.5 deg field of a band is a 
 position along the filter, which keeps the resolving power constant within a band; because the filters were
 coated on a rotationally symmetric machine, the iso-wavelength contours are circular arcs, the "smile".
 
-<figure markdown="span">
-  ![MWIR focal plane with three LVFs](figures/external/hui2026_fig1_mwir_fpa_lvf.png){ width="420" }
-  <figcaption><span class="credit">Credit: Figure 1 of Hui et al. 2026 (ApJS 284, 10; arXiv:2602.09139).</span>
-  The mid-wave focal-plane assembly: three H2RG detectors, each under its own LVF. The colour gradient is
-  the interference coating; the passband wavelength increases monotonically along the vertical axis of
-  each filter.</figcaption>
-</figure>
+```{figure} figures/external/hui2026_fig1_mwir_fpa_lvf.png
+:width: 420px
+:alt: MWIR focal plane with three LVFs
 
-<figure markdown="span">
-  ![Per-pixel central wavelength maps](figures/site/wavelength_maps.png){ width="820" }
-  <figcaption>The per-pixel central wavelength (CWAVE, in um) of the six detectors from the DR1/QR3
-  Spectral WCS calibration product, with iso-wavelength contours every 1/17 of the band. The curvature of
-  the contours is the smile. The title of each panel gives the measured wavelength range and the median
-  resolving power CWAVE / CBAND of the map. Made by <code>scripts/site_figures.py</code> from the files
-  cached by spherex-retrieval.</figcaption>
-</figure>
+*Credit: Figure 1 of Hui et al. 2026 (ApJS 284, 10; arXiv:2602.09139).* The mid-wave focal-plane assembly: three H2RG detectors, each under its own LVF. The colour gradient is the interference coating; the passband wavelength increases monotonically along the vertical axis of each filter.
+```
+
+```{figure} figures/site/wavelength_maps.png
+:width: 820px
+:alt: Per-pixel central wavelength maps
+
+The per-pixel central wavelength (CWAVE, in um) of the six detectors from the DR1/QR3 Spectral WCS calibration product, with iso-wavelength contours every 1/17 of the band. The curvature of the contours is the smile. The title of each panel gives the measured wavelength range and the median resolving power CWAVE / CBAND of the map. Made by `scripts/site_figures.py` from the files cached by spherex-retrieval.
+```
 
 The spectral response of every one of the 24 million pixels was measured on the ground with a monochromator
 scan of the assembled, cold instrument.[^hui] Three definitions from that paper are used throughout the
@@ -83,15 +78,19 @@ integrated out-of-band throughput stays below 5e-3.[^hui] This is why the bright
 produces weak features near 0.84 um in band 1 and near 1.25 and 1.49 um in band 2 (see the
 [reduction page](reduction_analysis.md#atmospheric-emission)).
 
-<figure markdown="span">
-  ![Example pixel response and band 2 response map](figures/external/hui2026_fig12_pixel_response.png){ width="360" }
-  ![Band 2 response versus channel](figures/external/hui2026_fig20_band2_response_leakage.png){ width="360" }
-  <figcaption><span class="credit">Credit: Figures 12 and 20 of Hui et al. 2026.</span> Left: the measured
-  spectral response of one band-2 pixel, with the in-band scan in green and the much weaker out-of-band
-  response in purple. Right: the response of band 2 as a function of detector position (labelled by the
-  nominal channel): the bright diagonal is the LVF progression, the three faint diagonals are the
-  out-of-band leakage features.</figcaption>
-</figure>
+```{figure} figures/external/hui2026_fig12_pixel_response.png
+:width: 360px
+:alt: Example pixel response and band 2 response map
+
+*Credit: Figure 12 of Hui et al. 2026.* The measured spectral response of one band-2 pixel, with the in-band scan in green and the much weaker out-of-band response in purple.
+```
+
+```{figure} figures/external/hui2026_fig20_band2_response_leakage.png
+:width: 360px
+:alt: Band 2 response versus channel
+
+*Credit: Figure 20 of Hui et al. 2026.* The response of band 2 as a function of detector position (labelled by the nominal channel): the bright diagonal is the LVF progression, the three faint diagonals are the out-of-band leakage features.
+```
 
 ## The six bands
 
@@ -112,14 +111,12 @@ At the band 3/4 boundary the dichroic edge sits inside the overlap; pixels whose
 are flagged DICHROIC and in our data every exposure with CWAVE between 2.417 and 2.426 um had the target
 pixels flagged (measured on 2,225 exposures; see the [reduction page](reduction_analysis.md#the-dichroic-boundary)).
 
-<figure markdown="span">
-  ![Band layout and where rest-frame features land](figures/site/band_layout.png){ width="820" }
-  <figcaption>(a) The six bands with their resolving powers, the dichroic gap, the He I 1.083 um airglow line
-  (solid) and its leak features (dotted), the other atmospheric lines listed in the Explanatory Supplement
-  (ticks) and the shuttle-glow peaks. (b) The observed wavelength of rest-frame features as a function of
-  redshift, against the bands (shaded), the detector boundaries (dashed) and the airglow lines. The grey
-  stripe is the redshift range of the SED demonstration. Made by <code>scripts/site_figures.py</code>.</figcaption>
-</figure>
+```{figure} figures/site/band_layout.png
+:width: 820px
+:alt: Band layout and where rest-frame features land
+
+(a) The six bands with their resolving powers, the dichroic gap, the He I 1.083 um airglow line (solid) and its leak features (dotted), the other atmospheric lines listed in the Explanatory Supplement (ticks) and the shuttle-glow peaks. (b) The observed wavelength of rest-frame features as a function of redshift, against the bands (shaded), the detector boundaries (dashed) and the airglow lines. The grey stripe is the redshift range of the SED demonstration. Made by `scripts/site_figures.py`.
+```
 
 ### Spectral channels versus per-pixel wavelengths
 
@@ -128,17 +125,21 @@ band's measured wavelength range.[^cukierman] The Spectral Channels calibration 
 a channel and tabulates each channel's central wavelength, limits, bandwidth and R; the IRSA tools and every
 published spectrum use this 102-point grid. The channels are a bookkeeping grid, not a wavelength solution:
 the wavelength at which a source is measured in a given exposure is the CWAVE of the pixel it lands on, and
-adjacent nominal channels overlap by up to 0.018 um (measured from the channel table; see
-[lessons](lessons.md)). Bands 5 and 6 have about three times finer sampling per channel than bands 1-4.
+adjacent nominal channels overlap by up to 0.018 um (measured from the channel table). Bands 5 and 6 have about three times finer sampling per channel than bands 1-4.
 
-<figure markdown="span">
-  ![Channel layout](figures/external/hui2026_fig2_channel_layout.png){ width="380" }
-  ![Channel definition in array 1](figures/external/cukierman2026_ChDef_Array1.png){ width="420" }
-  <figcaption><span class="credit">Credit: Figure 2 of Hui et al. 2026 (left) and a figure of Cukierman et
-  al. 2026 (ApJS 286, 22; arXiv:2603.25790, right).</span> The 17-channel layout of one detector, defined
-  geometrically for survey planning, and the logarithmic channel definition for array 1. Pixels at the
-  curved band edges fall outside the nominal layout but are optically active.</figcaption>
-</figure>
+```{figure} figures/external/hui2026_fig2_channel_layout.png
+:width: 380px
+:alt: Channel layout
+
+*Credit: Figure 2 of Hui et al. 2026.* The 17-channel layout of one detector, defined geometrically for survey planning.
+```
+
+```{figure} figures/external/cukierman2026_ChDef_Array1.png
+:width: 420px
+:alt: Channel definition in array 1
+
+*Credit: a figure of Cukierman et al. 2026 (ApJS 286, 22; arXiv:2603.25790).* The logarithmic channel definition for array 1. Pixels at the curved band edges fall outside the nominal layout but are optically active.
+```
 
 ## The point spread function
 
@@ -150,20 +151,19 @@ pipeline delivers an empirical PSF (ePSF) per detector zone, built from stars in
 formalism on a 5x oversampled 33 x 33 grid with unit integral; the zone tables carry the mean N_eff and the
 number of stars used.[^expsupp4]
 
-<figure markdown="span">
-  ![ePSF stamps and N_eff per zone](figures/site/epsf_zones.png){ width="820" }
-  <figcaption>Top: the central-zone ePSF of each detector (logarithmic stretch over 3.5 decades, axes in
-  native pixels), from the DR1/QR3 ePSF calibration files. Bottom: the mean N_eff of every ePSF zone
-  against the zone's central wavelength. The medians over zones are 3.4, 3.3, 3.3, 4.5, 4.5 and 4.9 pixels
-  for D1-D6 (measured). Made by <code>scripts/site_figures.py</code>.</figcaption>
-</figure>
+```{figure} figures/site/epsf_zones.png
+:width: 820px
+:alt: ePSF stamps and N_eff per zone
 
-<figure markdown="span">
-  ![N_eff from the instrument paper](figures/external/korngut2026_Neff_lbl.png){ width="420" }
-  <figcaption><span class="credit">Credit: Figure 13 of Korngut et al. 2026.</span> N_eff from the optical
-  model with and without inter-pixel capacitance, and the in-flight measurement from 1.1 million isolated
-  stars. Our zone medians above agree with the flight curve.</figcaption>
-</figure>
+Top: the central-zone ePSF of each detector (logarithmic stretch over 3.5 decades, axes in native pixels), from the DR1/QR3 ePSF calibration files. Bottom: the mean N_eff of every ePSF zone against the zone's central wavelength. The medians over zones are 3.4, 3.3, 3.3, 4.5, 4.5 and 4.9 pixels for D1-D6 (measured). Made by `scripts/site_figures.py`.
+```
+
+```{figure} figures/external/korngut2026_Neff_lbl.png
+:width: 420px
+:alt: N_eff from the instrument paper
+
+*Credit: Figure 13 of Korngut et al. 2026.* N_eff from the optical model with and without inter-pixel capacitance, and the in-flight measurement from 1.1 million isolated stars. Our zone medians above agree with the flight curve.
+```
 
 Two consequences for galaxy photometry: the header keyword PSF_FWHM is a per-image median in arcsec that
 differs between the QR2 optical PSF (5.2 arcsec in one D3 file) and the QR3 ePSF (7.4 arcsec in one D3
@@ -178,15 +178,19 @@ term at all wavelengths; read noise is sub-dominant.[^korngut] Above it sit the 
 (He I 1.083 um in every exposure, auroral lines, others), shuttle glow near 3.0 and 4.5 um, and Earthshine;
 all of these are described with their mitigations on the [reduction page](reduction_analysis.md#backgrounds).
 
-<figure markdown="span">
-  ![Noise budget](figures/external/korngut2026_Noise_Breakdown.png){ width="400" }
-  ![Projected sensitivity](figures/external/korngut2026_PSS.png){ width="400" }
-  <figcaption><span class="credit">Credit: Figures 7 and 25 of Korngut et al. 2026.</span> Left: the white
-  noise budget of one 118 s exposure, zodiacal photon noise against read noise. Right: the projected all-sky
-  point-source sensitivity at the end of the four-survey mission, assuming four observations per
-  wavelength, with the 2018 proposal projection for comparison; the only shortfall is the channel
-  contaminated by the He I airglow line.</figcaption>
-</figure>
+```{figure} figures/external/korngut2026_Noise_Breakdown.png
+:width: 400px
+:alt: Noise budget
+
+*Credit: Figure 7 of Korngut et al. 2026.* The white noise budget of one 118 s exposure, zodiacal photon noise against read noise.
+```
+
+```{figure} figures/external/korngut2026_PSS.png
+:width: 400px
+:alt: Projected sensitivity
+
+*Credit: Figure 25 of Korngut et al. 2026.* The projected all-sky point-source sensitivity at the end of the four-survey mission, assuming four observations per wavelength, with the 2018 proposal projection for comparison; the only shortfall is the channel contaminated by the He I airglow line.
+```
 
 Per-exposure depths in physical units are not tabulated in the instrument paper. Rustamkulov et al. 2026
 quote 5 sigma point-source limits of about 19.5 AB over 0.75-3.8 um and 17.5-18.5 AB over 3.8-5 um per
@@ -197,13 +201,12 @@ the forced model flux is 40-90 at 1-3.5 um and about 10 at 5 um (measured, figur
 
 ## How the sky is surveyed
 
-<figure markdown="span">
-  ![Raw spectral images of the Galactic plane](figures/external/korngut2026_Survey1_Galplane.png){ width="760" }
-  <figcaption><span class="credit">Credit: Figure 18 of Korngut et al. 2026.</span> Simultaneous raw images
-  from band 2 (left) and band 5 (right) during the first practice survey, crossing the Galactic plane. The
-  horizontal banding is the LVF: each row of the array sees a different wavelength, so emission lines and
-  the zodiacal spectrum appear as stripes.</figcaption>
-</figure>
+```{figure} figures/external/korngut2026_Survey1_Galplane.png
+:width: 760px
+:alt: Raw spectral images of the Galactic plane
+
+*Credit: Figure 18 of Korngut et al. 2026.* Simultaneous raw images from band 2 (left) and band 5 (right) during the first practice survey, crossing the Galactic plane. The horizontal banding is the LVF: each row of the array sees a different wavelength, so emission lines and the zodiacal spectrum appear as stripes.
+```
 
 The Survey Planning Software schedules pointings on the fly, honouring Sun, Earth, Moon and shuttle-glow
 avoidance (local zenith angle below 42 deg, ram angle below 70 deg).[^korngut][^expsupp1] The all-sky
@@ -220,22 +223,19 @@ the 102 channels, in six separate exposures per pointing (one per detector), and
 the CWAVE of the pixel it happens to fall on. Repeat measurements at nearly the same wavelength come from
 different surveys and different detector positions.
 
-<figure markdown="span">
-  ![Survey cadence of the reference galaxy](figures/site/survey_cadence.png){ width="820" }
-  <figcaption>(a) Every DR1 + QR3 wide-survey exposure of the demonstration's reference galaxy
-  (RA 168.1, Dec +12.1, ecliptic latitude +6 deg): the central wavelength of the pixel it fell on against
-  time, coloured by detector. Three passes separated by more than 30 days fall between MJD 60796
-  (2025-05-01) and 61187 (2026-05-27), 223 distinct epochs in all. (b) The number of exposures that
-  survived our quality screening in each of the 102 channels for the six demonstration galaxies: 1-8 per
-  channel, median 2-4 (measured). Made by <code>scripts/site_figures.py</code>.</figcaption>
-</figure>
+```{figure} figures/site/survey_cadence.png
+:width: 820px
+:alt: Survey cadence of the reference galaxy
 
-<figure markdown="span">
-  ![Hit counts of a mosaic](figures/external/cukierman2026_hits_panel.png){ width="760" }
-  <figcaption><span class="credit">Credit: Cukierman et al. 2026, hit-count panel.</span> The number of
-  exposures contributing to each pixel of a regional mosaic after the first survey: coverage is set by the
-  scan pattern and is denser towards the ecliptic poles.</figcaption>
-</figure>
+(a) Every DR1 + QR3 wide-survey exposure of the demonstration's reference galaxy (RA 168.1, Dec +12.1, ecliptic latitude +6 deg): the central wavelength of the pixel it fell on against time, coloured by detector. Three passes separated by more than 30 days fall between MJD 60796 (2025-05-01) and 61187 (2026-05-27), 223 distinct epochs in all. (b) The number of exposures that survived our quality screening in each of the 102 channels for the six demonstration galaxies: 1-8 per channel, median 2-4 (measured). Made by `scripts/site_figures.py`.
+```
+
+```{figure} figures/external/cukierman2026_hits_panel.png
+:width: 760px
+:alt: Hit counts of a mosaic
+
+*Credit: Cukierman et al. 2026, hit-count panel.* The number of exposures contributing to each pixel of a regional mosaic after the first survey: coverage is set by the scan pattern and is denser towards the ecliptic poles.
+```
 
 Observation identifiers encode the planning period: `2026W31_1B_0205_1` is week 31 of 2026, first half of the
 week, plan version B, large slew 0205, small slew 1; the first science plan was `2025W17_4B`.[^expsupp1]
