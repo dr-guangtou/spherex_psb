@@ -2,8 +2,7 @@
 
 The demonstration that this project ran in November 2026: forced Sersic photometry of six SDSS galaxies at
 0.03 < z < 0.06 on every DR1 and QR3 wide-survey exposure that covers them, assembled into spectral energy
-distributions (SEDs) and validated eight ways. The full checkpoint report, with every table, is the
-[SED demo report](reports/demo_sed_report.md). This page gives the method, the numbers that matter and the
+distributions (SEDs) and validated eight ways. This page gives the method, the numbers that matter and the
 questions that remain.
 
 :::{admonition} Outcome

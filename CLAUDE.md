@@ -22,9 +22,10 @@ AGB/TP-AGB stars.
   new is learned about SPHEREx; cite the source and mark measured numbers as measured.
 - Documentation standard (2026-11-14): for science and technical HTML documentation, including every
   GitHub Pages site built from this repository, use note-style and only note-style, as defined in
-  `docs/html_documentation_guide.md` (the `note-style` skill at
-  `/Users/shuang/Dropbox/work/project/vibe/guangtou_vibe/skills/note-style`, read it before changing
-  the documentation setup). Its first implementation is Sphinx, MyST Markdown and customised Furo:
+  `docs/html_documentation_guide.md` (the `note-style` skill, version 0.6 adopted 2026-11-15; canonical
+  copy `/Users/shuang/Dropbox/work/job/dr-guangtou.science/skills/note-style`, mirrored at
+  `/Users/shuang/Dropbox/work/project/vibe/guangtou_vibe/skills/note-style`, which Claude Code loads;
+  read it before changing the documentation setup). Its first implementation is Sphinx, MyST Markdown and customised Furo:
   sources stay ordinary `.md` files, the shared assets `docs/_static/note_style.css`,
   `docs/_static/note_style_theme.js`, `docs/_templates/base.html`, `docs/mathjax_config.js`, the
   bundled fonts under `docs/_static/fonts/` and the bundled MathJax under `docs/_static/vendor/` are
@@ -34,14 +35,18 @@ AGB/TP-AGB stars.
   and working links during conversion. Build both versions with `bash scripts/build_docs.sh` (strict,
   from empty output folders) before committing documentation changes; the public site deploys to
   GitHub Pages from `main`.
-- Publication scope (2026-11-15): project documents are never part of the published site. The
-  specification, task list, lessons, task specifications, the copied rule book, notes on private
-  material (such as the student's repository) and any similar project-management document are listed
-  in `INTERNAL_DOCUMENTS` in `docs/conf.py`. The default build (`docs/_build/html`, what GitHub Pages
-  publishes) excludes them; `sphinx-build -t internal` builds them into `docs/_build/internal` for the
-  owner's review, under an "Internal" navigation section and with a banner on each page. Add every new
-  document of that kind to the list when it is created. Public pages must not link to internal ones
-  (the strict public build fails if they do).
+- Publication scope (2026-11-15): only the science notes (index, primer, data access, reduction and
+  analysis, SED extraction, spectral indices) and the reading notes on official sources and papers
+  (`docs/references/irsa/`, `docs/references/papers/`) are public. Internal, never published: project
+  documents (specification, task list, lessons, the copied rule book), all reports and task
+  specifications (`docs/reports/`, for now), notes on private material (`docs/references/studies/`,
+  e.g. the student's repository), and the third-party tool notes and review (`docs/references/tools/`).
+  `INTERNAL_PATTERNS` in `docs/conf.py` lists them; the default build (`docs/_build/html`, what GitHub
+  Pages publishes) excludes them, and `sphinx-build -t internal` builds them into `docs/_build/internal`
+  for the owner, reached from `docs/internal.md` with a banner on each page. A new document of an
+  internal kind goes into an internal folder or the pattern list, and into `internal.md`. Public pages
+  must not link to internal ones (the strict public build fails if they do); local paths in public pages
+  are acceptable for now.
 - Links in published pages (2026-11-15): never print a web address as text. Write a hyperlink with
   descriptive text, `[IRSA Quick Release overview](https://...)`, which the theme shows in the link
   colour. Service endpoints, URL templates with placeholders, example request URLs, install commands

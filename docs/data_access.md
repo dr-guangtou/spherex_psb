@@ -138,8 +138,7 @@ extraction needs:[^expsupp4]
 ## What we actually fetch: cutout bundles with spherex-retrieval
 
 For forced photometry of a galaxy a 41 x 41 pixel cutout (0.07 deg) of every exposure is enough, together
-with the six per-detector calibration products. We use hbahk's `spherex-retrieval` (MIT licence; reviewed in
-the [tool review](reports/spherex_tools_review.md)), which runs the TAP query, downloads the IRSA cutouts,
+with the six per-detector calibration products. We use hbahk's [spherex-retrieval](https://github.com/hbahk/spherex-retrieval) (MIT licence), which runs the TAP query, downloads the IRSA cutouts,
 stops each download after the ePSF extension header, and attaches the calibration ePSF zones, CWAVE, CBAND
 and solid-angle cutouts to a small bundle.[^retrieval] Measured in the demo:
 
@@ -161,8 +160,7 @@ Astropy caches every remote FITS file by default; use `cache=False` for bulk cut
 
 ## Third-party software
 
-Twelve public repositories were reviewed in September 2026 ([tool review](reports/spherex_tools_review.md),
-[per-tool notes](references/tools/github_survey_2026-09-23.md)). Everything written before July 2026 is
+Twelve public repositories were reviewed in September 2026. Everything written before July 2026 is
 hard-coded to the QR2 data model (PSF cube, `MP_*` flag names, seven extensions) and must be checked
 against a QR3 file before use; only `spherex-retrieval` and `tractorjax-spherex` dispatch on the PSF kind.
 Four repositories have no licence and one is GPL-3; licences are checked before any code is copied. The
@@ -202,4 +200,4 @@ Rubin Butler middleware to run; it is read as a specification.
     [reading note](references/irsa/irsa_spherex_tutorials.md).
 [^tools]: IRSA Spectrophotometry Tool and Mosaic Tool help pages (saved 2026-09-22 under
     `docs/references/sources/external/`).
-[^retrieval]: hbahk, `spherex-retrieval` 0.4.0, MIT licence; our [tool note](references/tools/spherex-retrieval.md).
+[^retrieval]: hbahk, [spherex-retrieval](https://github.com/hbahk/spherex-retrieval) 0.4.0, MIT licence.

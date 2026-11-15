@@ -121,20 +121,25 @@ total, 6 % apart for n = 4) and whether a position-jitter term is added before s
 ## 9. Documentation system (2026-11-14)
 
 - The project's knowledge about SPHEREx and its own analysis is published as a static site built from
-  `docs/` following the note-style documentation standard (rule book version 0.5, copied to
-  `docs/html_documentation_guide.md`; skill folder `guangtou_vibe/skills/note-style`). Publisher: Sphinx
+  `docs/` following the note-style documentation standard (rule book version 0.6, copied to
+  `docs/html_documentation_guide.md`; canonical skill folder `dr-guangtou.science/skills/note-style`,
+  mirrored in `guangtou_vibe/skills/note-style`). Publisher: Sphinx
   9.1.1 with MyST parser 5.2.0 and Furo 2025.12.19 and sphinx-design 0.8.0 (the versions tested by the
   skill's starter; card grids are part of the standard since rule book 0.5); pinned in `uv.lock`, docs
   dependency group.
-  Build:
-  `uv run --only-group docs sphinx-build -E -W --keep-going -b html docs docs/_build/html`.
+  Delivery and commit gate: a fresh locked build,
+  `uv run --locked --only-group docs sphinx-build -E -W --keep-going -b html docs docs/_build/html`.
 - Layout: `docs/conf.py` (project settings; the theme palette and font stacks are the starter's);
   shared assets copied unmodified from the starter: `docs/_static/note_style.css`,
   `docs/_static/note_style_theme.js` (dark-first theme with saved reader choice),
   `docs/_templates/base.html`, `docs/mathjax_config.js`, `docs/_static/fonts/` (Source Sans 3 and
   Source Code Pro, variable WOFF2, Latin subsets, OFL 1.1, 316 KB) and `docs/_static/vendor/` (MathJax
-  4.1.3 runtime and the mathjax-newcm font, Apache-2.0, 32 MB), all served from the site itself. Project
-  additions live in `docs/_static/spherex_psb.css` only (table word-wrapping, image maximum width).
+  4.1.3 runtime and the mathjax-newcm font, Apache-2.0, 32 MB), all served from the site itself; the
+  fonts folder carries the 0.6 provenance notice. Project additions live in
+  `docs/_static/spherex_psb.css` only (smaller table text, left-aligned captions); table word-wrapping,
+  responsive images and the card-link-text reset are shared rules since 0.6. The starter's
+  `note_style_interactive.js` drives only its exposure-time sample and is not loaded here until a page has
+  an interactive figure.
 - Project-specific decisions: `numfig = False`, because the analysis figures carry explicit numbers
   (figure 1-8 of the SED demonstration, named after the scripts that make them) that reports and
   scripts refer to; `myst_heading_anchors = 4` so the former `page.md#section` links keep working;
@@ -154,13 +159,14 @@ total, 6 % apart for n = 4) and whether a position-jitter term is added before s
   `/Users/shuang/data/spherex/references/arxiv_src/`).
 - Two versions from one source tree (2026-11-15): the public site (`docs/_build/html`, the default
   build that GitHub Pages publishes) and the internal site (`docs/_build/internal`, built with
-  `-t internal`). `INTERNAL_DOCUMENTS` in `docs/conf.py` lists the internal pages (`SPEC`, `todo`,
-  `lessons`, `html_documentation_guide`, `reports/sed_demo_task`,
-  `references/studies/photometry_study_2026-11`); the public build excludes them, so neither the pages,
-  their sources nor the search index reach the public site, and a link from a public page to an
-  internal one fails the strict build. A `source-read` hook adds an "Internal" navigation section and a
-  banner on each internal page in the internal build only. `scripts/build_docs.sh` builds both from
-  empty folders and opens the internal one.
+  `-t internal`). Public: `index`, the five science pages, `references/irsa/*`, `references/papers/*`.
+  Internal (`INTERNAL_PATTERNS` in `docs/conf.py`): `internal` (the owner's index of internal pages),
+  `SPEC`, `todo`, `lessons`, `html_documentation_guide`, `reports/*` (for now), `references/studies/*`,
+  `references/tools/*`. The public build excludes them, so neither the pages, their sources nor the
+  search index reach the public site, and a link from a public page to an internal one fails the strict
+  build. A `source-read` hook adds the "Internal" navigation entry and a banner on each internal page in
+  the internal build only. `scripts/build_docs.sh` builds both from empty folders and opens the internal
+  one.
 - Links: web pages are cited as hyperlinks with descriptive text, never as printed addresses; service
   endpoints, URL templates, example requests, install commands and quoted code stay as inline code.
 - Rules: every SPHEREx fact is cited to its source in a footnote; numbers measured here are marked

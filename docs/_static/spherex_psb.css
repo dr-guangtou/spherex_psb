@@ -1,25 +1,12 @@
-/* Project additions on top of the shared note-style stylesheet (keep note_style.css unmodified). */
+/* Project additions on top of the shared note-style stylesheet (keep note_style.css unmodified).
+   Table word-wrapping and responsive images are shared rules since note-style 0.6. */
 
-/* Tables: words stay whole, wide tables scroll inside Furo's wrapper instead of breaking cells. */
+/* The SED and calibration tables have many numeric columns; a smaller size keeps them in the column. */
 article table.docutils {
   font-size: 0.85em;
 }
-article table.docutils td,
-article table.docutils th,
-article table.docutils :is(td, th) p {
-  overflow-wrap: normal;
-  word-break: normal;
-}
 
-/* Figures: a requested width is a maximum; the image never exceeds the reading column. */
-article figure img,
-article img {
-  max-width: 100%;
-  height: auto;
-}
-article figure {
-  max-width: 100%;
-}
+/* Long captions with credits read better left-aligned than centred. */
 article figcaption p {
   text-align: left;
 }

@@ -159,6 +159,7 @@ the only content changes are four two-image figures split into pairs and one SQL
       excluded from the public site and built separately for review (`-t internal`, `docs/_build/internal`).
 - [x] Public pages no longer link to internal ones (primer, index, SED page and report reworded).
 - [x] Printed web addresses in published pages replaced by descriptive hyperlinks.
-- [ ] Decide whether the third-party tool notes and review, which assess other people's (partly students')
-      repositories, belong on the public site.
-- [ ] Remove local absolute paths (`/Users/...`) from public pages, or accept them.
+- [x] Third-party tool notes and review, and the SED demo and H-minus reports, made internal (owner's
+      decision 2026-11-15); local paths in public pages accepted for now.
+- [x] Aligned with note-style 0.6: shared CSS (table wrapping, responsive images, card-link-text reset),
+      font provenance notice, rule-book copy, locked fresh build as the gate; redundant project CSS removed.

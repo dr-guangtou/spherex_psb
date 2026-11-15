@@ -4,7 +4,7 @@ Can a spectral index defined for spectra be measured from a SPHEREx SED? The SED
 photometry is a set of flux densities at irregular wavelengths, each with its own bandwidth of about
 lambda / 40, with a handful of samples per nominal channel and detector boundaries at fixed observed
 wavelengths. This page sets out what that does to an index, using the 1.6 um H-minus bump index as the
-worked example; the full study is in the [feasibility report](reports/hminus_bump_feasibility.md).
+worked example.
 
 ## What an index sees in SPHEREx data
 

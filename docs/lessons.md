@@ -200,3 +200,6 @@ Data lessons (verified live)
   folder (the build script now removes both output folders first).
 - zsh again: `tag="-t internal"; sphinx-build $tag ...` passes one argument, so the internal build ran
   without its tag. Write the arguments out, or use an array.
+- Listing internal pages one by one in `conf.py` did not scale once whole folders became internal; the
+  scope is now a set of glob patterns plus one internal index page (`internal.md`) that carries the
+  navigation, so adding a report needs no configuration change.

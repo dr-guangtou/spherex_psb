@@ -83,7 +83,7 @@ the script that makes them is named in the caption.
 ## Repository
 
 The notes are the `docs/` folder of the project repository; the analysis code lives in `spherex_psb/` and
-`scripts/`. The checkpoint reports behind these pages are under "Reports" in the navigation. The pages
+`scripts/`. The pages
 follow the note-style documentation standard (Sphinx, MyST Markdown, customised Furo) and are deployed to
 GitHub Pages by a workflow on every push to `main`.
 
@@ -119,15 +119,6 @@ spectral_indices
 
 ```{toctree}
 :hidden:
-:caption: Reports
-
-SED demo report <reports/demo_sed_report>
-H-minus bump feasibility <reports/hminus_bump_feasibility>
-Third-party tool review <reports/spherex_tools_review>
-```
-
-```{toctree}
-:hidden:
 :caption: Official sources
 
 IRSA SPHEREx pages <references/irsa/irsa_spherex_official_pages>
@@ -149,26 +140,4 @@ Compact SDSS galaxies (Lee et al. 2026) <references/papers/paper_ref_2607.18048>
 Brown dwarfs (Rustamkulov et al. 2026) <references/papers/paper_ref_2607.00543>
 Reddened quasars (Stepney et al. 2026) <references/papers/paper_ref_2605.06791>
 z > 4 quasars (Davies et al. 2026) <references/papers/paper_ref_2603.10135>
-```
-
-```{toctree}
-:hidden:
-:caption: Third-party tools
-
-GitHub survey (2026-09) <references/tools/github_survey_2026-09-23>
-references/tools/spherex-retrieval
-references/tools/tractorjax-spherex
-references/tools/Caltech-IPAC_spherex-pipelines
-references/tools/Caltech-IPAC_tractor-spherex
-references/tools/SPHEREx_pipeline
-references/tools/SPHERExSpecPhot
-references/tools/SPIFF
-references/tools/spexpi
-references/tools/spherex-cutoutdb
-references/tools/spherex-tools
-references/tools/spherex_spectra
-references/tools/spherextract
-references/tools/sphx_spec_stack
-references/tools/spxquery
-references/tools/xcavation
 ```

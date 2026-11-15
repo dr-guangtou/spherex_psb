@@ -8,8 +8,8 @@ set -euo pipefail
 cd "$(dirname "$0")/.."
 # Sphinx never deletes pages that are no longer built, so start from empty folders.
 /bin/rm -rf docs/_build/html docs/_build/internal
-uv run --only-group docs sphinx-build -E -W --keep-going -b html docs docs/_build/html
-uv run --only-group docs sphinx-build -E -W --keep-going -t internal -b html docs docs/_build/internal
+uv run --locked --only-group docs sphinx-build -E -W --keep-going -b html docs docs/_build/html
+uv run --locked --only-group docs sphinx-build -E -W --keep-going -t internal -b html docs docs/_build/internal
 echo "public site:   $(pwd)/docs/_build/html/index.html"
 echo "internal site: $(pwd)/docs/_build/internal/index.html"
 if [[ "${1:-}" != "--no-open" ]]; then

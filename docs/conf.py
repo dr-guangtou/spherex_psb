@@ -1,5 +1,7 @@
 """Sphinx configuration: note-style profile (Sphinx, MyST Markdown, customised Furo)."""
 
+import fnmatch
+
 project = "spherex_psb"
 copyright = "2026, the spherex_psb project"
 extensions = ["myst_parser", "sphinx.ext.mathjax", "sphinx.ext.githubpages", "sphinx_design"]
@@ -8,29 +10,24 @@ root_doc = "index"
 language = "en"
 exclude_patterns = ["_build", "references/sources/**", "figures/**", "Thumbs.db", ".DS_Store"]
 
-# Project-management pages (specification, task list, lessons, task specs, the copied rule book) and
-# notes on private material are for the owner's review only. The default build, which GitHub Pages
-# publishes, leaves them out; `sphinx-build -t internal` adds them under an "Internal" navigation
-# section with a banner on each page (scripts/build_docs.sh builds both versions).
-INTERNAL_DOCUMENTS = [
-    "SPEC",
-    "todo",
-    "lessons",
-    "html_documentation_guide",
-    "reports/sed_demo_task",
-    "references/studies/photometry_study_2026-11",
+# Internal pages are for the owner's review only: project documents (specification, task list, lessons,
+# the copied rule book), all reports, notes on private material and the notes on third-party tools.
+# The default build, which GitHub Pages publishes, excludes them; `sphinx-build -t internal` adds them,
+# reached from `internal.md` under an "Internal" navigation section, with a banner on each page
+# (scripts/build_docs.sh builds both versions).
+INTERNAL_PATTERNS = [
+    "internal.md",
+    "SPEC.md",
+    "todo.md",
+    "lessons.md",
+    "html_documentation_guide.md",
+    "reports/*.md",
+    "references/studies/*.md",
+    "references/tools/*.md",
 ]
-INTERNAL_NAVIGATION_TITLES = {
-    "SPEC": "Specification",
-    "todo": "To do",
-    "lessons": "Lessons",
-    "html_documentation_guide": "note-style rule book",
-    "reports/sed_demo_task": "SED demo task",
-    "references/studies/photometry_study_2026-11": "Photometry study (2026-11)",
-}
 internal_build = tags.has("internal")  # noqa: F821 (Sphinx provides `tags` to conf.py)
 if not internal_build:
-    exclude_patterns += [f"{name}.md" for name in INTERNAL_DOCUMENTS]
+    exclude_patterns += INTERNAL_PATTERNS
 nitpicky = True
 myst_enable_extensions = ["dollarmath", "colon_fence"]
 myst_heading_anchors = 4
@@ -84,14 +81,17 @@ Built only for local review (`sphinx-build -t internal`). It is not part of the 
 """
 
 
+def is_internal(docname):
+    return any(fnmatch.fnmatch(f"{docname}.md", pattern) for pattern in INTERNAL_PATTERNS)
+
+
 def add_internal_pages(app, docname, source):
-    """In the internal build, list the internal pages in the navigation and mark each one."""
+    """In the internal build, link the internal index from the navigation and mark internal pages."""
     if not internal_build:
         return
     if docname == "index":
-        entries = "\n".join(f"{INTERNAL_NAVIGATION_TITLES[name]} <{name}>" for name in INTERNAL_DOCUMENTS)
-        source[0] += f"\n\n```{{toctree}}\n:hidden:\n:caption: Internal\n\n{entries}\n```\n"
-    elif docname in INTERNAL_DOCUMENTS:
+        source[0] += "\n\n```{toctree}\n:hidden:\n:caption: Internal\n\ninternal\n```\n"
+    elif is_internal(docname):
         lines = source[0].split("\n")
         title_index = next(i for i, line in enumerate(lines) if line.startswith("# "))
         lines.insert(title_index + 1, INTERNAL_BANNER)

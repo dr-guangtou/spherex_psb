@@ -1,8 +1,8 @@
-% Copied from the note-style skill (`guangtou_vibe/skills/note-style/references/note_style_guide.md`, rule book version 0.5, 2026-11-15) as the skill's portable adoption instruction asks. The project-specific decisions are recorded in [the specification](SPEC.md#9-documentation-system-2026-11-14). Links to the skill's starter and font note are given as paths inside the skill folder.
+% Copied from the note-style skill (`dr-guangtou.science/skills/note-style/references/note_style_guide.md`, rule book version 0.6, 2026-11-15) as the skill's portable adoption instruction asks. The project-specific decisions are recorded in [the specification](SPEC.md#9-documentation-system-2026-11-14). Links into the skill folder are given as paths inside that folder.
 
 # note-style Rule Book and Style Guide
 
-Version 0.5, self-contained skill, 2026-11-15 (0.3 plus self-hosted Latin fonts and built-in card grids after the first real conversion).
+Version 0.6, reconciled first-conversion fixes and bilingual examples, 2026-11-15.
 
 ## Purpose and adoption status
 
@@ -80,8 +80,8 @@ With independently built books, search normally covers the current build. Collec
 
 ### Typography
 
-- Use one shared body-font stack and one shared code-font stack across adopted projects. The adopted Latin faces are Source Sans 3 (body) and Source Code Pro (code), served from the publication's own `_static/fonts/` as variable-weight WOFF2 files (Latin and Latin Extended subsets, SIL Open Font License 1.1, from the fontsource packages 5.3.1). A face that is only named in a configuration renders as whatever the reader's system substitutes; the first real conversion showed PingFang substituting for the body font on macOS until the files were bundled.
-- The owner's preferred Chinese face is XiQueSongTiJF_std. Its web-embedding terms need foundry clarification as described in the skill's `references/font_integration.md`. The bundled Source Sans 3 and the Chinese-capable fallback stack keep the starter functional for Latin and Chinese text.
+- Use Source Sans 3 for Latin body text and Source Code Pro for code. The starter bundles variable-weight WOFF2 files for normal and italic text in Latin and Latin Extended subsets under `docs/_static/fonts/`. These files come from the corresponding `@fontsource-variable` packages at version 5.3.1 under SIL Open Font License 1.1. Preserve their license texts and provenance notice (`assets/starter/docs/_static/fonts/NOTICE.md` in the skill folder). Naming an unavailable font in the stack does not load it; verify that the publication actually serves its font files.
+- The owner's preferred Chinese face is XiQueSongTiJF_std. Its web-embedding terms need foundry clarification as described in font integration (`references/font_integration.md` in the skill folder). Chinese text continues to use the configured Chinese-capable system fallbacks. The bundled unicode ranges cover Latin; add relevant licensed subsets when other scripts need a fixed appearance.
 - Assess Chinese punctuation, Latin symbols, numerals, bold weights, inline mathematics, and mixed-language headings together before adopting font assets.
 - Use relative text sizing and content-driven block heights. Preserve reading and navigation when text is enlarged.
 - Keep paragraphs within a comfortable reading column. Allow long technical tables, equations, and figures to use a wider region or their own scroll container when needed.
@@ -112,7 +112,31 @@ The Source Han families provide Chinese-capable font assets. A font name in a co
 
 ### Overview pages and card grids
 
-A collection overview may present its main chapters as a grid of linked cards instead of a list. Furo has no card element of its own, so the profile includes the `sphinx-design` extension (a starter dependency and extension) and styles its cards: the card title is a larger heading in the link colour, so the card reads as a link, and the body is one or two sentences. Use the `grid` directive with a one-column layout on narrow screens (`::::{grid} 1 1 2 2`) and `grid-item-card` with `:link:` and `:link-type: doc`; the starter's `index.md` shows the markup.
+A collection overview may present its main chapters as linked cards when that makes navigation clearer. The starter includes `sphinx-design` 0.8.0 in its lockfile and enables `sphinx_design`. Use `::::{grid} 1 1 2 2` for one column on narrow screens and two on wider screens, with nested `:::{grid-item-card}` directives, `:link: document_name`, and `:link-type: doc`. The starter index (`assets/starter/docs/index.md` in the skill folder) provides a complete two-card example.
+
+Keep the title descriptive and the body to one or two sentences. The shared CSS sets `.sd-card-title` to `1.2rem`, weight 600, in the link color, with an underline on hover or focus within the card. Retain natural card height and keyboard-accessible links. Cards are an optional overview pattern; ordinary lists and the project sidebar remain available.
+
+Preserve `font-size-adjust: none` on `.sd-hide-link-text`. Sphinx Design hides redundant card-link text with a zero font size; the article's inherited font-size adjustment made that text visible during integration testing. The targeted reset retains the link's accessible name and the visible card title.
+
+### Tables and static figures
+
+Keep table cells and headers on normal word boundaries. The shared CSS sets `overflow-wrap: normal` and `word-break: normal` on `td`, `th`, and their paragraph children, overriding article-level emergency wrapping. Let wide scientific tables scroll within the publisher's table region when required. Check long identifiers and URLs explicitly; use a deliberate local layout adjustment if a particular table needs one.
+
+Article images use `max-width: 100%` and `height: auto` so a requested figure width remains bounded by the reading column and its aspect ratio is preserved. Retain intrinsic image dimensions where available. Check captions and labels at narrow widths, as an image that fits may still need larger lettering or a simpler composition.
+
+Use one image per MyST figure directive. For two images, use consecutive figure directives with separate captions and labels. A side-by-side composition, when required, needs a deliberately chosen layout or a prepared composite figure. The layout examples (`assets/starter/docs/layout_examples.md` in the skill folder) include an 820-pixel figure and a table for checking the shared rules.
+
+### Code and query examples
+
+Use the `postgresql` Pygments lexer for SQL or ADQL examples containing brace placeholders such as `{minimum_ra}`. In the tested environment, the generic `sql` lexer produces an error token for those braces and fails the warnings-as-errors build. State which values must be substituted. Highlighting is separate from query validation, and braces are not ADQL or SQL parameter syntax.
+
+````markdown
+```postgresql
+SELECT source_id, ra, dec
+FROM example_catalog
+WHERE ra BETWEEN {minimum_ra} AND {maximum_ra}
+```
+````
 
 ### Mathematics and interactive figures
 
@@ -136,11 +160,16 @@ docs/
   conf.py
   index.md
   signal_noise.md
+  bilingual_sample.md
+  layout_examples.md
+  mathjax_config.js
   _static/
     note_style.css
     note_style_theme.js
-    fonts/            (Source Sans 3, Source Code Pro, WOFF2 and licences)
-    vendor/           (MathJax runtime and math fonts, licences)
+    note_style_interactive.js
+    exposure_counts.svg
+    fonts/             (Latin WOFF2 files, licenses, provenance)
+    vendor/
   _templates/
     base.html
 ```
@@ -149,11 +178,11 @@ Run these commands from the copied starter directory.
 
 ```sh
 uv sync --locked
-uv run sphinx-build -W --keep-going -b html docs _build/html
+uv run --locked sphinx-build -E -W --keep-going -b html docs _build/html
 uv run python -m http.server 8765 --directory _build/html --bind 127.0.0.1
 ```
 
-Publish the generated `_build/html/` directory together with its assets. Chinese font distribution, Chinese search, and interactive scientific figures are subsequent profile refinements. The starter bundles Source Sans 3 and Source Code Pro (`docs/_static/fonts/`, with their licence texts) and the MathJax 4.1.3 runtime and math-font assets, all served from its own static publication.
+Publish the generated `_build/html/` directory together with its assets. The starter bundles its Latin body and code fonts and the MathJax 4.1.3 runtime and math-font assets, all served from its own static publication. Chinese font distribution and Chinese search remain subsequent profile refinements.
 
 The Sphinx configuration enables the MyST parser and math renderer and selects Furo.
 
@@ -164,6 +193,14 @@ html_theme = "furo"
 ```
 
 Furo's normal default follows browser preferences. The starter applies a saved theme or the requested dark initial theme before rendering the article, using a small template override. Its existing theme buttons cycle between dark, light, and system preference. A small event handler preserves usable switching when storage is blocked and synchronizes changes between tabs. Recheck this integration when upgrading Furo.
+
+### Bilingual paragraphs and an interactive figure
+
+The bilingual exposure note (`assets/starter/docs/bilingual_sample.md` in the skill folder) demonstrates paired Chinese and English passages, mixed-language headings, inline and display mathematics, a caption, and a reference table. This paired format is a reading sample; a project's translation coverage remains its own decision. Its Chinese passages use `<span lang="zh-CN">` within Markdown paragraphs so assistive tools can identify their language while MyST processes the inline mathematics and links.
+
+Its figure uses a native fieldset, labels, range inputs, and SVG. The local script updates the curve, selected point, numeric values, and accessible description. Keyboard arrow keys move a slider by its stated step. An announcement follows a committed control change. The initial curve and textual reference table also explain the model when JavaScript is unavailable. Controls become active after initialization.
+
+When adapting the example, change the scientific model and document its units, parameter ranges, assumptions, and reference values together. Keep labels, SVG descriptions, and captions consistent with the new model. Check both themes and narrow screens after the change. The sample's illustrative parameters and fixed axes serve its exposure-time explanation.
 
 ### Labelled equation in Markdown
 
@@ -210,28 +247,28 @@ Repository-specific instructions continue to govern language, dependencies, rele
 4. Render that chapter with Sphinx, MyST, and the customized Furo profile.
 5. Review the acceptance checks below. Record concrete changes needed by the profile.
 6. Convert one coherent section at a time, preserving technical meaning and identifiers. Map changed paths and provide redirects where existing published URLs need them.
-7. Build and review the complete project publication with its search index and assets.
+7. Build and review the complete project publication with its search index and assets. Use `-E -W --keep-going` for the delivery or commit gate, so Sphinx re-reads every source file and re-emits its warnings. An incremental build is useful during editing but is insufficient for that gate.
 8. Integrate the verified output into the website when its content is ready for publication. Recheck links and assets at the final subdirectory URL.
 
 ## Acceptance checks for each converted publication
 
 | Check | Passing result |
 | --- | --- |
-| Source and build | The documented command builds from the recorded environment and generates the expected chapters and assets. |
+| Source and build | A fresh `-E -W --keep-going` build from the recorded environment generates the expected chapters and assets without warnings. |
 | Navigation | Readers can identify the current chapter, find related chapters, and return to the book overview. |
 | Theme | A fresh visit starts dark, switching works, and a saved choice is honored when storage is available. |
-| Languages | Chinese and English text, punctuation, headings, and code remain readable with the selected fonts. |
+| Languages and fonts | Bundled Latin font files load from the publication; Chinese and English text, punctuation, headings, and code remain readable together. |
 | Search | Representative Chinese and English queries find the intended pages within the documented search scope. |
 | Mathematics | Real macros render and labelled references resolve to the intended equations. |
 | Content | Figures, tables, references, identifiers, and revision information retain their meaning. |
 | Interaction | Controls work with keyboard and pointer input, and the figure's assumptions and initial state are clear. |
-| Narrow layout and zoom | Text remains available and controls remain usable when the viewport narrows or text is enlarged. |
+| Narrow layout and zoom | Text and controls remain usable; table words retain normal boundaries and figures fit without distortion when the viewport narrows or text is enlarged. |
 | Portability | The publication and assets work from its intended standalone URL and website subdirectory. |
 | Verification record | The review records the browsers actually tested, tool versions, failures, and remaining limitations. |
 
 ## Decisions still to make
 
-- Adopt the Chinese font distribution, palettes, and layout settings after visual comparison; the Latin body and code fonts are settled (Source Sans 3, Source Code Pro).
+- Refine Chinese font distribution, palettes, and layout settings after visual comparison. The Latin body and code fonts are settled as Source Sans 3 and Source Code Pro.
 - Decide whether individual publications need translated editions, mixed-language pages, or both.
 - Define collection-wide search when independently built books are assembled into the website.
 
