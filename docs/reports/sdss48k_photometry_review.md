@@ -7,8 +7,9 @@ commit of 2026-11-09 and does not yet hold the `sdss48k/` run folder the README 
 script `top100k/spx_phot.py` and talltable's `optimal_extract` at commit `6d8ded3` are there). Scripts of this
 review: `scripts/sdss48k_review/` (`summarise_catalogue.py`, `compare_with_demo.py`,
 `measure_failures_and_errors.py`, `make_figures.py`; for section 8 `measure_hminus_bump.py`,
-`summarise_hminus_bump.py`, `make_hminus_figures.py`). Figures: `docs/figures/sdss48k_review/`. Section 8 was added
-the same day.
+`summarise_hminus_bump.py`, `make_hminus_figures.py`; for section 8.4 `check_model_comparability.py`,
+`make_model_check_figures.py`). Figures: `docs/figures/sdss48k_review/`. Section 8 was added the same day, section
+8.4 on 2026-11-16.
 
 ## 1. Summary
 
@@ -30,8 +31,13 @@ the same day.
   gross outliers), and its formal errors are 1.2-1.8 times too small. The run's constant pixel solid angle
   also leaves a 2 % D2/D3 step, removed here with the official solid-angle map.
 - **H-minus bump.** The paper's index (Hbump_opt) is measured for 46,504 galaxies with a median error of
-  0.016 mag: median -0.041 mag, 66 % of galaxies below zero at more than 2 sigma, between the H-bump paper's
-  TP-AGB-off and TP-AGB-on model loci, and nearly flat against Dn4000 and HdeltaA (section 8).
+  0.016 mag: median -0.041 mag, 66 % of galaxies below zero at more than 2 sigma, and nearly flat against Dn4000
+  and HdeltaA (section 8). The paper's model loci need two adjustments before they can be compared with this
+  sample (section 8.4): the models quench by 5.9 Gyr after the onset of star formation (the cosmic age at
+  z = 1), so only their late epochs apply at z = 0.05, and none of those is star forming; and the SPHEREx
+  sampling shifts the index by 0.002 mag (median) and with redshift, which explains most of the redshift trend.
+  Matched in this way, the galaxies within the models' range (sSFR < 10^-10.5 per yr, 31,988) sit 0.001-0.007 mag
+  weaker than the TP-AGB-on models and 0.022-0.027 mag stronger than TP-AGB off.
 
 ## 2. What was done
 
@@ -264,7 +270,8 @@ Median index in bins of the broad D4000 (models: median and 16-84 % range):
 
 (All bins from 1.1 to 2.6 are in the output of `summarise_hminus_bump.py`.)
 
-- **Level.** At every D4000 the data median lies between the two model loci; over D4000 1.3-2.4 it is
+- **Level.** (All model epochs after 1 Gyr, as in the paper; section 8.4 restricts them to the epochs a
+  z = 0.05 galaxy can have.) At every D4000 the data median lies between the two model loci; over D4000 1.3-2.4 it is
   0.026-0.035 mag stronger than TP-AGB off and 0.006-0.022 mag weaker than TP-AGB on, closer to TP-AGB on. With TP-AGB off, the models do not
   reach the median of the data at any D4000 or HdeltaA.
 - **Shape.** The TP-AGB-on models have the strongest bump at D4000 1.3-1.6 (where the paper's fiducial tracks
@@ -272,21 +279,128 @@ Median index in bins of the broad D4000 (models: median and 16-84 % range):
   at high HdeltaA; the data have their weakest bump there. In the data, low D4000 and high HdeltaA are mostly
   star-forming galaxies, whose emission lines (Paschen and Brackett lines, [Fe II] 1.644 um inside the feature
   window) and dust are not in the models; the rapid-quenching galaxies the models single out are a small
-  subset that this plot does not isolate.
+  subset that this plot does not isolate. The models' peak also comes from early epochs (every TP-AGB-on
+  epoch with a bump below -0.06 mag is before 9.5 Gyr; section 8.4): a z = 0.05 galaxy cannot be at those
+  epochs under the paper's prior.
 - The model contours describe where the models can lie, not a predicted distribution: the paper's grid of
   star-formation histories is not weighted to the SDSS population.
 
-### 8.4 Systematics not yet controlled
+### 8.4 Are the models comparable with the data?
+
+Three differences between the paper's models and these measurements, each measured
+(`check_model_comparability.py`, figures 7 and 8).
+
+```{figure} ../figures/sdss48k_review/fig7_model_comparability_checks.png
+:width: 820px
+:alt: Checks of resolution, SPHEREx sampling and model epochs
+
+Figure 7. (a) HdeltaA of solar C3K SSPs broadened to a total sigma, minus its value at 300 km/s (the models'
+product); grey band: the sample's stellar velocity dispersion (MPA-JHU `V_DISP`, 5-95 %), to which the SDSS
+instrument adds in quadrature. (b) Per galaxy: the model index measured through that galaxy's own SPHEREx
+exposures with the data estimator, minus the model's R = 100 index, for a 5 Gyr solar SSP with TP-AGB off and on;
+dotted: a continuous spectrum at R = 41 alone. (c) Measured index minus the median of its Dn4000 bin, against
+redshift (black), and the same after subtracting each galaxy's sampling bias (grey); dashed: the median sampling
+bias of the models against redshift, offset to zero mean. (d) Broad D4000 of the sample and of the TP-AGB-on
+model population at all epochs after 1 Gyr (the paper's figure 1) and at epochs after 10 Gyr.
+```
+
+**1. Optical indices: resolution.** The models give D4000 and HdeltaA on a sigma = 300 km/s product. MPA-JHU
+measures them on the SDSS spectra ("values measured off the unmodified spectrum", MPA-JHU DR7 raw-data page; no
+page I read states a dispersion correction), so their broadening is the instrument plus the galaxy's own
+dispersion, 53 / 112 / 212 km/s (p5 / p50 / p95) for the latter. Measured on the H-bump project's native C3K SSPs
+(ages 1-13 Gyr, four metallicities) broadened to 70-250 km/s instead of 300 km/s:
+
+| Index | change from 300 km/s to 70-250 km/s | data median error |
+|---|---|---|
+| broad D4000 (the models' D4000) | -0.001 to +0.006 | 0.02 |
+| Dn4000 (figure 4 only, no models) | +0.000 to +0.030 | |
+| HdeltaA | -0.81 to +0.03 A; at 100-150 km/s, solar: -0.07 to -0.08 (1 Gyr), -0.20 to -0.24 (2 Gyr), -0.28 to -0.33 (4 Gyr), -0.36 to -0.42 A (8 Gyr) | 0.73 A |
+
+D4000 is unaffected. The model HdeltaA would be 0.1-0.4 A lower at the SDSS resolution, more for older light: a
+shift to the left in figures 5b and 8b, smaller than one galaxy's error. Not applied in the figures.
+
+**2. The bump: SPHEREx resolution and sampling.** The models give the bump at R = 100 on a continuous spectrum;
+the data index uses each galaxy's own exposures (median R = 35-41 in D1-D4, from `wv_um / wv_width_um`) at the rest
+wavelengths its redshift and the survey give. For every galaxy the model spectra (solar SSPs of 1, 2, 3, 5, 10
+Gyr, TP-AGB off and on, as in the paper) were integrated over its exposures (Gaussian response with the exposure's
+equivalent width) and passed through the data estimator:
+
+| Effect | TP-AGB off | TP-AGB on |
+|---|---|---|
+| resolution alone (continuous R = 41 minus R = 100) | -0.0012 to -0.0011 mag | -0.0001 to +0.0020 mag |
+| sampling and estimator, median over galaxies | -0.0004 to +0.0003 mag | +0.0017 to +0.0044 mag |
+| same, p5 / p95 (5 Gyr) | -0.009 / +0.009 mag | -0.009 / +0.013 mag |
+| median at z 0.030-0.035 and 0.055-0.060 (5 Gyr) | +0.0015 and -0.0013 mag | +0.0034 and +0.0005 mag |
+
+(positive = the data system shows a weaker bump than the model at R = 100.) The resolution is not the issue
+(as the feasibility study found); the irregular sampling is. On average it moves the TP-AGB-on locus by 0.002 mag
+towards weaker bumps, galaxy by galaxy it scatters the index by 0.005-0.007 mag (standard deviation), and it changes by 0.003 mag
+across the redshift range. This explains most of the redshift trend of 8.5: at fixed Dn4000 the index at
+z 0.05-0.06 minus that at z 0.03-0.04 is -0.0030 to -0.0042 mag as measured and -0.0005 to -0.0014 mag after
+subtracting each galaxy's sampling bias (TP-AGB-on template; -0.0007 to -0.0022 mag with the TP-AGB-off one;
+figure 7c). The same subtraction lowers the intrinsic spread from 0.010 to 0.008 mag (0.009 to 0.007 mag in
+the galaxies with errors below 0.012 mag).
+
+**3. Star-formation histories and epochs.** The paper's population draws the quenching time t_q uniformly in
+1-5.9 Gyr after the onset of star formation (H-bump project `sfh_model.py`; 5.85 Gyr is the cosmic age at z = 1,
+Planck 2018) and keeps every epoch to 13 Gyr; the paper compares it with quiescent galaxies at z = 1-2. A galaxy
+at z = 0.03-0.06 is 12.96-13.36 Gyr after the Big Bang, so it can only be at late model epochs.
+
+| Model epochs | before quenching | D4000 p1 / p50 | sSFR p99 (log per yr) | SDSS below D4000 p1 | SDSS above sSFR p99 |
+|---|---|---|---|---|---|
+| >= 1 Gyr (figure 5) | 20.7 % | 1.17 / 1.75 | -8.7 | 0.1 % | 0 % |
+| >= 8 Gyr | 0 % | 1.48 / 2.05 | -10.2 | 13 % | 16 % |
+| >= 10 Gyr | 0 % | 1.58 / 2.10 | -10.5 | 23 % | 30 % |
+| >= 12 Gyr | 0 % | 1.67 / 2.16 | -10.7 | 32 % | 37 % |
+
+(SDSS sSFR: MPA-JHU `SPECSFR_TOT_P50`.) At the epochs that apply, the model population has no star-forming and
+no recently quenched galaxies: a quarter to a third of the sample lies outside it. The regions of figure 5
+where the TP-AGB-on models are most distinctive come from early epochs: every epoch with a bump below -0.06 mag
+is before 9.5 Gyr (median 4.6 Gyr, 1.3 Gyr after quenching), and every epoch with HdeltaA above 4 A is before
+8.4 Gyr (more than half of them still star forming). At z = 0.05 the same spectra would need a t_q of about
+10-13 Gyr, which the prior does not draw. The bump of the
+late epochs barely depends on the epoch: median -0.018 / -0.019 / -0.020 mag (TP-AGB off) and -0.050 / -0.049 /
+-0.048 mag (TP-AGB on) after 8 / 10 / 12 Gyr.
+
+```{figure} ../figures/sdss48k_review/fig8_hminus_bump_with_late_models.png
+:width: 820px
+:alt: H-minus bump index against D4000 and HdeltaA with the late-epoch model populations
+
+Figure 8. As figure 5, with the model populations restricted to epochs after 10 Gyr and shifted by their median
+SPHEREx sampling bias (+0.0001 mag TP-AGB off, +0.0020 mag TP-AGB on). The running median is for the 31,988
+galaxies within the models' sSFR range (MPA-JHU sSFR below 10^-10.5 per yr); grey contours: all galaxies.
+```
+
+**Matched comparison** (figure 8; galaxies with sSFR < 10^-10.5 per yr, models after 10 Gyr with the sampling
+shift, median index in broad-D4000 bins):
+
+| D4000 | data | TP-AGB off | TP-AGB on |
+|---|---|---|---|
+| 1.50-1.65 | -0.041 | -0.015 | -0.048 |
+| 1.65-1.80 | -0.042 | -0.016 | -0.048 |
+| 1.80-1.95 | -0.042 | -0.019 | -0.043 |
+| 1.95-2.10 | -0.042 | -0.021 | -0.043 |
+| 2.10-2.25 | -0.043 | -0.019 | -0.047 |
+| 2.25-2.40 | -0.043 | -0.018 | -0.048 |
+
+The data are 0.001-0.007 mag weaker than TP-AGB on and 0.022-0.027 mag stronger than TP-AGB off, and flat in
+D4000 (Spearman -0.03), as the late TP-AGB-on models nearly are (-0.043 to -0.048 mag). In the HdeltaA plane the late models lie at
+HdeltaA below 1.6 A (99 %; maximum 3.0 A) while the data reach 6 A; the 0.1-0.4 A resolution shift of item 1 does not close that gap, which
+is the star-forming and recently quenched light the late models lack.
+
+### 8.5 Systematics not yet controlled
 
 1. **Redshift trend.** At fixed Dn4000 the median index deepens by 0.004-0.005 mag from z = 0.033 to 0.057 in
-   every Dn4000 bin (figure 6b). Candidates: the D2/D3 boundary and the exposure sampling move through the
-   windows with redshift (sampling bias up to 0.008 mag in the feasibility study), and the fixed 12.3 arcsec
-   aperture radius is 7.4 kpc at z = 0.03 and 14.3 kpc at z = 0.06 (flat LambdaCDM, H0 = 70, Omega_m = 0.3). Not separated yet.
+   every Dn4000 bin (figure 6b). Most of it is the exposure sampling (section 8.4, item 2): after subtracting
+   each galaxy's sampling bias, 0.0005-0.0022 mag remain between z 0.03-0.04 and 0.05-0.06. The remainder may come
+   from the fixed 12.3 arcsec aperture, whose radius is 7.4 kpc at z = 0.03 and 14.3 kpc at z = 0.06 (flat
+   LambdaCDM, H0 = 70, Omega_m = 0.3); not tested.
 2. **Residual D2/D3 calibration.** Field stars constrain the detector step to +-1.3 % (feasibility study), i.e.
    +-0.004-0.009 mag on the index, the same for all galaxies at one redshift.
 3. **Different apertures.** The optical indices come from the 3 arcsec SDSS fibre, the bump from a 12.3 arcsec
    aperture; radial gradients enter the comparison.
-4. **Emission lines and dust** are in the data, not in the models (see 8.3).
+4. **Emission lines and dust** are in the data, not in the models (see 8.3); the matched comparison of 8.4
+   uses galaxies with sSFR < 10^-10.5 per yr, where both are smaller.
 
 ```{figure} ../figures/sdss48k_review/fig6_hminus_bump_checks.png
 :width: 820px
@@ -299,20 +413,26 @@ galaxies. (d) The six demo galaxies: this run's aperture-flux index against the 
 index (DR1 + QR3), with and without the solid-angle correction.
 ```
 
-### 8.5 Reading
+### 8.6 Reading
 
-The 1.6 um bump is measured in individual galaxies at 0.016 mag per galaxy, and its sample median (-0.041 mag)
-sits between the two model loci, much closer to TP-AGB on. The systematics measured so far (items 1-2 of 8.4
-and the sampling bias, each <= 0.01 mag) are smaller than its 0.026-0.035 mag offset from the TP-AGB-off locus;
-items 3-4 are not quantified. What the data do not show is the model's TP-AGB-on dependence on stellar age: the
-index is nearly flat against Dn4000 and HdeltaA, with an intrinsic spread of ~0.01 mag. The next steps that
-would test the paper's prediction directly:
+The 1.6 um bump is measured in individual galaxies at 0.016 mag per galaxy. Compared with the paper's models at
+the epochs a z = 0.05 galaxy can have, and on the same system (SPHEREx sampling applied to the models), the
+galaxies within the models' range sit on the TP-AGB-on locus to 0.001-0.007 mag and 0.022-0.027 mag away from
+TP-AGB off. That offset is larger than every systematic measured so far: the sampling bias (0.002 mag median,
+0.003 mag across the redshift range), the residual D2/D3 calibration (+-0.004-0.009 mag) and the resolution terms
+(<= 0.002 mag); the fibre-aperture mismatch is not quantified. The flat trend with D4000 is what the late models
+predict too. What figure 5 seemed to show, that the data lack the models' age dependence, does not test the
+paper: the models' strong-bump region comes from epochs a low-redshift galaxy cannot have under the paper's prior.
+
+To test the paper's prediction at low redshift the models need histories that quench late (t_q up to ~13 Gyr) and
+star-forming histories, which is a change to the H-bump project's population, not to this measurement. Next steps
+on our side:
 
 - separate quiescent and post-starburst galaxies from star-forming ones with the MPA-JHU emission lines
   (`galSpecLine-dr8.fits` is local) and compare the bump at fixed D4000;
-- add dust attenuation and emission lines to the model comparison, or restrict it to quiescent galaxies;
-- stack galaxies in Dn4000-HdeltaA cells to reach 0.003-0.005 mag per cell and see the bump profile itself;
-- settle the redshift trend (forward-model estimator of the feasibility study; size-matched apertures).
+- apply the sampling bias per galaxy with a template matched to its own index (forward-model estimator of the
+  feasibility study), instead of one template;
+- stack galaxies in Dn4000-HdeltaA cells to reach 0.003-0.005 mag per cell and see the bump profile itself.
 
 ## 9. Questions for the student
 

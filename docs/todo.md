@@ -173,7 +173,13 @@ the only content changes are four two-image figures split into pairs and one SQL
 - [x] H-minus bump index (Hbump_opt) for 46,504 galaxies from the aperture fluxes, with the solid-angle
       correction; against Dn4000, HdeltaA and the H-bump paper's models; figures 4-6; report section 8.
 - [ ] Bump of quiescent and post-starburst galaxies at fixed D4000 (MPA-JHU emission lines to separate them).
-- [ ] Settle the 0.004-0.005 mag redshift trend of the index (sampling estimator, aperture size).
+- [x] Model comparability (2026-11-16, report 8.4, figures 7-8): optical resolution (HdeltaA 0.1-0.4 A, D4000
+      none), SPHEREx sampling through each galaxy's exposures (0.002 mag median, explains most of the redshift
+      trend), model epochs restricted to >= 10 Gyr (the paper's t_q prior ends at the z = 1 cosmic age).
+- [ ] Residual redshift trend of 0.0005-0.002 mag after the sampling correction (aperture size untested).
+- [ ] Per-galaxy sampling correction with a template matched to each galaxy's index (forward-model estimator).
+- [ ] Owner's decision: ask the H-bump project for late-quenching (t_q up to ~13 Gyr) and star-forming
+      histories, needed to test the paper's prediction at low redshift.
 - [ ] Owner's decision: use the aperture flux with corrections (aperture correction from optical shape,
       neighbour flag, outlier rejection, error scaling), or re-measure with forced Sersic photometry.
 - [ ] Ask the student to push the `sdss48k/` run folder; ask whether aperture-flagged pixel counts and

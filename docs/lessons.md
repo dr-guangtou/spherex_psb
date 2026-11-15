@@ -212,3 +212,16 @@ Data lessons (verified live)
   straddles the boundary. The SDSS 48k run's 2 % D2/D3 step was not calibration but the constant 6.15 arcsec
   pixel used for the flux conversion; the official solid-angle map at the galaxy's detector position removed it
   and moved the H-minus bump index by 0.010 mag.
+
+## Model loci must be on the data's system and in the data's regime (2026-11-16)
+
+- Before comparing data with a published model population, check the population's priors against the sample:
+  the H-bump paper's t_q prior ends at 5.9 Gyr (the cosmic age at z = 1) and every epoch to 13 Gyr is kept, so
+  its strong-bump region comes from epochs a z = 0.05 galaxy cannot have. Restrict to the epochs that apply and
+  say which galaxies the models cannot describe.
+- Put the models through the measurement, not only through the resolution: the R = 41 smoothing moves the bump
+  by <= 0.002 mag, but the irregular sampling of each galaxy moves it by 0.002 mag on average, 0.005-0.007 mag per
+  galaxy and 0.003 mag across 0.03 < z < 0.06, which was most of a "redshift trend" in the data.
+- Optical indices: models at sigma = 300 km/s versus SDSS spectra at the instrument plus the galaxy's dispersion
+  shift HdeltaA by 0.1-0.4 A (older light more); D4000 is insensitive.
+
