@@ -114,7 +114,7 @@ works.[^archive]
 
 ### The Data Explorer tools (browser only)
 
-`https://irsa.ipac.caltech.edu/applications/spherex` hosts the Spectral Image Search with cutout download,
+The [SPHEREx Data Explorer](https://irsa.ipac.caltech.edu/applications/spherex) hosts the Spectral Image Search with cutout download,
 the Spectrophotometry Tool and the Mosaic Tool. All are job-based (two concurrent jobs per tool, results kept
 14 days) and none has a programmatic interface as of 2026-09-22.[^tools] Their algorithms and limits are
 described on the [reduction page](reduction_analysis.md#the-official-extraction-tools).
@@ -175,26 +175,27 @@ Rubin Butler middleware to run; it is read as a specification.
   March 2026 was silent on QR3, the R7 pipeline, the ePSF table, six new flag bits, the flag-keyword scheme,
   the Data Explorer tools and the S3 `qr3/` tree. Re-verify collection names, versions and extension layouts
   against the archive before trusting a note, including these pages.
-- The archive documentation site (`caltech-ipac.github.io/spherex-archive-documentation`, dated 2026-02-18)
+- The [archive documentation site](https://caltech-ipac.github.io/spherex-archive-documentation/) (dated 2026-02-18)
   lags the Explanatory Supplement by two releases; the Supplement PDF and the IRSA help pages are the primary
   sources. The Data Explorer and the VO API index are JavaScript applications that `curl` cannot read.
-- The Explanatory Supplement v2.1 (2026-11-10) is served at
-  `https://irsa.ipac.caltech.edu/data/SPHEREx/docs/SPHEREx_Expsupp.pdf`; the older `_QR.pdf` URL still
-  serves v2.0.
+- The [Explanatory Supplement v2.1](https://irsa.ipac.caltech.edu/data/SPHEREx/docs/SPHEREx_Expsupp.pdf)
+  (2026-11-10) is served without the `_QR` suffix; the older
+  [`_QR.pdf` address](https://irsa.ipac.caltech.edu/data/SPHEREx/docs/SPHEREx_Expsupp_QR.pdf) still serves v2.0.
 - The official Source Discovery notebook parses flag names from `MP_*` header keywords and breaks on R7
   files; hard-code the flag table ([reduction page](reduction_analysis.md#flags)).
 - An untracked file in a Dropbox-synced repository is not safe: a task specification that was moved but not
   committed vanished and reappeared elsewhere. Commit documents with the first checkpoint.
 - Python output to a redirected log is block-buffered; use `flush=True` or `python -u` for long jobs.
 
-[^overview]: IRSA Quick Release overview, `https://irsa.ipac.caltech.edu/data/SPHEREx/docs/overview_qr.html`,
-    and the IRSA mission page; our [note on the official pages](references/irsa/irsa_spherex_official_pages.md).
+[^overview]: [IRSA Quick Release overview](https://irsa.ipac.caltech.edu/data/SPHEREx/docs/overview_qr.html)
+    and the [IRSA SPHEREx mission page](https://irsa.ipac.caltech.edu/Missions/spherex.html); our [note on the official pages](references/irsa/irsa_spherex_official_pages.md).
 [^expsupp2]: SPHEREx Explanatory Supplement v2.0/v2.1, sections 2.1 (releases and pipeline versions) and 4.3.4
     (flux corrections); our [reading note](references/irsa/spherex_explanatory_supplement_v2.0.md).
 [^expsupp4]: Explanatory Supplement, section 4 (calibrations) and 4.3.3-4.3.4 (templates and additional
     products).
-[^archive]: SPHEREx Archive User Guide (`caltech-ipac.github.io/spherex-archive-documentation`), the IRSA cloud
-    access page and the AWS Registry of Open Data entry; our
+[^archive]: [SPHEREx Archive User Guide](https://caltech-ipac.github.io/spherex-archive-documentation/), the
+    [IRSA cloud access page](https://irsa.ipac.caltech.edu/cloud_access/#spherex) and the
+    [AWS Registry of Open Data entry](https://registry.opendata.aws/spherex-qr/); our
     [reading note](references/irsa/spherex_archive_documentation.md). The S3 layout facts were measured on
     2026-09-22 and 2026-11-13.
 [^tutorials]: The IRSA SPHEREx tutorial notebooks (introduction, cutouts, PSF, mosaic, source discovery); our

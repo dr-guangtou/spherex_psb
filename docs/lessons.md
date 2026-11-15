@@ -189,3 +189,14 @@ Data lessons (verified live)
   blocks keep their highlighting without relaxing `-W`.
 - On this machine `rm` and `cp` are aliased (trash and interactive copy); inside `&&` chains use
   `/bin/rm` and `/bin/cp -f`, otherwise the chain stops silently at an "overwrite?" prompt.
+
+## Publication scope and links (2026-11-15)
+
+- The first site published the specification, task list and lessons alongside the science pages, and the
+  notes printed raw web addresses. Both are now rules in `CLAUDE.md`: project documents are internal
+  (`INTERNAL_DOCUMENTS` in `docs/conf.py`), and web pages are linked with descriptive text.
+- Sphinx never deletes output pages that are no longer built: after excluding a page, its old HTML stays
+  in the output folder and a check of that folder reports a leak that is not there. Build into an empty
+  folder (the build script now removes both output folders first).
+- zsh again: `tag="-t internal"; sphinx-build $tag ...` passes one argument, so the internal build ran
+  without its tag. Write the arguments out, or use an array.

@@ -125,8 +125,7 @@ band's measured wavelength range.[^cukierman] The Spectral Channels calibration 
 a channel and tabulates each channel's central wavelength, limits, bandwidth and R; the IRSA tools and every
 published spectrum use this 102-point grid. The channels are a bookkeeping grid, not a wavelength solution:
 the wavelength at which a source is measured in a given exposure is the CWAVE of the pixel it lands on, and
-adjacent nominal channels overlap by up to 0.018 um (measured from the channel table; see
-[lessons](lessons.md)). Bands 5 and 6 have about three times finer sampling per channel than bands 1-4.
+adjacent nominal channels overlap by up to 0.018 um (measured from the channel table). Bands 5 and 6 have about three times finer sampling per channel than bands 1-4.
 
 ```{figure} figures/external/hui2026_fig2_channel_layout.png
 :width: 380px

@@ -43,13 +43,13 @@ statements, then each candidate paper's arXiv abstract page was fetched with
 
 Under the `SPHEREx` GitHub org (documentation/infrastructure, not science
 pipelines):
-- `SPHEREx/Public-products` - https://github.com/SPHEREx/Public-products - static public-product reference material (16 stars, no recent activity).
-- `SPHEREx/SPHEREx-Visualizer-Lite` - https://github.com/SPHEREx/SPHEREx-Visualizer-Lite - lightweight all-sky/deep-coverage visualization code (Python), updated May 2026.
+- [SPHEREx/Public-products](https://github.com/SPHEREx/Public-products): static public-product reference material (16 stars, no recent activity).
+- [SPHEREx/SPHEREx-Visualizer-Lite](https://github.com/SPHEREx/SPHEREx-Visualizer-Lite): lightweight all-sky/deep-coverage visualization code (Python), updated May 2026.
 - `SPHEREx/spherex-doc-portal`, `spherex-doc-workflows`, `spherex-lander-plugin`, `spherex-sphinx`, `spherex-tex`, `spherex-templates` - internal documentation-build tooling (Sphinx/LaTeX/GitHub Actions), not analysis code.
 
 Under `Caltech-IPAC` (the SPHEREx Science Data Center, SSDC):
-- **`Caltech-IPAC/spherex-pipelines`** - https://github.com/Caltech-IPAC/spherex-pipelines - **public**, BSD-3-Clause, last pushed 2026-07-01. This *is* the official Level 1-3 pipeline code referenced in Akeson et al. (2026, arXiv:2511.15823). The README states it contains "essentially all the code for the SPHEREx Level 1 through Level 3 pipelines," built on Rubin Observatory's `dax`/`middleware` framework, and that it uses a modified fork of **The Tractor** for source photometry/extraction, maintained as `Caltech-IPAC/tractor-spherex`. Spacecraft telemetry handling, the data simulator (Crill et al. 2025), and shared system-engineering parameters are explicitly *not* included. The repo receives point-in-time snapshots tied to each public data release (starting with QR2, Oct 2025) rather than a live development history; SSDC states it cannot support external issues/PRs. This is the closest thing to ground truth for how L2 spectral images and L3 forced photometry are actually produced, and is worth reading even though it is not meant to be run outside IPAC/TACC.
-- `Caltech-IPAC/tractor-spherex` - https://github.com/Caltech-IPAC/tractor-spherex - SPHEREx-specific fork of `dstndstn/tractor`, last pushed 2026-06-29, license `NOASSERTION`. This is the actual forward-modeling engine (PSF + source-model rendering, optimization) used by the official L3 forced-photometry module, and by `hbahk/tractorjax-spherex` and the cluster-photometry validation paper below as the reference implementation.
+- **[Caltech-IPAC/spherex-pipelines](https://github.com/Caltech-IPAC/spherex-pipelines)**: **public**, BSD-3-Clause, last pushed 2026-07-01. This *is* the official Level 1-3 pipeline code referenced in Akeson et al. (2026, arXiv:2511.15823). The README states it contains "essentially all the code for the SPHEREx Level 1 through Level 3 pipelines," built on Rubin Observatory's `dax`/`middleware` framework, and that it uses a modified fork of **The Tractor** for source photometry/extraction, maintained as `Caltech-IPAC/tractor-spherex`. Spacecraft telemetry handling, the data simulator (Crill et al. 2025), and shared system-engineering parameters are explicitly *not* included. The repo receives point-in-time snapshots tied to each public data release (starting with QR2, Oct 2025) rather than a live development history; SSDC states it cannot support external issues/PRs. This is the closest thing to ground truth for how L2 spectral images and L3 forced photometry are actually produced, and is worth reading even though it is not meant to be run outside IPAC/TACC.
+- [Caltech-IPAC/tractor-spherex](https://github.com/Caltech-IPAC/tractor-spherex): SPHEREx-specific fork of `dstndstn/tractor`, last pushed 2026-06-29, license `NOASSERTION`. This is the actual forward-modeling engine (PSF + source-model rendering, optimization) used by the official L3 forced-photometry module, and by `hbahk/tractorjax-spherex` and the cluster-photometry validation paper below as the reference implementation.
 - `Caltech-IPAC/spherex_butler_poc` - stale (2021) proof-of-concept for `dax_butler`; not relevant.
 
 No separate, distinctly-named "SPHEREx sky simulator" repo turned up beyond what is already known; the simulator paper (arXiv:2505.24856) does not appear to ship a public standalone repo under `SPHEREx/*` at the time of this survey.
@@ -99,7 +99,7 @@ or non-astronomical "SphereX"-named products): `tamojeetroychowdhury/SPHEREx-Pre
 
 ## Detailed notes on the top 5 most relevant new candidates
 
-**1. `hbahk/tractorjax-spherex`** (https://github.com/hbahk/tractorjax-spherex)
+**1.** [hbahk/tractorjax-spherex](https://github.com/hbahk/tractorjax-spherex)
 Purpose: reference-catalog forced photometry/spectrophotometry directly from
 SPHEREx L2 cutouts, by the same author as the already-known `spherex-retrieval`
 downloader. Data access: wraps `spherex-retrieval` for cutout download and
@@ -111,14 +111,14 @@ inverse-variance-binned, wavelength-sorted spectra. PSF handling: sources are
 rendered on a 5x oversampled grid, then either pixel-integrated (QR2 optical
 PSF) or point-sampled (R7 effective PSF, QR3+DR1), reading `PSFKIND` from the
 bundle automatically. Runs on GPU or CPU via a JAX engine wrapping `tractor-jax`
-(https://github.com/hbahk/tractor-jax), with an optional classic-Tractor CPU
+([hbahk/tractor-jax](https://github.com/hbahk/tractor-jax)), with an optional classic-Tractor CPU
 backend. Extended-source support: fixed catalog *shapes* (point + whatever
 shape the input catalog provides) rather than free-form galaxy morphology
 fitting; not yet validated for resolved/semi-resolved galaxies per its own
 "alpha" status note. Maturity: alpha, not on PyPI, install-from-source, single
 author, active (pushed 2026-09-19). License: GPL-3.0.
 
-**2. `gregreen/spherex_spectra`** (https://github.com/gregreen/spherex_spectra)
+**2.** [gregreen/spherex_spectra](https://github.com/gregreen/spherex_spectra)
 Purpose: "Modular SPHEREx PSF photometry pipeline in JAX + Equinox" (per its
 `pyproject.toml`), built by Gregory Green (known for the Bayestar dust maps).
 No top-level README, but an `explanatory_supplement.md` lays out a genuinely
@@ -140,7 +140,7 @@ license file, no stars/community yet - looks like an individual research
 project rather than a released package. Worth watching given the author's
 track record and the unusually careful numerical-precision design notes.
 
-**3. `leejjoon/sphx_spec_stack`** (https://github.com/leejjoon/sphx_spec_stack)
+**3.** [leejjoon/sphx_spec_stack](https://github.com/leejjoon/sphx_spec_stack)
 Purpose: **spectrum stacking** specifically - the one capability explicitly
 named in the user's requirements that most other tools treat as an
 afterthought. By Jae-Joon Lee (long-time IPAC/astropy-affiliated developer).
@@ -160,7 +160,7 @@ tractorjax-spherex. Maturity: documented (`docs/00_overview.md` through
 `05_roadmap.md`), has example data and scripts, single author, no license
 file, last pushed 2026-08-26.
 
-**4. `WenkeRen/spxquery`** (https://github.com/WenkeRen/spxquery)
+**4.** [WenkeRen/spxquery](https://github.com/WenkeRen/spxquery)
 Purpose: "SPHEREx Time-Domain Analysis Package" - automates query, download,
 photometry, and visualization for a given sky position, on PyPI
 (`pip install spxquery`), with ReadTheDocs documentation. Data access: queries
@@ -180,7 +180,7 @@ Templates from SPHEREx" (arXiv:2609.02167) to build a 14-component AGN/host
 NMF dictionary from ~3,800 galaxies+AGN; that paper's code is archived on
 Zenodo (DOI 10.5281/zenodo.22226283).
 
-**5. `fkiwy/spexpi`** (https://github.com/fkiwy/spexpi)
+**5.** [fkiwy/spexpi](https://github.com/fkiwy/spexpi)
 Purpose: "SPHEREx Spectrum Extraction Pipeline," built around ultracool-dwarf
 use cases (including high-proper-motion targets) but stated to be applicable
 to "any isolated point source." Data access: queries IRSA TAP for cutouts or
@@ -202,12 +202,12 @@ license, pushed 2026-05-23, 0 stars.
 
 | Paper | Tool | Link |
 |---|---|---|
-| Akeson et al. 2026, "The SPHEREx Image and Spectrophotometry Processing Pipeline" (accepted, ApJS; arXiv:2511.15823) | Official L1-L3 pipeline (this *is* the description of `Caltech-IPAC/spherex-pipelines`) | https://arxiv.org/abs/2511.15823 ; https://github.com/Caltech-IPAC/spherex-pipelines |
-| Ren, Guo, Zheng et al. 2026, "Empirical Near-Infrared Spectral Templates from SPHEREx: Disentangling AGN and Host-Galaxy Emission" (arXiv:2609.02167) | `spxquery` extraction framework + weighted-NMF dictionary code (`spxdictlearn`); code/Zenodo archive | https://arxiv.org/abs/2609.02167 ; https://github.com/WenkeRen/spxquery ; https://github.com/WenkeRen/spxdictlearn ; Zenodo DOI 10.5281/zenodo.22226283 |
-| Bahk, Hwang, Bleem et al. 2026, "The SPHEREx View of Galaxy Clusters: A Simulation-based Validation of the Forced Photometry Pipeline for Extended Sources" (submitted, AAS Journals; arXiv:2606.19875) | The Tractor (official `Caltech-IPAC/tractor-spherex`) applied/validated for extended cluster-galaxy sources via simulated DESI+COSMOS mocks | https://arxiv.org/abs/2606.19875 ; https://github.com/Caltech-IPAC/tractor-spherex |
-| Li, C. 2026, "SPHEREx 3.3 Micron Aromatic Emission in the Magellanic Clouds..." (accepted, ApJ; arXiv:2609.20295) | `SPIRAL` pipeline (zodi-subtracted, quality-masked, wavelength-window-binned feature-map builder) | https://github.com/cli-tsinghua/SPIRAL |
-| Wills et al., JGR:Atmospheres (preprint arXiv:2605.00851) | `SPHEREx-airglow-analysis` (background/airglow characterization code) | https://github.com/RyanWills16/SPHEREx-airglow-analysis ; Zenodo DOI 10.5281/zenodo.21708478 |
-| Green (unpublished/in-prep, per repo activity) | `spherex_spectra` JAX+Equinox forward-model pipeline | https://github.com/gregreen/spherex_spectra |
+| Akeson et al. 2026, "The SPHEREx Image and Spectrophotometry Processing Pipeline" (accepted, ApJS; arXiv:2511.15823) | Official L1-L3 pipeline (this *is* the description of `Caltech-IPAC/spherex-pipelines`) | [arXiv:2511.15823](https://arxiv.org/abs/2511.15823) ; [Caltech-IPAC/spherex-pipelines](https://github.com/Caltech-IPAC/spherex-pipelines) |
+| Ren, Guo, Zheng et al. 2026, "Empirical Near-Infrared Spectral Templates from SPHEREx: Disentangling AGN and Host-Galaxy Emission" (arXiv:2609.02167) | `spxquery` extraction framework + weighted-NMF dictionary code (`spxdictlearn`); code/Zenodo archive | [arXiv:2609.02167](https://arxiv.org/abs/2609.02167) ; [WenkeRen/spxquery](https://github.com/WenkeRen/spxquery) ; [WenkeRen/spxdictlearn](https://github.com/WenkeRen/spxdictlearn) ; Zenodo DOI 10.5281/zenodo.22226283 |
+| Bahk, Hwang, Bleem et al. 2026, "The SPHEREx View of Galaxy Clusters: A Simulation-based Validation of the Forced Photometry Pipeline for Extended Sources" (submitted, AAS Journals; arXiv:2606.19875) | The Tractor (official `Caltech-IPAC/tractor-spherex`) applied/validated for extended cluster-galaxy sources via simulated DESI+COSMOS mocks | [arXiv:2606.19875](https://arxiv.org/abs/2606.19875) ; [Caltech-IPAC/tractor-spherex](https://github.com/Caltech-IPAC/tractor-spherex) |
+| Li, C. 2026, "SPHEREx 3.3 Micron Aromatic Emission in the Magellanic Clouds..." (accepted, ApJ; arXiv:2609.20295) | `SPIRAL` pipeline (zodi-subtracted, quality-masked, wavelength-window-binned feature-map builder) | [cli-tsinghua/SPIRAL](https://github.com/cli-tsinghua/SPIRAL) |
+| Wills et al., JGR:Atmospheres (preprint arXiv:2605.00851) | `SPHEREx-airglow-analysis` (background/airglow characterization code) | [RyanWills16/SPHEREx-airglow-analysis](https://github.com/RyanWills16/SPHEREx-airglow-analysis) ; Zenodo DOI 10.5281/zenodo.21708478 |
+| Green (unpublished/in-prep, per repo activity) | `spherex_spectra` JAX+Equinox forward-model pipeline | [gregreen/spherex_spectra](https://github.com/gregreen/spherex_spectra) |
 
 (Surveyed via `WebSearch`/`WebFetch` only. Several other 2026 SPHEREx papers
 appeared in search - star/galaxy separation, power-spectrum emulation,

@@ -152,6 +152,17 @@ total, 6 % apart for n = 4) and whether a position-jitter term is added before s
   `scripts/site_figures.py` from calibration products and our records), `docs/figures/external/` (figures
   reproduced from papers, each with a credit line; arXiv sources kept under
   `/Users/shuang/data/spherex/references/arxiv_src/`).
+- Two versions from one source tree (2026-11-15): the public site (`docs/_build/html`, the default
+  build that GitHub Pages publishes) and the internal site (`docs/_build/internal`, built with
+  `-t internal`). `INTERNAL_DOCUMENTS` in `docs/conf.py` lists the internal pages (`SPEC`, `todo`,
+  `lessons`, `html_documentation_guide`, `reports/sed_demo_task`,
+  `references/studies/photometry_study_2026-11`); the public build excludes them, so neither the pages,
+  their sources nor the search index reach the public site, and a link from a public page to an
+  internal one fails the strict build. A `source-read` hook adds an "Internal" navigation section and a
+  banner on each internal page in the internal build only. `scripts/build_docs.sh` builds both from
+  empty folders and opens the internal one.
+- Links: web pages are cited as hyperlinks with descriptive text, never as printed addresses; service
+  endpoints, URL templates, example requests, install commands and quoted code stay as inline code.
 - Rules: every SPHEREx fact is cited to its source in a footnote; numbers measured here are marked
   "measured" with the script named; the strict build must pass before a commit; the site deploys to
   GitHub Pages through `.github/workflows/docs.yml` on pushes to `main` (Pages source must be set to

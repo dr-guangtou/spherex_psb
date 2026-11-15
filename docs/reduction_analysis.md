@@ -287,7 +287,8 @@ From the Explanatory Supplement section 2.3 and the pipeline paper:[^expsupp23][
   corners, captured by the SIP terms; about 3 % of images failed fine astrometry before R7, below 1 %
   after, with failures clustered in crowded fields.
 - Rice compression quantises pixel values at half the expected noise; harmless for aperture sums but worth
-  knowing. A curated list of heavily contaminated images is kept at `spherex.caltech.edu/page/anomalyimages`.
+  knowing. A curated list of heavily contaminated images is kept on the
+  [SPHEREx anomalous-images page](https://spherex.caltech.edu/page/anomalyimages).
 
 ## Calibration accuracy
 

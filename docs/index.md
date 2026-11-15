@@ -83,9 +83,9 @@ the script that makes them is named in the caption.
 ## Repository
 
 The notes are the `docs/` folder of the project repository; the analysis code lives in `spherex_psb/` and
-`scripts/`. The project specification, task list and lessons file are under "Project" in the navigation.
-The pages follow the [note-style](html_documentation_guide.md) documentation standard (Sphinx, MyST
-Markdown, customised Furo) and are deployed to GitHub Pages by a workflow on every push to `main`.
+`scripts/`. The checkpoint reports behind these pages are under "Reports" in the navigation. The pages
+follow the note-style documentation standard (Sphinx, MyST Markdown, customised Furo) and are deployed to
+GitHub Pages by a workflow on every push to `main`.
 
 ```
 bash scripts/build_docs.sh      # strict build into docs/_build/html, then opens index.html
@@ -103,7 +103,7 @@ The IRSA release pages ask for this sentence[^ack]:
 together with the DOI of each release used (QR2 10.26131/IRSA652, QR3 10.26131/IRSA662, DR1
 10.26131/IRSA678) and citations of the mission, pipeline, instrument and spectral-response papers.
 
-[^ack]: IRSA Quick Release overview, `https://irsa.ipac.caltech.edu/data/SPHEREx/docs/overview_qr.html`; see
+[^ack]: [IRSA Quick Release overview](https://irsa.ipac.caltech.edu/data/SPHEREx/docs/overview_qr.html); see
     the [IRSA pages note](references/irsa/irsa_spherex_official_pages.md).
 
 ```{toctree}
@@ -119,14 +119,9 @@ spectral_indices
 
 ```{toctree}
 :hidden:
-:caption: Project
+:caption: Reports
 
-Specification <SPEC>
-To do <todo>
-Lessons <lessons>
-note-style rule book <html_documentation_guide>
 SED demo report <reports/demo_sed_report>
-SED demo task <reports/sed_demo_task>
 H-minus bump feasibility <reports/hminus_bump_feasibility>
 Third-party tool review <reports/spherex_tools_review>
 ```
@@ -158,9 +153,8 @@ z > 4 quasars (Davies et al. 2026) <references/papers/paper_ref_2603.10135>
 
 ```{toctree}
 :hidden:
-:caption: Studies and tools
+:caption: Third-party tools
 
-Photometry study (2026-11) <references/studies/photometry_study_2026-11>
 GitHub survey (2026-09) <references/tools/github_survey_2026-09-23>
 references/tools/spherex-retrieval
 references/tools/tractorjax-spherex

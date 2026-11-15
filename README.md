@@ -26,7 +26,7 @@ Data (cutout bundles, calibration cache, results) live outside the repository un
 ```
 uv sync                                        # analysis environment (uv only; no pip, conda or poetry)
 uv run pre-commit install
-bash scripts/build_docs.sh                     # strict Sphinx build into docs/_build/html, then opens it
+bash scripts/build_docs.sh                     # public site in docs/_build/html, internal one in docs/_build/internal
 uv run --only-group docs python -m http.server 8765 --directory docs/_build/html --bind 127.0.0.1  # with search
 ```
 

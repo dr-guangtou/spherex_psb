@@ -12,7 +12,7 @@
 - **PyPI**: yes, `pip install xcavation`; current version `1.1.0` per `xcavation.egg-info/PKG-INFO`; built wheel/sdist are committed directly to the repo.
 - **Tests**: none. No `tests/` directory, no CI workflow directory.
 - **Docs**: a Sphinx skeleton exists (`docs/source/conf.py`, `docs/source/index.rst`, `.readthedocs.yaml`) but `index.rst` is the unmodified `sphinx-quickstart` template — effectively no real docs beyond the README and an example Colab notebook (`Xcavation_Example.ipynb`).
-- **Associated paper**: README cites `https://doi.org/10.3847/2515-5172/ae6257`, which resolves to Brooks, Cushing & Kothari (2026), *"An Ultracool Dwarf Spectral Sequence Using SPHEREx,"* a short RNAAS note — confirming the tool's design target of point-source spectrophotometry of ultracool dwarfs, not extended sources. A Zenodo DOI badge is also present (10.5281/zenodo.19477227).
+- **Associated paper**: README cites [doi:10.3847/2515-5172/ae6257](https://doi.org/10.3847/2515-5172/ae6257), which resolves to Brooks, Cushing & Kothari (2026), *"An Ultracool Dwarf Spectral Sequence Using SPHEREx,"* a short RNAAS note — confirming the tool's design target of point-source spectrophotometry of ultracool dwarfs, not extended sources. A Zenodo DOI badge is also present (10.5281/zenodo.19477227).
 
 ## Purpose and scope
 

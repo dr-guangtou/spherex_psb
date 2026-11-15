@@ -152,3 +152,13 @@ be interpreted before those two systematics are removed.
 
 The conversion kept every page, figure, footnote and link (the strict build with `nitpicky` verifies them);
 the only content changes are four two-image figures split into pairs and one SQL block typed as text.
+
+## Publication scope and links (2026-11-15)
+
+- [x] Internal pages (specification, to do, lessons, SED demo task, rule-book copy, photometry study note)
+      excluded from the public site and built separately for review (`-t internal`, `docs/_build/internal`).
+- [x] Public pages no longer link to internal ones (primer, index, SED page and report reworded).
+- [x] Printed web addresses in published pages replaced by descriptive hyperlinks.
+- [ ] Decide whether the third-party tool notes and review, which assess other people's (partly students')
+      repositories, belong on the public site.
+- [ ] Remove local absolute paths (`/Users/...`) from public pages, or accept them.

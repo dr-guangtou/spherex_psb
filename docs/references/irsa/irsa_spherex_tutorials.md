@@ -1,7 +1,7 @@
 # IRSA SPHEREx tutorial notebooks (surveyed 2026-09-22)
 
 Sources consulted: the rendered MyST site at
-`https://caltech-ipac.github.io/irsa-tutorials/spherex/` (and its sub-pages) and the
+[SPHEREx tutorial notebooks](https://caltech-ipac.github.io/irsa-tutorials/spherex/) (and its sub-pages) and the
 **only** GitHub repository permitted for this survey, the official
 `Caltech-IPAC/irsa-tutorials` repo, specifically the MyST-markdown notebook sources under
 `tutorials/spherex/` and `tutorials/techniques-and-tools/`. All rendered HTML pages were
@@ -14,15 +14,15 @@ truncation. Local copies of every source file are saved under
 
 ## Notebook inventory
 
-| # | Title | Rendered URL | Source file (local copy) | Last updated (as stated in notebook) | One-line purpose |
-|---|-------|--------------|---------------------------|----------------------------------------|------------------|
-| 0 | SPHEREx Tutorial Notebooks (landing/gallery page) | https://caltech-ipac.github.io/irsa-tutorials/spherex | `irsa_tutorial_sources/spherex.md` | n/a (index page) | Gallery listing the 5 notebooks below via `{notebook-gallery}` directive. |
-| 1 | Introduction to SPHEREx Spectral Images | https://caltech-ipac.github.io/irsa-tutorials/spherex-intro | `irsa_tutorial_sources/spherex_intro.md` | 5 March 2026 | Query SIA for Spectral Image MEFs, open one with astropy, tour every FITS extension (IMAGE/FLAGS/VARIANCE/ZODI/PSF/WCS-WAVE), spatial+spectral WCS basics, Firefly visualization. |
-| 2 | Download a collection of SPHEREx Spectral Image cutouts as a MEF | https://caltech-ipac.github.io/irsa-tutorials/spherex-cutouts | `irsa_tutorial_sources/spherex_cutouts.md` | 5 March 2026 | TAP query for all exposures overlapping a position + bandpass, download cutouts (serial and parallel), assemble a new multi-extension cutout-collection FITS file with a wavelength/URL summary table. |
-| 3 | Understanding and Analyzing SPHEREx Mosaic Cubes | https://caltech-ipac.github.io/irsa-tutorials/spherex-mosaic | `irsa_tutorial_sources/spherex_mosaic.md` | 8 May 2026 | Load a pre-built Mosaic-Tool (x,y,λ) cube, extract a quick-look spectrum with `photutils` aperture photometry + annulus background subtraction, build a PAH 3.3 µm emission-line map, reproject and overlay a GALEX FUV image. **Most directly relevant notebook for resolved/semi-resolved galaxy spectroscopy.** |
-| 4 | Understanding and Extracting the ePSF Extension in a SPHEREx Cutout | https://caltech-ipac.github.io/irsa-tutorials/spherex-psf | `irsa_tutorial_sources/spherex_psf.md` | 17 September 2026 (newest of the core set) | Map cutout pixels back to the parent LVF image, read the (e)PSF extension/calibration product depending on image version, pick the correct spatial PSF zone, and use `photutils.psf.ImagePSF` to render a native-resolution PSF stamp for forward modeling (e.g. Tractor). |
-| 5 | SPHEREx Source Discovery Tool IRSA Demo | https://caltech-ipac.github.io/irsa-tutorials/spherex-source-discovery-tool-demo | `irsa_tutorial_sources/spherex_source_discovery/spherex_source_discovery_tool_demo.md` (+ `README.md`, `conda-spherex_sdt.yml`, and the `spherex_source_discovery_tool/` package) | 18 February 2026 | End-to-end demo of the standalone `spherex_source_discovery_tool` package: cloud (S3) image access, surface-brightness→flux-density conversion via solid-angle-pixel maps, background subtraction (`sep`), two-band image subtraction/reprojection to find red sources, `SExtractor` source extraction, interactive Firefly/bokeh source selection, and full aperture-photometry spectrum assembly with flags + variance propagation. |
-| 6 | MOST (Moving Object Search Tool) queries — SPHEREx section | https://caltech-ipac.github.io/irsa-tutorials/techniques (techniques-and-tools) | `irsa_tutorial_sources/techniques-and-tools/MOST_queries.md` | not dated in text; "Support for SPHEREx in MOST was added in June 2026" | Tangential: shows `Most.query_object(..., catalog="spherex")` to find SPHEREx images intersecting a moving object's orbital path, and cutout retrieval from those images. Not about galaxy spectroscopy; included only because it is a genuine SPHEREx-touching notebook outside the `spherex/` folder, per task instructions. |
+| # | Title | Source file (local copy) | Last updated (as stated in notebook) | One-line purpose |
+|---|-------|---------------------------|----------------------------------------|------------------|
+| 0 | [SPHEREx Tutorial Notebooks (landing/gallery page)](https://caltech-ipac.github.io/irsa-tutorials/spherex) | `irsa_tutorial_sources/spherex.md` | n/a (index page) | Gallery listing the 5 notebooks below via `{notebook-gallery}` directive. |
+| 1 | [Introduction to SPHEREx Spectral Images](https://caltech-ipac.github.io/irsa-tutorials/spherex-intro) | `irsa_tutorial_sources/spherex_intro.md` | 5 March 2026 | Query SIA for Spectral Image MEFs, open one with astropy, tour every FITS extension (IMAGE/FLAGS/VARIANCE/ZODI/PSF/WCS-WAVE), spatial+spectral WCS basics, Firefly visualization. |
+| 2 | [Download a collection of SPHEREx Spectral Image cutouts as a MEF](https://caltech-ipac.github.io/irsa-tutorials/spherex-cutouts) | `irsa_tutorial_sources/spherex_cutouts.md` | 5 March 2026 | TAP query for all exposures overlapping a position + bandpass, download cutouts (serial and parallel), assemble a new multi-extension cutout-collection FITS file with a wavelength/URL summary table. |
+| 3 | [Understanding and Analyzing SPHEREx Mosaic Cubes](https://caltech-ipac.github.io/irsa-tutorials/spherex-mosaic) | `irsa_tutorial_sources/spherex_mosaic.md` | 8 May 2026 | Load a pre-built Mosaic-Tool (x,y,λ) cube, extract a quick-look spectrum with `photutils` aperture photometry + annulus background subtraction, build a PAH 3.3 µm emission-line map, reproject and overlay a GALEX FUV image. **Most directly relevant notebook for resolved/semi-resolved galaxy spectroscopy.** |
+| 4 | [Understanding and Extracting the ePSF Extension in a SPHEREx Cutout](https://caltech-ipac.github.io/irsa-tutorials/spherex-psf) | `irsa_tutorial_sources/spherex_psf.md` | 17 September 2026 (newest of the core set) | Map cutout pixels back to the parent LVF image, read the (e)PSF extension/calibration product depending on image version, pick the correct spatial PSF zone, and use `photutils.psf.ImagePSF` to render a native-resolution PSF stamp for forward modeling (e.g. Tractor). |
+| 5 | [SPHEREx Source Discovery Tool IRSA Demo](https://caltech-ipac.github.io/irsa-tutorials/spherex-source-discovery-tool-demo) | `irsa_tutorial_sources/spherex_source_discovery/spherex_source_discovery_tool_demo.md` (+ `README.md`, `conda-spherex_sdt.yml`, and the `spherex_source_discovery_tool/` package) | 18 February 2026 | End-to-end demo of the standalone `spherex_source_discovery_tool` package: cloud (S3) image access, surface-brightness→flux-density conversion via solid-angle-pixel maps, background subtraction (`sep`), two-band image subtraction/reprojection to find red sources, `SExtractor` source extraction, interactive Firefly/bokeh source selection, and full aperture-photometry spectrum assembly with flags + variance propagation. |
+| 6 | [MOST (Moving Object Search Tool) queries — SPHEREx section](https://caltech-ipac.github.io/irsa-tutorials/techniques) | `irsa_tutorial_sources/techniques-and-tools/MOST_queries.md` | not dated in text; "Support for SPHEREx in MOST was added in June 2026" | Tangential: shows `Most.query_object(..., catalog="spherex")` to find SPHEREx images intersecting a moving object's orbital path, and cutout retrieval from those images. Not about galaxy spectroscopy; included only because it is a genuine SPHEREx-touching notebook outside the `spherex/` folder, per task instructions. |
 
 No SPHEREx notebooks were found under `simulated-data/`, `cloud-access-intro.md`, `irsa-hats-with-lsdb.md`, `Parallelize_Convolution.md`, or `SEDs_in_Firefly.md` (checked by grep on the raw source for "spherex", zero hits in all but `MOST_queries.md`). There is no separate "cloud-access" SPHEREx notebook; cloud (S3) access is instead demonstrated inline inside the Source Discovery Tool demo (#5).
 
@@ -71,7 +71,7 @@ conf.remote_timeout = 120
 - `spherex_qr2` — QR2 Wide Survey
 - `spherex_qr2_deep` — QR2 Deep Survey
 
-Documented at "SPHEREx Data Access: APIs" (`https://caltech-ipac.github.io/spherex-archive-documentation/spherex-data-access#application-program-interfaces-apis`).
+Documented at "[SPHEREx Data Access: APIs](https://caltech-ipac.github.io/spherex-archive-documentation/spherex-data-access#application-program-interfaces-apis)".
 
 **Service endpoints / query pattern.**
 ```python
@@ -151,7 +151,7 @@ plt.imshow(wavelength.value, origin="lower", cmap="gray")
 
 **WCSNAME keys:** the header has `WCSNAME*` — primary WCS (astrometric + SIP distortion), `WCSNAMEA` (zero-indexed pixel coords), `WCSNAMEW` (spectral: Wavelength+Bandwidth, references WCS-WAVE lookup table).
 
-**Flags.** `spectral_image_header['L2 N_*']` shows 14 flag types; most pixels flagged as SOURCE. Full flag bit table is in Table 8 of the SPHEREx Explanatory Supplement PDF (`https://irsa.ipac.caltech.edu/data/SPHEREx/docs/SPHEREx_Expsupp_QR.pdf`). Flag definitions are also directly embedded in the FLAGS extension header: `flags_header['MP*']`.
+**Flags.** `spectral_image_header['L2 N_*']` shows 14 flag types; most pixels flagged as SOURCE. Full flag bit table is in Table 8 of the [SPHEREx Explanatory Supplement PDF](https://irsa.ipac.caltech.edu/data/SPHEREx/docs/SPHEREx_Expsupp_QR.pdf). Flag definitions are also directly embedded in the FLAGS extension header: `flags_header['MP*']`.
 
 **Runtime:** ~30 seconds.
 
@@ -490,7 +490,7 @@ ePSF_calibs = {
     "6": "https://nasa-irsa-spherex.s3.us-east-1.amazonaws.com/qr3/epsf/cal-epsf-v1-2026-191/6/epsf_D6_spx_cal-epsf-v1-2026-191.fits",
 }
 ```
-Base bucket index: `https://nasa-irsa-spherex.s3.us-east-1.amazonaws.com/index.html`; calibration products live under `<release>/<dataset_type>/<version-tag>/<detector>/`. The calibration file additionally contains an `EPSF_MOSAIC` layer (a full-detector PSF-zone mosaic image), **not present in the per-exposure LVF images**, useful for quickly visualizing all zones on a detector.
+Base bucket index: [SPHEREx S3 bucket index](https://nasa-irsa-spherex.s3.us-east-1.amazonaws.com/index.html); calibration products live under `<release>/<dataset_type>/<version-tag>/<detector>/`. The calibration file additionally contains an `EPSF_MOSAIC` layer (a full-detector PSF-zone mosaic image), **not present in the per-exposure LVF images**, useful for quickly visualizing all zones on a detector.
 
 **Format of the ePSF binary table:** columns include `BINX`, `BINY` (0-indexed zone IDs), `XCENTER`, `YCENTER` (zone center in parent-image pixels), `NEFF_MEAN` (PSF effective area), `CWAVE` (center wavelength of the zone), and `EPSF` (a 2D-array-valued column, the oversampled PSF stamp itself). Header keywords: `OVSMPX`, `OVSMPY` (oversampling factors), `TDIM11` (oversampled PSF stamp shape), `NAXIS2` (total number of zones).
 
@@ -678,7 +678,7 @@ img_data2 = img_data2 - bkg2
 mask2 = np.zeros(flags_data2.shape) * np.nan
 mask2[(flags_data2 == 2097152) | (flags_data2 == 2) | (flags_data2 == 0)] = 1
 ```
-Text explains: `2097152` = bit 21 = pixels *not* contaminated by errors/transients/cosmic rays; explicitly says they ignore the OVERFLOW flag because it is coincident with SUR_ERROR. Full flag bit reference: `https://irsa.ipac.caltech.edu/onlinehelp/spherex/spherex/sp.html#explorebitflags`.
+Text explains: `2097152` = bit 21 = pixels *not* contaminated by errors/transients/cosmic rays; explicitly says they ignore the OVERFLOW flag because it is coincident with SUR_ERROR. Full flag bit reference: [IRSA SPHEREx help: explore bit flags](https://irsa.ipac.caltech.edu/onlinehelp/spherex/spherex/sp.html#explorebitflags).
 
 **Two-detector reprojection for differencing, with explicit warnings on method choice/cost:**
 ```python
@@ -776,7 +776,7 @@ most_output = Most.query_object(
     catalog="spherex",
 )
 ```
-Text states: "Support for SPHEREx in MOST was added in June 2026... SPHEREx images can be obtained in much the same way as the WISE examples shown above by setting the `'catalog'` argument to `"spherex"`... A cutout can be produced in much the same way as before, although minor changes are needed as the headers of the SPHEREx images differ from those of WISE." Full instructions link: `https://irsa.ipac.caltech.edu/applications/MOST/instructions.html`.
+Text states: "Support for SPHEREx in MOST was added in June 2026... SPHEREx images can be obtained in much the same way as the WISE examples shown above by setting the `'catalog'` argument to `"spherex"`... A cutout can be produced in much the same way as before, although minor changes are needed as the headers of the SPHEREx images differ from those of WISE." Full instructions: [IRSA MOST instructions](https://irsa.ipac.caltech.edu/applications/MOST/instructions.html).
 
 ---
 
@@ -836,7 +836,7 @@ Text states: "Support for SPHEREx in MOST was added in June 2026... SPHEREx imag
 
 1. Does the SPHEREx archive provide (or plan to provide) a **programmatic API for the Mosaic Tool**, so that cube generation for a sample of galaxies (rather than one GUI-driven cube at a time) becomes feasible? None of the notebooks address this, and it is explicitly stated as a current gap.
 2. Is there a documented, science-team-endorsed method for **coadding/stacking multiple SPHEREx exposures at the same wavelength** (beyond simply collecting per-exposure cutouts), and if so, does it propagate variance and flags consistently? Not shown in any tutorial.
-2a. Related: is a variance-weighted or inverse-variance stacking recipe for the per-exposure spectrum-assembly approach (notebook 5) documented anywhere in the SPHEREx Explanatory Supplement, which was referenced repeatedly but not itself fetched in this survey (`https://irsa.ipac.caltech.edu/data/SPHEREx/docs/SPHEREx_Expsupp_QR.pdf`)?
+2a. Related: is a variance-weighted or inverse-variance stacking recipe for the per-exposure spectrum-assembly approach (notebook 5) documented anywhere in the SPHEREx Explanatory Supplement, which was referenced repeatedly but not itself fetched in this survey ([SPHEREx Explanatory Supplement PDF](https://irsa.ipac.caltech.edu/data/SPHEREx/docs/SPHEREx_Expsupp_QR.pdf))?
 3. What is the actual, current **`spherex.plane`/`spherex.artifact` TAP schema** in full (all column names, not just the subset used in these queries)? A full schema dump (e.g., `TAP_SCHEMA.columns` for the `spherex` schema) was not fetched in this survey and would clarify whether additional columns (depth, PSF FWHM per plane, S/N estimates) exist that could simplify galaxy-spectrum QA.
 4. Does IRSA provide any **forced-photometry or pre-extracted source catalog** for SPHEREx (as opposed to only image/exposure-level metadata via TAP/SIA)? None of the tutorials reference one, but this was not independently confirmed against the archive's catalog holdings outside the notebooks.
 5. For post-starburst galaxies at typical redshifts, will nuclear vs. extended (semi-resolved) light separation require PSF-matched multi-wavelength apertures — and if so, is there an official recommended approach beyond the point-source Tractor guidance in `spherex_psf.md`, e.g. in the SPHEREx Explanatory Supplement or forthcoming tutorials?

@@ -200,7 +200,7 @@ IDs used, approximate pixel↔wavelength map, spacecraft/telescope temperatures,
   unflagged.
 
 A curated list of heavily contaminated images is maintained at
-https://spherex.caltech.edu/page/anomalyimages.
+[SPHEREx anomalous images list](https://spherex.caltech.edu/page/anomalyimages).
 
 ## 2.4 Known limitations
 
@@ -471,7 +471,7 @@ archive.
 
 Used both to derive the absolute gain matrix (Sec. 4.1.1) and to power the IRSA **Spectrophotometry Tool**.
 
-**Method**: **Tractor**-based (Lang/Hogg/Marbach; http://thetractor.org) generative/forward modeling,
+**Method**: **Tractor**-based (Lang/Hogg/Marbach; [Tractor website](http://thetractor.org)) generative/forward modeling,
 maximum-likelihood forced photometry (positions fixed, not floated), analogous in spirit to xID (Hurley et
 al. 2017) and T-PHOT (Merlin et al. 2016). Statistical/optimization framework: Hogg et al. (2010) + `emcee`
 (Foreman-Mackey et al. 2013).

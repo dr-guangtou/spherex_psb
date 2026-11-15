@@ -2,8 +2,7 @@
 
 The demonstration that this project ran in November 2026: forced Sersic photometry of six SDSS galaxies at
 0.03 < z < 0.06 on every DR1 and QR3 wide-survey exposure that covers them, assembled into spectral energy
-distributions (SEDs) and validated eight ways. The task specification is in the
-[SED demo task](reports/sed_demo_task.md) and the full checkpoint report, with every table, in the
+distributions (SEDs) and validated eight ways. The full checkpoint report, with every table, is the
 [SED demo report](reports/demo_sed_report.md). This page gives the method, the numbers that matter and the
 questions that remain.
 
@@ -245,5 +244,5 @@ uv run python scripts/sed_demo/measure_galaxy.py <galaxy> --stamps-only         
 Data under `/Users/shuang/data/spherex/`: cutout bundles (457 MB), calibration cache (780 MB), results
 (18 MB: per-exposure records, screened records, binned SEDs, validation tables, QA stamps).
 
-[^study]: The facts carried over from the photometry study of 2026-11-12/13 are in
-    [this note](references/studies/photometry_study_2026-11.md), with their source paths.
+[^study]: An unpublished photometry study by the group (2026-11-12/13): noise-free simulations of
+    point-source and Sersic fits over all ePSF zones, and the size distribution of the SDSS parent sample.

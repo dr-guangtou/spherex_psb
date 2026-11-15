@@ -31,10 +31,21 @@ AGB/TP-AGB stars.
   copied from the skill's starter and are not edited here (project additions go in `docs/_static/spherex_psb.css`). Do not introduce another site
   generator, theme or CDN-hosted math runtime. Record the adopted guide version, publisher versions and
   project-specific decisions in `docs/SPEC.md`; preserve source provenance, stable document identifiers
-  and working links during conversion. Build with
-  `uv run --only-group docs sphinx-build -E -W --keep-going -b html docs docs/_build/html`
-  (or `bash scripts/build_docs.sh`) before committing documentation changes; the site deploys to
+  and working links during conversion. Build both versions with `bash scripts/build_docs.sh` (strict,
+  from empty output folders) before committing documentation changes; the public site deploys to
   GitHub Pages from `main`.
+- Publication scope (2026-11-15): project documents are never part of the published site. The
+  specification, task list, lessons, task specifications, the copied rule book, notes on private
+  material (such as the student's repository) and any similar project-management document are listed
+  in `INTERNAL_DOCUMENTS` in `docs/conf.py`. The default build (`docs/_build/html`, what GitHub Pages
+  publishes) excludes them; `sphinx-build -t internal` builds them into `docs/_build/internal` for the
+  owner's review, under an "Internal" navigation section and with a banner on each page. Add every new
+  document of that kind to the list when it is created. Public pages must not link to internal ones
+  (the strict public build fails if they do).
+- Links in published pages (2026-11-15): never print a web address as text. Write a hyperlink with
+  descriptive text, `[IRSA Quick Release overview](https://...)`, which the theme shows in the link
+  colour. Service endpoints, URL templates with placeholders, example request URLs, install commands
+  and quoted source code stay as inline code.
 - Always rely on official IRSA / IPAC resources and peer-reviewed or arXiv papers for
   SPHEREx facts. Do not use or consult third-party SPHEREx GitHub tools unless the
   user explicitly asks.

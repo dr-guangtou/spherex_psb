@@ -2,7 +2,7 @@
 
 ## Metadata
 
-- **URL**: https://github.com/Caltech-IPAC/spherex-pipelines
+- **Repository**: [Caltech-IPAC/spherex-pipelines](https://github.com/Caltech-IPAC/spherex-pipelines)
 - **License**: BSD 3-Clause (`LICENSE.md`), Caltech 2019-2026. Confirmed by GitHub API (`spdx_id: BSD-3-Clause`).
 - **Language**: Python 3 (100%); requires >=3.11, tested 3.11-3.13 (3.10 support dropped, `docs/changes/SP-1865.other.md`).
 - **Size**: 32,454 KB on GitHub; ~88 MB shallow clone (`--depth 1`, includes `tests/data/*.fits` fixtures).

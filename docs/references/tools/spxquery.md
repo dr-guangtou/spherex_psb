@@ -9,7 +9,7 @@
 - **First commit**: 2025-11-05. **Last commit**: 2026-07-11 ("fix: update colormap validation to use matplotlib.colormaps API"). 87 commits total per GitHub.
 - **PyPI**: published, `pip install spxquery`, current version **0.4.1** (uploaded 2026-05-19; `INSTALL.md` in the repo is stale and still says "PyPI installation coming soon" / expects `0.2.0`, so docs lag the released package).
 - **Tests**: `tests/test_advanced_config.py` (437 lines) plus a GitHub Actions workflow (`.github/workflows/python-package.yml`); `pyproject.toml` wires `pytest`, `pytest-cov`, `ruff`, `mypy` as dev dependencies with `addopts = "-v --cov=spxquery --cov-report=html --cov-report=term"`. Test coverage is limited to configuration validation, not photometry correctness.
-- **Docs**: ReadTheDocs site (`spxquery.readthedocs.io`, Sphinx + `myst-parser` + `nbsphinx`), plus an in-repo `docs/` tree (API reference stubs, user guides for batch photometry, cutouts, drizzle3d, parameters, pipeline, quality control) and a `CONTRIBUTING.md`.
+- **Docs**: ReadTheDocs site ([spxquery documentation](https://spxquery.readthedocs.io), Sphinx + `myst-parser` + `nbsphinx`), plus an in-repo `docs/` tree (API reference stubs, user guides for batch photometry, cutouts, drizzle3d, parameters, pipeline, quality control) and a `CONTRIBUTING.md`.
 - **Associated paper**: none found; only a generic "Based on SPHEREx data from NASA/IPAC IRSA" acknowledgment.
 
 This is the most actively developed and best-packaged of the three repos reviewed.
