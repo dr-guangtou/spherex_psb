@@ -203,3 +203,8 @@ Data lessons (verified live)
 - Listing internal pages one by one in `conf.py` did not scale once whole folders became internal; the
   scope is now a set of glob patterns plus one internal index page (`internal.md`) that carries the
   navigation, so adding a report needs no configuration change.
+- Reviewing someone else's photometry: match it to our own measurements on the same exposures first
+  (observation id + detector). It separated what agrees (wavelengths, calibration, aperture sums) from what
+  does not (the measurement model) in one table, before any sample-wide statistics.
+- talltable's `converged` is set true when the clipping loop hits its iteration limit; a column named like a
+  quality flag can be uninformative. Read the code that fills it before using it.

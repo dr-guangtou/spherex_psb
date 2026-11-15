@@ -21,6 +21,7 @@ note-style rule book <html_documentation_guide>
 SED demo report <reports/demo_sed_report>
 H-minus bump feasibility <reports/hminus_bump_feasibility>
 SED demo task <reports/sed_demo_task>
+SDSS 48k photometry review <reports/sdss48k_photometry_review>
 Third-party tool review <reports/spherex_tools_review>
 ```
 

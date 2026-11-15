@@ -163,3 +163,20 @@ the only content changes are four two-image figures split into pairs and one SQL
       decision 2026-11-15); local paths in public pages accepted for now.
 - [x] Aligned with note-style 0.6: shared CSS (table wrapping, responsive images, card-link-text reset),
       font provenance notice, rule-book copy, locked fresh build as the gate; redundant project CSS removed.
+
+## Review of the student's SDSS 48k photometry (2026-11-15, feature/sdss48k-review)
+
+- [x] Read the run's README, the production script and talltable's `optimal_extract` (read only).
+- [x] Catalogue and coverage summary; same-exposure comparison with the six demo galaxies; sample-wide
+      clipping failures; repeatability of close-wavelength pairs; figures 1-3; internal report
+      `docs/reports/sdss48k_photometry_review.md`.
+- [ ] Owner's decision: use the aperture flux with corrections (aperture correction from optical shape,
+      neighbour flag, outlier rejection, error scaling), or re-measure with forced Sersic photometry.
+- [ ] Ask the student to push the `sdss48k/` run folder; ask whether aperture-flagged pixel counts and
+      sub-pixel positions can be stored.
+
+### Review
+
+The run's bookkeeping (targets, footprints, wavelengths, calibration) agrees with ours; its PSF flux is not
+usable for these galaxies, as the photometry study predicted; its aperture flux repeats to 3-5 % in D1-D4 but
+is not a total flux and has unsubtracted neighbours and bad-pixel outliers.
