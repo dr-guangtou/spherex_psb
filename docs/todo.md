@@ -170,6 +170,10 @@ the only content changes are four two-image figures split into pairs and one SQL
 - [x] Catalogue and coverage summary; same-exposure comparison with the six demo galaxies; sample-wide
       clipping failures; repeatability of close-wavelength pairs; figures 1-3; internal report
       `docs/reports/sdss48k_photometry_review.md`.
+- [x] H-minus bump index (Hbump_opt) for 46,504 galaxies from the aperture fluxes, with the solid-angle
+      correction; against Dn4000, HdeltaA and the H-bump paper's models; figures 4-6; report section 8.
+- [ ] Bump of quiescent and post-starburst galaxies at fixed D4000 (MPA-JHU emission lines to separate them).
+- [ ] Settle the 0.004-0.005 mag redshift trend of the index (sampling estimator, aperture size).
 - [ ] Owner's decision: use the aperture flux with corrections (aperture correction from optical shape,
       neighbour flag, outlier rejection, error scaling), or re-measure with forced Sersic photometry.
 - [ ] Ask the student to push the `sdss48k/` run folder; ask whether aperture-flagged pixel counts and

@@ -6,7 +6,9 @@ README, made 2026-11-12 on OSC). Code: the student's repository
 commit of 2026-11-09 and does not yet hold the `sdss48k/` run folder the README points to, but the production
 script `top100k/spx_phot.py` and talltable's `optimal_extract` at commit `6d8ded3` are there). Scripts of this
 review: `scripts/sdss48k_review/` (`summarise_catalogue.py`, `compare_with_demo.py`,
-`measure_failures_and_errors.py`, `make_figures.py`). Figures: `docs/figures/sdss48k_review/`.
+`measure_failures_and_errors.py`, `make_figures.py`; for section 8 `measure_hminus_bump.py`,
+`summarise_hminus_bump.py`, `make_hminus_figures.py`). Figures: `docs/figures/sdss48k_review/`. Section 8 was added
+the same day.
 
 ## 1. Summary
 
@@ -17,15 +19,19 @@ review: `scripts/sdss48k_review/` (`summarise_catalogue.py`, `compare_with_demo.
 - **Bookkeeping is sound.** The target table is the parent catalogue row for row, every galaxy has
   measurements, and on the same exposures the wavelengths agree with ours to 0.0002 um and the aperture fluxes
   with ours to 1-3 % for isolated galaxies. The image list and footprints can be reused as they are.
-- **The PSF flux should not be used for galaxy SEDs.** It assumes a point source; on our six demo galaxies it
+- **The PSF flux should not be used for galaxy SEDs, neither for fluxes nor for shapes.** It assumes a point source; on our six demo galaxies it
   recovers 31-92 % of the total flux, by a fraction that changes from detector to detector (so it bends the
   SED shape), and talltable's 4-sigma pixel clipping pushes 8.7 % of all bright measurements to more than 1.5
   times the aperture flux (up to 10-100 times). This is the failure our photometry study of 2026-11-12/13
   predicted from simulations.
-- **The aperture flux is the usable product, after corrections.** It repeats to 3-5 % per exposure in D1-D4,
-  but it is not a total flux (56-96 % of our Sersic total on the four isolated demo galaxies, falling by up to 0.1 mag from
+- **The aperture flux is the usable product.** It repeats to 3-5 % per exposure in D1-D4, so SED-shape
+  measurements over a limited wavelength range can use it directly (section 8). It is not a total flux (56-96 % of our Sersic total on the four isolated demo galaxies, falling by up to 0.1 mag from
   D1 to D6), it has no neighbour subtraction, it sums pixels that the fit masks as bad (2-4 % of exposures are
-  gross outliers), and its formal errors are 1.2-1.8 times too small.
+  gross outliers), and its formal errors are 1.2-1.8 times too small. The run's constant pixel solid angle
+  also leaves a 2 % D2/D3 step, removed here with the official solid-angle map.
+- **H-minus bump.** The paper's index (Hbump_opt) is measured for 46,504 galaxies with a median error of
+  0.016 mag: median -0.041 mag, 66 % of galaxies below zero at more than 2 sigma, between the H-bump paper's
+  TP-AGB-off and TP-AGB-on model loci, and nearly flat against Dn4000 and HdeltaA (section 8).
 
 ## 2. What was done
 
@@ -158,8 +164,11 @@ Usable as is:
 - the aperture flux for relative work on isolated galaxies, after removing outlier exposures per galaxy
   (robust clipping along wavelength) and scaling the errors by the factors in section 6.
 
-Not usable for SED science: `opt_flux_uJy` (point-source flux of extended galaxies, wavelength-dependent
-losses, clipping failures).
+Usable for SED-shape measurements over a limited wavelength range (colours, spectral indices): the aperture
+flux with outlier rejection and the solid-angle correction, as section 8 does for the H-minus bump.
+
+Not usable for galaxy SEDs: `opt_flux_uJy` (point-source flux of extended galaxies, wavelength-dependent
+losses that bend the SED shape, clipping failures).
 
 To turn the aperture flux into total-flux SEDs (each item is a decision for the owner):
 1. **Aperture correction per galaxy and detector** from the optical shape convolved with the SPHEREx PSF, as in
@@ -169,14 +178,143 @@ To turn the aperture flux into total-flux SEDs (each item is a decision for the 
    g4 and g5 show 17-43 % contamination.
 3. **Bad pixels in the aperture**: cannot be fixed from the catalogue (the number of flagged pixels inside the
    aperture is not stored); outlier rejection along wavelength is the only remedy without re-measuring.
-4. Solid angle (constant 6.15 arcsec pixel, -1.7 % to +1.1 % by detector in our study) and the missing QR3 weeks
-   and DR1 images are smaller effects.
+4. Solid angle: the constant 6.15 arcsec pixel is off by -1.7 % to +1.1 % depending on the detector position,
+   which makes a 2 % flux step between D2 and D3 where they overlap (section 8). The official Solid Angle Pixel
+   Map at `xpix_fulldet`, `ypix_fulldet` removes it without re-measuring.
+5. The missing QR3 weeks and the DR1 images are smaller effects.
 
 The alternative is to re-measure with the demo's forced Sersic photometry. The student's infrastructure (exact
 footprints, row-band reads from S3, sharded resumable runs) is the part worth keeping; only the measurement
 step would change. The cost of such a run has not been measured.
 
-## 8. Questions for the student
+## 8. The H-minus bump index from the aperture fluxes
+
+The index only needs the shape of the SED between 1.49 and 1.79 um (rest), so the aperture flux can be used
+without a total-flux correction. Definition: Hbump_opt of the H-bump paper (rest-frame vacuum windows blue
+1.494-1.539, feature 1.570-1.734, red 1.746-1.791 um; straight-line pseudo-continuum through the band means of
+F_lambda; I = -2.5 log10 mean(F_lambda / F_c); negative = bump present), measured with the irregular-sampling
+estimator of the demo feasibility study (`docs/reports/hminus_bump_feasibility.md`). Relative calibration
+between exposures is taken as correct.
+
+### 8.1 Measurement
+
+| Step | Choice |
+|---|---|
+| Galaxies | 47,927 (one row per repeat group) |
+| Exposures | aperture flux, rest 1.44-1.84 um; 1.79 million exposures |
+| Solid angle | each flux multiplied by SAPM / (6.15 arcsec)^2 at the galaxy's detector position (official map, R7 pipeline, from the spherex-retrieval cache; equal to the demo's per-exposure solid angles to better than 10^-5) |
+| Outliers | quadratic in wavelength fitted per galaxy; exposures beyond 5 robust sigma rejected (median 0, p84 1 per galaxy) |
+| Requirement | >= 2 exposures in each side window and >= 5 in the feature window |
+| Error | per-exposure scatter around the quadratic (median 3.2 %) propagated to the index; a bootstrap over exposures for 485 random galaxies agrees (median ratio 0.98, figure 6c) |
+| Optical indices | MPA-JHU DR8 `galSpecIndx`, joined by specobjid: Dn4000 and HdeltaA as in the input catalogue (identical values), and the broad D4000 (`D4000_SUB`) that the paper's models use; their errors |
+
+Result: an index for 46,504 galaxies (97 %); the others lack exposures in one window (blue 681, red 918,
+feature 668). Exposures per window: blue 2 / 4 / 7, feature 9 / 14 / 23, red 2 / 3 / 6 (p5 / p50 / p95).
+Index error 0.010 / 0.016 / 0.035 mag (p5 / p50 / p95).
+
+**The solid-angle correction matters.** D2 and D3 both cover observed 1.616-1.668 um. As delivered, D3 fluxes
+there are 2.06 % below D2 (median per galaxy); the official map gives solid angles of 0.990 (D2) and 1.010 (D3)
+times the constant pixel at those positions, which predicts the step, and after the correction the median step
+is -0.19 % (figure 6a). The D2/D3 boundary falls between the blue and red windows, so the correction deepens the
+index by 0.010 mag (median; 0.007-0.012 for 90 % of galaxies). On the six demo galaxies the corrected index agrees
+with the demo study's model-flux index within the errors (differences -0.019 to +0.011 mag; the uncorrected one
+is 0.006-0.023 mag shallower; figure 6d).
+
+### 8.2 Against Dn4000 and HdeltaA
+
+```{figure} ../figures/sdss48k_review/fig4_hminus_bump_vs_optical_indices.png
+:width: 820px
+:alt: H-minus bump index against Dn4000 and HdeltaA for 46,504 SDSS galaxies
+
+Figure 4. The H-minus bump index of individual galaxies against (a) Dn4000 and (b) HdeltaA from the input
+catalogue (MPA-JHU, emission-subtracted). Grey: smoothed density enclosing 68, 95 and 99.5 % of the galaxies;
+black: running median with its error. The bump axis is inverted as in the H-bump paper (stronger bump up).
+The cross is the median error of one galaxy.
+```
+
+- Median index -0.041 mag; p5 / p95 -0.076 / -0.007. 66 % of galaxies are below zero at more than 2 sigma, 39 %
+  at more than 3 sigma; 0.07 % are above zero at 2 sigma.
+- Observed spread 0.019 mag (robust sigma) against a median error of 0.016 mag: the intrinsic spread is
+  ~0.010 mag, and ~0.009 mag in the 9,037 galaxies with errors below 0.012 mag (spread 0.014, error 0.011).
+- The trends are weak (Spearman rank correlation -0.09 with Dn4000, +0.08 with HdeltaA). The median index goes
+  from -0.035 at Dn4000 1.1-1.2 to -0.044 at 2.0-2.1, and from -0.043 at HdeltaA -4 to -0.037 at HdeltaA 5-6:
+  galaxies with older light have a slightly stronger bump.
+
+### 8.3 Against the H-bump paper's models
+
+```{figure} ../figures/sdss48k_review/fig5_hminus_bump_with_models.png
+:width: 820px
+:alt: H-minus bump index against D4000 and HdeltaA with TP-AGB-off and TP-AGB-on model populations
+
+Figure 5. As figure 4, against (a) the broad D4000 (MPA-JHU `D4000_SUB`, the definition the models use) and
+(b) HdeltaA, with the model populations of the H-bump paper: exponential-quench star-formation histories, all
+epochs after 1 Gyr, TP-AGB off (C3K templates, agb = 0, blue) and TP-AGB on (LW02 templates, agb = 2, vermilion),
+68 and 95 % contours; models are noiseless and dust-free.
+```
+
+Median index in bins of the broad D4000 (models: median and 16-84 % range):
+
+| D4000 | galaxies | data | TP-AGB off | TP-AGB on |
+|---|---|---|---|---|
+| 1.3-1.4 | 2,095 | -0.037 | -0.002 (-0.006, +0.003) | -0.059 (-0.064, -0.054) |
+| 1.5-1.6 | 4,810 | -0.040 | -0.009 (-0.013, -0.005) | -0.057 (-0.068, -0.051) |
+| 1.7-1.8 | 4,219 | -0.042 | -0.014 (-0.017, -0.009) | -0.053 (-0.061, -0.046) |
+| 1.9-2.0 | 6,439 | -0.042 | -0.017 (-0.021, -0.012) | -0.049 (-0.055, -0.043) |
+| 2.1-2.2 | 5,410 | -0.043 | -0.017 (-0.021, -0.013) | -0.052 (-0.054, -0.046) |
+
+(All bins from 1.1 to 2.6 are in the output of `summarise_hminus_bump.py`.)
+
+- **Level.** At every D4000 the data median lies between the two model loci; over D4000 1.3-2.4 it is
+  0.026-0.035 mag stronger than TP-AGB off and 0.006-0.022 mag weaker than TP-AGB on, closer to TP-AGB on. With TP-AGB off, the models do not
+  reach the median of the data at any D4000 or HdeltaA.
+- **Shape.** The TP-AGB-on models have the strongest bump at D4000 1.3-1.6 (where the paper's fiducial tracks
+  are 0.5-1 Gyr after quenching) and
+  at high HdeltaA; the data have their weakest bump there. In the data, low D4000 and high HdeltaA are mostly
+  star-forming galaxies, whose emission lines (Paschen and Brackett lines, [Fe II] 1.644 um inside the feature
+  window) and dust are not in the models; the rapid-quenching galaxies the models single out are a small
+  subset that this plot does not isolate.
+- The model contours describe where the models can lie, not a predicted distribution: the paper's grid of
+  star-formation histories is not weighted to the SDSS population.
+
+### 8.4 Systematics not yet controlled
+
+1. **Redshift trend.** At fixed Dn4000 the median index deepens by 0.004-0.005 mag from z = 0.033 to 0.057 in
+   every Dn4000 bin (figure 6b). Candidates: the D2/D3 boundary and the exposure sampling move through the
+   windows with redshift (sampling bias up to 0.008 mag in the feasibility study), and the fixed 12.3 arcsec
+   aperture radius is 7.4 kpc at z = 0.03 and 14.3 kpc at z = 0.06 (flat LambdaCDM, H0 = 70, Omega_m = 0.3). Not separated yet.
+2. **Residual D2/D3 calibration.** Field stars constrain the detector step to +-1.3 % (feasibility study), i.e.
+   +-0.004-0.009 mag on the index, the same for all galaxies at one redshift.
+3. **Different apertures.** The optical indices come from the 3 arcsec SDSS fibre, the bump from a 12.3 arcsec
+   aperture; radial gradients enter the comparison.
+4. **Emission lines and dust** are in the data, not in the models (see 8.3).
+
+```{figure} ../figures/sdss48k_review/fig6_hminus_bump_checks.png
+:width: 820px
+:alt: Checks of the H-minus bump measurement
+
+Figure 6. (a) Flux step between D3 and D2 where they overlap (observed 1.616-1.668 um), per galaxy, as delivered
+(constant pixel solid angle) and after the solid-angle map; dashed: medians. (b) Median index against redshift
+in four Dn4000 bins, with the error of the median. (c) Bootstrap against analytic index errors for 485 random
+galaxies. (d) The six demo galaxies: this run's aperture-flux index against the demo study's forced-Sersic
+index (DR1 + QR3), with and without the solid-angle correction.
+```
+
+### 8.5 Reading
+
+The 1.6 um bump is measured in individual galaxies at 0.016 mag per galaxy, and its sample median (-0.041 mag)
+sits between the two model loci, much closer to TP-AGB on. The systematics measured so far (items 1-2 of 8.4
+and the sampling bias, each <= 0.01 mag) are smaller than its 0.026-0.035 mag offset from the TP-AGB-off locus;
+items 3-4 are not quantified. What the data do not show is the model's TP-AGB-on dependence on stellar age: the
+index is nearly flat against Dn4000 and HdeltaA, with an intrinsic spread of ~0.01 mag. The next steps that
+would test the paper's prediction directly:
+
+- separate quiescent and post-starburst galaxies from star-forming ones with the MPA-JHU emission lines
+  (`galSpecLine-dr8.fits` is local) and compare the bump at fixed D4000;
+- add dust attenuation and emission lines to the model comparison, or restrict it to quiescent galaxies;
+- stack galaxies in Dn4000-HdeltaA cells to reach 0.003-0.005 mag per cell and see the bump profile itself;
+- settle the redshift trend (forward-model estimator of the feasibility study; size-matched apertures).
+
+## 9. Questions for the student
 
 - Push the `sdss48k/` run folder (job scripts, `targets.csv`, logs) to the repository; the local copy ends at
   2026-11-09.

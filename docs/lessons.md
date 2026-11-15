@@ -208,3 +208,7 @@ Data lessons (verified live)
   does not (the measurement model) in one table, before any sample-wide statistics.
 - talltable's `converged` is set true when the clipping loop hits its iteration limit; a column named like a
   quality flag can be uninformative. Read the code that fills it before using it.
+- Where two detectors overlap in wavelength, compare their fluxes of the same galaxy before any index that
+  straddles the boundary. The SDSS 48k run's 2 % D2/D3 step was not calibration but the constant 6.15 arcsec
+  pixel used for the flux conversion; the official solid-angle map at the galaxy's detector position removed it
+  and moved the H-minus bump index by 0.010 mag.
