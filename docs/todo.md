@@ -163,3 +163,44 @@ the only content changes are four two-image figures split into pairs and one SQL
       decision 2026-11-15); local paths in public pages accepted for now.
 - [x] Aligned with note-style 0.6: shared CSS (table wrapping, responsive images, card-link-text reset),
       font provenance notice, rule-book copy, locked fresh build as the gate; redundant project CSS removed.
+
+## Review of the student's SDSS 48k photometry (2026-11-15, feature/sdss48k-review)
+
+- [x] Read the run's README, the production script and talltable's `optimal_extract` (read only).
+- [x] Catalogue and coverage summary; same-exposure comparison with the six demo galaxies; sample-wide
+      clipping failures; repeatability of close-wavelength pairs; figures 1-3; internal report
+      `docs/reports/sdss48k_photometry_review.md`.
+- [x] H-minus bump index (Hbump_opt) for 46,504 galaxies from the aperture fluxes, with the solid-angle
+      correction; against Dn4000, HdeltaA and the H-bump paper's models; figures 4-6; report section 8.
+- [ ] Bump of quiescent and post-starburst galaxies at fixed D4000 (MPA-JHU emission lines to separate them).
+- [x] Model comparability (2026-11-16, report 8.4, figures 7-8): optical resolution (HdeltaA 0.1-0.4 A, D4000
+      none), SPHEREx sampling through each galaxy's exposures (0.002 mag median, explains most of the redshift
+      trend), model epochs restricted to >= 10 Gyr (the paper's t_q prior ends at the z = 1 cosmic age).
+- [ ] Residual redshift trend of 0.0005-0.002 mag after the sampling correction (aperture size untested).
+- [ ] Per-galaxy sampling correction with a template matched to each galaxy's index (forward-model estimator).
+- [ ] Owner's decision: ask the H-bump project for late-quenching (t_q up to ~13 Gyr) and star-forming
+      histories, needed to test the paper's prediction at low redshift.
+- [ ] Owner's decision: use the aperture flux with corrections (aperture correction from optical shape,
+      neighbour flag, outlier rejection, error scaling), or re-measure with forced Sersic photometry.
+- [x] Stacks in 40 equal-number Dn4000-HdeltaA cells (whole SED and continuum-normalised bump) and the strong-bump
+      outliers (2026-11-16, `docs/reports/sdss48k_stacks_and_outliers.md`, figures 9-13).
+- [x] Follow-ups of the stacks (2026-11-16, `docs/reports/sdss48k_stack_followups.md`, figures 14-17):
+      post-starburst candidates against matched controls (young E+A bump weaker, not stronger); D3/D2 step
+      (noise, no correction); inclination (edge-on 0.002-0.004 mag stronger at Dn4000 < 1.8; face-on stacks);
+      target 45124 (D2 failure next to a saturated star at 24 arcsec); cells against the late-epoch models on
+      the stack system (between TP-AGB off and on, 0.001-0.011 mag weaker than on).
+- [ ] Larger post-starburst sample (HdeltaA > 3 A gives 165) or other SPHEREx data; 3 sigma on a 0.005 mag
+      contrast needs about 3 times the 89 E+A.
+- [ ] Flags for the index: bright star (2 mag brighter than the galaxy) within 60 arcsec; per-detector scatter
+      ratio above 3; face-on cut (q >= 0.5) for population comparisons.
+- [ ] Why the mean D3/D2 step changes with redshift (+0.4 % to -0.4 %) and size: resolution or bandpass of D2
+      and D3 across the bump, or PSF-dependent aperture loss.
+- [ ] Owner's question: why do the late-epoch models lie 1.3-1.7 A below the data in HdeltaA at fixed D4000?
+- [ ] Ask the student to push the `sdss48k/` run folder; ask whether aperture-flagged pixel counts and
+      sub-pixel positions can be stored.
+
+### Review
+
+The run's bookkeeping (targets, footprints, wavelengths, calibration) agrees with ours; its PSF flux is not
+usable for these galaxies, as the photometry study predicted; its aperture flux repeats to 3-5 % in D1-D4 but
+is not a total flux and has unsubtracted neighbours and bad-pixel outliers.

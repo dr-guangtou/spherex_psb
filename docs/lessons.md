@@ -203,3 +203,64 @@ Data lessons (verified live)
 - Listing internal pages one by one in `conf.py` did not scale once whole folders became internal; the
   scope is now a set of glob patterns plus one internal index page (`internal.md`) that carries the
   navigation, so adding a report needs no configuration change.
+- Reviewing someone else's photometry: match it to our own measurements on the same exposures first
+  (observation id + detector). It separated what agrees (wavelengths, calibration, aperture sums) from what
+  does not (the measurement model) in one table, before any sample-wide statistics.
+- talltable's `converged` is set true when the clipping loop hits its iteration limit; a column named like a
+  quality flag can be uninformative. Read the code that fills it before using it.
+- Where two detectors overlap in wavelength, compare their fluxes of the same galaxy before any index that
+  straddles the boundary. The SDSS 48k run's 2 % D2/D3 step was not calibration but the constant 6.15 arcsec
+  pixel used for the flux conversion; the official solid-angle map at the galaxy's detector position removed it
+  and moved the H-minus bump index by 0.010 mag.
+
+## Model loci must be on the data's system and in the data's regime (2026-11-16)
+
+- Before comparing data with a published model population, check the population's priors against the sample:
+  the H-bump paper's t_q prior ends at 5.9 Gyr (the cosmic age at z = 1) and every epoch to 13 Gyr is kept, so
+  its strong-bump region comes from epochs a z = 0.05 galaxy cannot have. Restrict to the epochs that apply and
+  say which galaxies the models cannot describe.
+- Put the models through the measurement, not only through the resolution: the R = 41 smoothing moves the bump
+  by <= 0.002 mag, but the irregular sampling of each galaxy moves it by 0.002 mag on average, 0.005-0.007 mag per
+  galaxy and 0.003 mag across 0.03 < z < 0.06, which was most of a "redshift trend" in the data.
+- Optical indices: MPA-JHU measures Dn4000 and HdeltaA on the SDSS spectra at their own resolution (R = 1850-2200
+  plus the galaxy's dispersion; Kauffmann et al. 2003a, Tremonti et al. 2004), with no dispersion correction.
+  Models at sigma = 300 km/s are 0.28 A (median galaxy) too high in HdeltaA; D4000 is insensitive. For any
+  catalogue index, read the original method papers, not only the data model: the data-model and web pages do not
+  state the resolution.
+
+## Stacks and outliers of a noisy index (2026-11-16)
+
+- Judge outliers by significance against the errors plus the population's intrinsic spread, and always look at
+  the mirror tail: the 457 galaxies that "look" like strong-bump outliers were mirrored by 476 on the weak side
+  with the same diagnostics (large errors, bright stars within 20 arcsec). A one-sided search would have found
+  a population that is not there.
+- Stacking many galaxies at different redshifts turns irregular per-galaxy sampling into near-continuous
+  sampling: the stacked index lost half of the redshift trend that the mean of individual indices shows. Compare
+  stacks with models smoothed to the instrument resolution, not with the per-galaxy sampled models.
+- Where the windows of an index fall on different detectors (here blue on D2, feature and red on D3 at
+  z = 0.03-0.06), any per-galaxy detector-to-detector offset is part of the index; check the overlap-region step
+  of outliers before reading them as physical.
+- A straight pseudo-continuum does not remove dust: the curvature of the attenuation curve over 1.49-1.79 um
+  deepens the index by 0.0017 mag for A_V = 1, and edge-on galaxies show it (0.0028 mag). Test inclination for
+  any small index trend.
+- SkyServer SqlSearch is a GET request; a VALUES table of about 150 rows (positions or specobjids) per query
+  stays under its URL limit (400 gave 404). IRSA TAP returned 502 on 2026-11-16.
+
+## Follow-ups of the stacks (2026-11-16)
+
+- A per-galaxy diagnostic measured from a few exposures can correlate with the index through shared noise:
+  the D3 overlap exposures that define the D3/D2 step also sit in the feature window. Before calling a
+  diagnostic a mechanism, redraw it under a null built from the galaxy's own residuals, and recompute the index
+  without the exposures it shares. Correcting by a noisy diagnostic made the index twice as noisy.
+- Read the image of the most extreme outlier before theorising: target 45124's "unexplained" excess was a
+  saturated star 24 arcsec away, just outside the 20 arcsec neighbour search. Bright stars matter out to 60
+  arcsec for a 12.3 arcsec aperture without neighbour subtraction.
+- Fibre-selected post-starbursts are not post-starbursts in a whole-galaxy aperture: the young E+A have PAH 3.3
+  um at three quarters of the star-forming controls' strength. Check an SED tracer of star formation in the
+  same aperture as the index before reading a population result.
+- When model and data loci are offset in one index (here the late-epoch models are 1.3-1.7 A low in HdeltaA at
+  fixed D4000), a 2-D match quietly selects one side of the data (16 % coverage). Match on the index the
+  prediction depends on, and report the offset.
+- `ruff check --fix` sorts imports and can move a module imported from a path that an earlier import adds;
+  import such modules through the module that sets the path.
+
