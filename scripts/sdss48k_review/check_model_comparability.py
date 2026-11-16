@@ -47,6 +47,8 @@ TOTAL_SIGMA_KM_S = (70.0, 100.0, 150.0, 200.0, 250.0, 300.0)
 DN4000_BANDS_AIR_A = {"blue": (3850.0, 3950.0), "red": (4000.0, 4100.0)}  # Balogh et al. 1999
 SSP_AGES_GYR = (1.0, 2.0, 3.0, 5.0, 10.0)
 LATE_EPOCH_CUTS_GYR = (8.0, 10.0, 12.0)
+SDSS_RESOLVING_POWER = (1850.0, 2200.0)  # Tremonti et al. 2004, section 2 (FWHM ~2.4 A at 5000 A)
+SPEED_OF_LIGHT_KM_S = 299792.458
 
 
 def dn4000(wave_a: np.ndarray, flux_nu: np.ndarray) -> np.ndarray:
@@ -92,6 +94,37 @@ def optical_resolution_check() -> pd.DataFrame:
         )
     print(f"native optical sigma of the C3K grid: {native:.1f} km/s")
     return table
+
+
+def sdss_resolution_offsets(optical: pd.DataFrame) -> dict:
+    """HdeltaA offset (index at the galaxy's own broadening minus at 300 km/s) per galaxy. MPA-JHU measures
+    the indices on the SDSS spectra without a dispersion correction (Kauffmann et al. 2003a, sections 2-3),
+    so the broadening is the instrument (R = 1850-2200, Tremonti et al. 2004) plus the stellar `V_DISP`."""
+    measured = pd.read_parquet(OUT_DIR / "hminus_bump_indices.parquet")
+    measured = measured[np.isfinite(measured.hminus_bump_mag)]
+    info = mpa_column("galSpecInfo", ["SPECOBJID", "V_DISP"]).drop_duplicates("specobjid")
+    v_disp = measured.merge(info, on="specobjid", how="left").V_DISP.to_numpy(dtype=float)
+    curves = {
+        "all_ssp_median": optical.groupby("total_sigma_km_s").hdelta_a_minus_sigma300.median(),
+        "age_8gyr_solar": optical[(optical.log_z == 0) & (np.isclose(optical.age_gyr, 7.943, atol=0.01))]
+        .groupby("total_sigma_km_s")
+        .hdelta_a_minus_sigma300.median(),
+    }
+    result = {}
+    for power in SDSS_RESOLVING_POWER:
+        instrument = SPEED_OF_LIGHT_KM_S / (2.0 * np.sqrt(2.0 * np.log(2.0)) * power)
+        total = np.hypot(np.clip(v_disp, 0, None), instrument)
+        entry = {
+            "instrument_sigma_km_s": round(float(instrument), 1),
+            "total_sigma_p5_p50_p95": np.nanpercentile(total, [5, 50, 95]).round(0).tolist(),
+        }
+        for name, curve in curves.items():
+            offset = np.interp(np.clip(total, curve.index[0], curve.index[-1]), curve.index, curve.to_numpy())
+            entry[f"hdelta_a_offset_{name}_p5_p50_p95"] = (
+                np.nanpercentile(offset, [5, 50, 95]).round(2).tolist()
+            )
+        result[f"R{power:g}"] = entry
+    return result
 
 
 def model_spectra() -> dict[str, tuple[np.ndarray, np.ndarray, float]]:
@@ -262,6 +295,8 @@ def main() -> None:
             print(grouped.median().round(3))
             print(grouped.agg(["min", "max"]).round(3))
         summary["optical_minus_sigma300_median"] = grouped.median().round(3).to_dict()
+        summary["sdss_resolution_hdelta_a_offsets"] = sdss_resolution_offsets(optical)
+        print(json.dumps(summary["sdss_resolution_hdelta_a_offsets"], indent=1))
     if "sampling" in parts:
         sampling, references = sampling_bias_check(args.max_galaxies)
         sampling.to_parquet(OUT_DIR / f"model_check_sampling_bias{suffix}.parquet")

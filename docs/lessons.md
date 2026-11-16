@@ -222,6 +222,9 @@ Data lessons (verified live)
 - Put the models through the measurement, not only through the resolution: the R = 41 smoothing moves the bump
   by <= 0.002 mag, but the irregular sampling of each galaxy moves it by 0.002 mag on average, 0.005-0.007 mag per
   galaxy and 0.003 mag across 0.03 < z < 0.06, which was most of a "redshift trend" in the data.
-- Optical indices: models at sigma = 300 km/s versus SDSS spectra at the instrument plus the galaxy's dispersion
-  shift HdeltaA by 0.1-0.4 A (older light more); D4000 is insensitive.
+- Optical indices: MPA-JHU measures Dn4000 and HdeltaA on the SDSS spectra at their own resolution (R = 1850-2200
+  plus the galaxy's dispersion; Kauffmann et al. 2003a, Tremonti et al. 2004), with no dispersion correction.
+  Models at sigma = 300 km/s are 0.28 A (median galaxy) too high in HdeltaA; D4000 is insensitive. For any
+  catalogue index, read the original method papers, not only the data model: the data-model and web pages do not
+  state the resolution.
 

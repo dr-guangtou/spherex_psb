@@ -296,7 +296,7 @@ Three differences between the paper's models and these measurements, each measur
 
 Figure 7. (a) HdeltaA of solar C3K SSPs broadened to a total sigma, minus its value at 300 km/s (the models'
 product); grey band: the sample's stellar velocity dispersion (MPA-JHU `V_DISP`, 5-95 %), to which the SDSS
-instrument adds in quadrature. (b) Per galaxy: the model index measured through that galaxy's own SPHEREx
+instrument (sigma 58-69 km/s) adds in quadrature. (b) Per galaxy: the model index measured through that galaxy's own SPHEREx
 exposures with the data estimator, minus the model's R = 100 index, for a 5 Gyr solar SSP with TP-AGB off and on;
 dotted: a continuous spectrum at R = 41 alone. (c) Measured index minus the median of its Dn4000 bin, against
 redshift (black), and the same after subtracting each galaxy's sampling bias (grey); dashed: the median sampling
@@ -304,11 +304,27 @@ bias of the models against redshift, offset to zero mean. (d) Broad D4000 of the
 model population at all epochs after 1 Gyr (the paper's figure 1) and at epochs after 10 Gyr.
 ```
 
-**1. Optical indices: resolution.** The models give D4000 and HdeltaA on a sigma = 300 km/s product. MPA-JHU
-measures them on the SDSS spectra ("values measured off the unmodified spectrum", MPA-JHU DR7 raw-data page; no
-page I read states a dispersion correction), so their broadening is the instrument plus the galaxy's own
-dispersion, 53 / 112 / 212 km/s (p5 / p50 / p95) for the latter. Measured on the H-bump project's native C3K SSPs
-(ages 1-13 Gyr, four metallicities) broadened to 70-250 km/s instead of 300 km/s:
+**1. Optical indices: resolution.** The models give D4000 and HdeltaA on a sigma = 300 km/s product. The input
+catalogue's Dn4000 and HdeltaA are the MPA-JHU DR8 values (`galSpecIndx`), made with the code of Kauffmann et al.
+(2003a, MNRAS 341, 33) and Tremonti et al. (2004, ApJ 613, 898). What the original record says:
+
+- The indices are measured on the SDSS spectra themselves (Kauffmann et al. 2003a, section 2; "values measured
+  off the unmodified spectrum", MPA-JHU DR7 raw-data page). No correction to a common resolution or velocity
+  dispersion is applied to the measured values; no record I read mentions one.
+- SDSS resolution: R = 1850-2200, FWHM ~2.4 A at 5000 A (Tremonti et al. 2004, section 2); the Lick/IDS library's
+  9 A is "a factor of 4 lower than that of the SDSS spectra" (Kauffmann et al. 2003a, section 3).
+- MPA-JHU's own model comparison used Bruzual & Charlot (2003) models on the STELIB library at 3 A FWHM, "well
+  matched to that of the SDSS data" (Tremonti et al. 2004), without the galaxies' dispersion; Kauffmann et al.
+  (2003a, section 3) tested that and found the effect on HdeltaA and Dn4000 "negligible" (their mean errors were
+  1.4 A and 0.048).
+- Emission: Kauffmann et al. (2003a) corrected HdeltaA by scaling from the measured Halpha; the DR7/DR8 `_SUB`
+  values used here are instead an "index measurement on the data after subtracting all 3-sigma emission lines" (galSpecIndx
+  data model). The stellar-continuum fits behind them are broadened to each galaxy's dispersion, but that
+  affects only the emission-line subtraction, not the index measurement.
+
+So each galaxy's index is at the instrumental sigma (58-69 km/s for R = 2200-1850) plus its stellar `V_DISP`
+(53 / 112 / 212 km/s, p5 / p50 / p95): a total of 79-87 / 126-131 / 220-223 km/s. Measured on the H-bump
+project's native C3K SSPs (ages 1-13 Gyr, four metallicities) broadened to 70-250 km/s instead of 300 km/s:
 
 | Index | change from 300 km/s to 70-250 km/s | data median error |
 |---|---|---|
@@ -316,8 +332,10 @@ dispersion, 53 / 112 / 212 km/s (p5 / p50 / p95) for the latter. Measured on the
 | Dn4000 (figure 4 only, no models) | +0.000 to +0.030 | |
 | HdeltaA | -0.81 to +0.03 A; at 100-150 km/s, solar: -0.07 to -0.08 (1 Gyr), -0.20 to -0.24 (2 Gyr), -0.28 to -0.33 (4 Gyr), -0.36 to -0.42 A (8 Gyr) | 0.73 A |
 
-D4000 is unaffected. The model HdeltaA would be 0.1-0.4 A lower at the SDSS resolution, more for older light: a
-shift to the left in figures 5b and 8b, smaller than one galaxy's error. Not applied in the figures.
+D4000 is unaffected. Interpolated at each galaxy's total broadening, the model HdeltaA would be lower by
+0.28 A (median; 0.14-0.32 A for 90 % of galaxies) with the median over all SSPs, and by 0.43-0.44 A (0.22-0.50 A)
+for a solar 8 Gyr SSP: a shift to the left in figures 5b and 8b, smaller than one galaxy's error (0.73 A) but
+not negligible against the 0.1-0.2 A precision of a stack. Not applied in the figures.
 
 **2. The bump: SPHEREx resolution and sampling.** The models give the bump at R = 100 on a continuous spectrum;
 the data index uses each galaxy's own exposures (median R = 35-41 in D1-D4, from `wv_um / wv_width_um`) at the rest
