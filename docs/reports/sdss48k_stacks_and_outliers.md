@@ -34,7 +34,8 @@ Figures 9-13 in `docs/figures/sdss48k_review/`.
   (controls: 3 %). The significant tail (s < -3) holds 79 galaxies where a Gaussian gives 63; the weak side
   holds 97.
 - **What is left points to systematics.** The significant strong tail is enriched in a positive D3-D2 flux step
-  of the galaxy (11.5 % above +5 %, controls 6.6 %; the weak tail is enriched in negative steps) and in
+  of the galaxy (11.5 % above +5 %, controls 6.6 %; the weak tail is enriched in negative steps; *revised in
+  `sdss48k_stack_followups.md`: the step is noise shared with the index, not a mechanism*) and in
   edge-on discs (axis ratio below 0.3: 23 %, controls 13 %). Over the whole sample, galaxies with axis ratio
   below 0.3 have a stronger bump by 0.0028 +- 0.0010 mag, what a dust screen of A_V = 1-2 produces through the
   curvature of the attenuation curve (0.0017-0.0031 mag, measured). No outlier group shows an optical
@@ -253,6 +254,9 @@ budget partly captures (large errors) and which goes both ways.
   same wavelength (observed 1.616-1.668 um) the strong outliers have a mean step of +1.3 % (controls -0.2 %,
   weak outliers -1.6 %), and the tails are enriched in large steps of the matching sign. The step is measured
   from a few exposures per galaxy, so it identifies the mechanism but cannot correct galaxy by galaxy.
+  *Revised (`sdss48k_stack_followups.md`, section 3.1): the step's spread is that of noise, and the D3
+  overlap exposures also sit in the feature window, so their noise enters both; without them 81 % of the strong
+  tail remains. The step is not the mechanism.*
 - **Edge-on discs.** 23 % of the strong outliers have axis ratio below 0.3 (controls 13 %); four of the six most
   significant are edge-on or strongly inclined (figure 13). See 3.4.
 - **Optical properties** (BPT class, sSFR, Halpha, Dn4000, HdeltaA) are those of the controls: the strong
@@ -295,7 +299,8 @@ axis ratio q, redshift.
 The most significant galaxy (s = -5.6, index -0.237 +- 0.034 mag) is a faint, inclined star-forming disc
 (Dn4000 1.26, HdeltaA 4.7 A, q 0.30) whose excess (20-35 %) peaks at 1.59 um and falls through the red window, a
 shape unlike the stacked bump; it remains beyond 4.8 sigma without its most influential visit. It is unexplained
-and worth a look at the exposures. In the next five the D2 points lie below the D3 points, the per-galaxy step
+and worth a look at the exposures. *Explained in `sdss48k_stack_followups.md`, section 5: its D2 photometry
+fails (scatter 43 %) next to a saturated star 24 arcsec away; the blue window is 34 % low.* In the next five the D2 points lie below the D3 points, the per-galaxy step
 of 3.3. The three apparent outliers carry saturated stars within 20 arcsec.
 
 ## 4. Reading and next steps
@@ -309,3 +314,4 @@ of 3.3. The three apparent outliers carry saturated stars within 20 arcsec.
 - Next: select post-starburst candidates by HdeltaA excess and weak emission (galSpecLine) and stack them against
   Dn4000-matched controls; repeat the stacks for face-on galaxies (axis ratio above 0.6); compare each cell with
   the late-epoch model populations on the same continuous-sampling system (R = 41) rather than with single SSPs.
+  *Done in `sdss48k_stack_followups.md` (face-on cut at axis ratio 0.5).*

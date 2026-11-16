@@ -246,3 +246,21 @@ Data lessons (verified live)
 - SkyServer SqlSearch is a GET request; a VALUES table of about 150 rows (positions or specobjids) per query
   stays under its URL limit (400 gave 404). IRSA TAP returned 502 on 2026-11-16.
 
+## Follow-ups of the stacks (2026-11-16)
+
+- A per-galaxy diagnostic measured from a few exposures can correlate with the index through shared noise:
+  the D3 overlap exposures that define the D3/D2 step also sit in the feature window. Before calling a
+  diagnostic a mechanism, redraw it under a null built from the galaxy's own residuals, and recompute the index
+  without the exposures it shares. Correcting by a noisy diagnostic made the index twice as noisy.
+- Read the image of the most extreme outlier before theorising: target 45124's "unexplained" excess was a
+  saturated star 24 arcsec away, just outside the 20 arcsec neighbour search. Bright stars matter out to 60
+  arcsec for a 12.3 arcsec aperture without neighbour subtraction.
+- Fibre-selected post-starbursts are not post-starbursts in a whole-galaxy aperture: the young E+A have PAH 3.3
+  um at three quarters of the star-forming controls' strength. Check an SED tracer of star formation in the
+  same aperture as the index before reading a population result.
+- When model and data loci are offset in one index (here the late-epoch models are 1.3-1.7 A low in HdeltaA at
+  fixed D4000), a 2-D match quietly selects one side of the data (16 % coverage). Match on the index the
+  prediction depends on, and report the offset.
+- `ruff check --fix` sorts imports and can move a module imported from a path that an earlier import adds;
+  import such modules through the module that sets the path.
+

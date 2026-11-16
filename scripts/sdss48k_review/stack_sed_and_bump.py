@@ -298,43 +298,13 @@ def cell_properties(members: pd.DataFrame) -> dict:
     }
 
 
-def main() -> None:
-    parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--max-galaxies", type=int, default=None, help="random subset for a quick test")
-    args = parser.parse_args()
-    rng = np.random.default_rng(1)
-
-    galaxies = load_galaxies()
-    n_measured = len(galaxies)
-    galaxies = galaxies[~galaxies.in_magellanic.astype(bool)]
-    density = plane_density(galaxies.d4000_n_sub.to_numpy(), galaxies.lick_hd_a_sub.to_numpy())
-    sparse = density < np.quantile(density, SPARSE_FRACTION)
-    print(
-        f"measured {n_measured:,}; outside the Magellanic Clouds {len(galaxies):,};",
-        f"sparse removed {sparse.sum():,}",
-    )
-    galaxies = galaxies[~sparse]
-    if args.max_galaxies:
-        galaxies = galaxies.sample(args.max_galaxies, random_state=0)
-    galaxies = assign_cells(galaxies).sort_values("target").reset_index(drop=True)
-    print(
-        f"stacked galaxies {len(galaxies):,}; per cell",
-        galaxies.cell.value_counts().min(),
-        "to",
-        galaxies.cell.value_counts().max(),
-    )
-
-    rows = load_exposures(galaxies)
-    print(f"exposures {len(rows):,}")
-    matrices = galaxy_matrices(rows, galaxies)
-    print(f"galaxies with a normalisation {matrices['norm_found'].sum():,}")
-
-    sed_centres, bump_centres = matrices["sed_centres_um"], matrices["bump_centres_um"]
-    redshift_third = pd.qcut(galaxies.redshift, 3, labels=False)
-    groups = {"all": galaxies.index.to_numpy()}
-    groups |= {f"redshift{k + 1}": galaxies.index[redshift_third == k].to_numpy() for k in range(3)}
-    groups |= {int(cell): members.index.to_numpy() for cell, members in galaxies.groupby("cell")}
-    profiles = {"sed_centres_um": sed_centres, "bump_centres_um": bump_centres}
+def stack_groups(
+    groups: dict, galaxies: pd.DataFrame, matrices: dict, rng: np.random.Generator
+) -> tuple[pd.DataFrame, dict]:
+    """Both stacks, their indices and the members' properties for each group of galaxy row positions.
+    Integer group names are cells (key `cellNN`); string names are used as keys."""
+    bump_centres = matrices["bump_centres_um"]
+    profiles = {"sed_centres_um": matrices["sed_centres_um"], "bump_centres_um": bump_centres}
     records = []
     for name, index in groups.items():
         sed, sed_boot, sed_n = clipped_stack(matrices["sed"][index], rng)
@@ -369,7 +339,45 @@ def main() -> None:
             ),
         }
         records.append(record)
-    cells = pd.DataFrame(records)
+    return pd.DataFrame(records), profiles
+
+
+def main() -> None:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--max-galaxies", type=int, default=None, help="random subset for a quick test")
+    args = parser.parse_args()
+    rng = np.random.default_rng(1)
+
+    galaxies = load_galaxies()
+    n_measured = len(galaxies)
+    galaxies = galaxies[~galaxies.in_magellanic.astype(bool)]
+    density = plane_density(galaxies.d4000_n_sub.to_numpy(), galaxies.lick_hd_a_sub.to_numpy())
+    sparse = density < np.quantile(density, SPARSE_FRACTION)
+    print(
+        f"measured {n_measured:,}; outside the Magellanic Clouds {len(galaxies):,};",
+        f"sparse removed {sparse.sum():,}",
+    )
+    galaxies = galaxies[~sparse]
+    if args.max_galaxies:
+        galaxies = galaxies.sample(args.max_galaxies, random_state=0)
+    galaxies = assign_cells(galaxies).sort_values("target").reset_index(drop=True)
+    print(
+        f"stacked galaxies {len(galaxies):,}; per cell",
+        galaxies.cell.value_counts().min(),
+        "to",
+        galaxies.cell.value_counts().max(),
+    )
+
+    rows = load_exposures(galaxies)
+    print(f"exposures {len(rows):,}")
+    matrices = galaxy_matrices(rows, galaxies)
+    print(f"galaxies with a normalisation {matrices['norm_found'].sum():,}")
+
+    redshift_third = pd.qcut(galaxies.redshift, 3, labels=False)
+    groups = {"all": galaxies.index.to_numpy()}
+    groups |= {f"redshift{k + 1}": galaxies.index[redshift_third == k].to_numpy() for k in range(3)}
+    groups |= {int(cell): members.index.to_numpy() for cell, members in galaxies.groupby("cell")}
+    cells, profiles = stack_groups(groups, galaxies, matrices, rng)
     suffix = "_test" if args.max_galaxies else ""
     cells.to_parquet(OUT_DIR / f"stack_cells{suffix}.parquet")
     galaxies[["target", "specobjid", "dn4000_bin", "hdelta_bin", "cell"]].to_parquet(

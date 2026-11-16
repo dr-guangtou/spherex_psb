@@ -23,6 +23,7 @@ H-minus bump feasibility <reports/hminus_bump_feasibility>
 SED demo task <reports/sed_demo_task>
 SDSS 48k photometry review <reports/sdss48k_photometry_review>
 SDSS 48k stacks and bump outliers <reports/sdss48k_stacks_and_outliers>
+SDSS 48k stack follow-ups <reports/sdss48k_stack_followups>
 Third-party tool review <reports/spherex_tools_review>
 ```
 

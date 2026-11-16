@@ -451,7 +451,9 @@ on our side:
 - apply the sampling bias per galaxy with a template matched to its own index (forward-model estimator of the
   feasibility study), instead of one template;
 - stack galaxies in Dn4000-HdeltaA cells to reach 0.003-0.005 mag per cell and see the bump profile itself
-  (done 2026-11-16: `sdss48k_stacks_and_outliers.md`, 0.0005-0.0007 mag per cell; also the strong-bump outliers).
+  (done 2026-11-16: `sdss48k_stacks_and_outliers.md`, 0.0005-0.0007 mag per cell; also the strong-bump outliers;
+  follow-ups with post-starbursts, inclination, the D3/D2 step and the late-epoch models in
+  `sdss48k_stack_followups.md`).
 
 ## 9. Questions for the student
 
