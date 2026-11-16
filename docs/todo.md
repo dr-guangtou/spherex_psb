@@ -182,6 +182,14 @@ the only content changes are four two-image figures split into pairs and one SQL
       histories, needed to test the paper's prediction at low redshift.
 - [ ] Owner's decision: use the aperture flux with corrections (aperture correction from optical shape,
       neighbour flag, outlier rejection, error scaling), or re-measure with forced Sersic photometry.
+- [x] Stacks in 40 equal-number Dn4000-HdeltaA cells (whole SED and continuum-normalised bump) and the strong-bump
+      outliers (2026-11-16, `docs/reports/sdss48k_stacks_and_outliers.md`, figures 9-13).
+- [ ] Post-starburst candidates (HdeltaA excess, weak emission from galSpecLine) stacked against Dn4000-matched
+      controls; the equal-number cells do not isolate them.
+- [ ] Control the index for inclination (axis ratio < 0.3: 0.003 mag stronger, dust curvature) and for the
+      per-galaxy D3/D2 step; repeat the stacks for face-on galaxies.
+- [ ] Look at the exposures of target 45124 (s = -5.6, excess peaking at 1.59 um, unlike the stacked profile).
+- [ ] Compare the cell stacks with the late-epoch model populations at R = 41 continuous sampling.
 - [ ] Ask the student to push the `sdss48k/` run folder; ask whether aperture-flagged pixel counts and
       sub-pixel positions can be stored.
 

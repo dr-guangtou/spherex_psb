@@ -228,3 +228,21 @@ Data lessons (verified live)
   catalogue index, read the original method papers, not only the data model: the data-model and web pages do not
   state the resolution.
 
+## Stacks and outliers of a noisy index (2026-11-16)
+
+- Judge outliers by significance against the errors plus the population's intrinsic spread, and always look at
+  the mirror tail: the 457 galaxies that "look" like strong-bump outliers were mirrored by 476 on the weak side
+  with the same diagnostics (large errors, bright stars within 20 arcsec). A one-sided search would have found
+  a population that is not there.
+- Stacking many galaxies at different redshifts turns irregular per-galaxy sampling into near-continuous
+  sampling: the stacked index lost half of the redshift trend that the mean of individual indices shows. Compare
+  stacks with models smoothed to the instrument resolution, not with the per-galaxy sampled models.
+- Where the windows of an index fall on different detectors (here blue on D2, feature and red on D3 at
+  z = 0.03-0.06), any per-galaxy detector-to-detector offset is part of the index; check the overlap-region step
+  of outliers before reading them as physical.
+- A straight pseudo-continuum does not remove dust: the curvature of the attenuation curve over 1.49-1.79 um
+  deepens the index by 0.0017 mag for A_V = 1, and edge-on galaxies show it (0.0028 mag). Test inclination for
+  any small index trend.
+- SkyServer SqlSearch is a GET request; a VALUES table of about 150 rows (positions or specobjids) per query
+  stays under its URL limit (400 gave 404). IRSA TAP returned 502 on 2026-11-16.
+

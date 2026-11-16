@@ -450,7 +450,8 @@ on our side:
   (`galSpecLine-dr8.fits` is local) and compare the bump at fixed D4000;
 - apply the sampling bias per galaxy with a template matched to its own index (forward-model estimator of the
   feasibility study), instead of one template;
-- stack galaxies in Dn4000-HdeltaA cells to reach 0.003-0.005 mag per cell and see the bump profile itself.
+- stack galaxies in Dn4000-HdeltaA cells to reach 0.003-0.005 mag per cell and see the bump profile itself
+  (done 2026-11-16: `sdss48k_stacks_and_outliers.md`, 0.0005-0.0007 mag per cell; also the strong-bump outliers).
 
 ## 9. Questions for the student
 

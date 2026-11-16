@@ -83,10 +83,16 @@ def screen(rest_um: np.ndarray, flux_lambda: np.ndarray) -> tuple[np.ndarray, np
     return keep, residual, robust_sigma(residual[keep])
 
 
-def index_and_error(rest_um: np.ndarray, flux_lambda: np.ndarray, scatter: float) -> dict:
+def index_and_error(
+    rest_um: np.ndarray,
+    flux_lambda: np.ndarray,
+    scatter: float,
+    min_side: int = MIN_SIDE,
+    min_feature: int = MIN_FEATURE,
+) -> dict:
     members = {key: (rest_um >= lo) & (rest_um <= hi) for key, (lo, hi) in WINDOWS_UM.items()}
     counts = {f"n_{key}": int(mask.sum()) for key, mask in members.items()}
-    if counts["n_blue"] < MIN_SIDE or counts["n_red"] < MIN_SIDE or counts["n_feature"] < MIN_FEATURE:
+    if counts["n_blue"] < min_side or counts["n_red"] < min_side or counts["n_feature"] < min_feature:
         return counts | {"hminus_bump_mag": np.nan, "hminus_bump_err_mag": np.nan}
     blue = flux_lambda[members["blue"]].mean()
     red = flux_lambda[members["red"]].mean()
